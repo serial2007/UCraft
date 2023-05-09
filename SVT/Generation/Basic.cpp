@@ -70,8 +70,43 @@ Generation::BiomeMenu::BiomeMenu(Biome*& _currentBiome) :
 
 Generation::WorldUnit* Generation::BiomeMenu::DivideBiomes(WorldUnit* unit)
 {
+	/*auto stack = this->BiomeStack;
+	while (!stack.empty())
+	{
+		Generation::Biome* biome = stack.top().second();
+		biome->Divide(unit);
+		biome->Generate(unit);
+		for (int i = biome->son.size() - 1; i >= 0; --i)
+		{
+			stack.push(biome->son[i]);
+		}
+	}*/
 
-	for (auto& it : BiomeList)
+	std::stack<unsigned int> stk;
+	stk.push(0xfff);
+	while (!stk.empty())
+	{
+
+		//Generation::Biome* biome = 
+		unsigned p = stk.top();
+		std::cout << "p = " << p << '\n';
+		stk.pop();
+		if (p != 0xfff)
+		{
+			Generation::Biome* biome = this->BiomeList[p].second();
+			biome->Divide(unit);
+			biome->Generate(unit);
+		}
+
+
+		for (int i = sonid[p].size() - 1; i >= 0; --i)
+		{
+			//if (sonid[p][i])
+				stk.push(sonid[p][i]);
+		}
+	}
+	std::cout << "END\n";
+	/*for (auto& it : BiomeList)
 	{
 		currentBiome = it.second();
 		currentBiome->Divide(unit);
@@ -81,8 +116,16 @@ Generation::WorldUnit* Generation::BiomeMenu::DivideBiomes(WorldUnit* unit)
 	{
 		currentBiome = it.second();
 		currentBiome->Generate(unit);
-	}
+	}*/
 
 	return unit;
 }
 
+//std::vector <std::pair<unsigned int, std::function<Generation::Biome* (void)> > >  Generation::BiomeList;
+
+
+//template<typename T> void Generation::RegisterBiome(unsigned int p, unsigned int fa)
+//{
+//
+//	
+//}

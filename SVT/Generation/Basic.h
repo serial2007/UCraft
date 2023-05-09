@@ -8,13 +8,14 @@
 #include <map>
 #include <string>
 #include <Windows.h>
-
-#include "Random/PosStruct.h"
+#include <stack>
+#include "Random/Random.h"
 //inline Generation::Chunk* ImportChunk(int x, int y);
 
 #define ReserveWorldUnit 64
 
-
+#define REGISTER_BASE 0xfff
+#define REGISTER_NULL 0x1000
 
 
 
@@ -34,6 +35,8 @@ namespace Generation
 
 		Chunk() { memset(block, 0, sizeof(block)); memset(biomeid, 0, sizeof(biomeid)); }
 		void Save();
+
+		
 
 		void Biome2DOut();
 	};
@@ -58,9 +61,17 @@ namespace Generation
 	{
 	public:
 		Biome() {}
-
+		std::vector <std::pair<unsigned int, std::function<Biome* (void)> > >  son;
+		virtual unsigned id() { return REGISTER_NULL; }
 		virtual void Divide(WorldUnit*) {};
 		virtual void Generate(WorldUnit*) {};
+
+		//template<typename T> void RegisterSon(int p)
+		//{
+		//	son.push_back(std::make_pair(p, []() {return new T(); }));
+		//	std::cout << "Registering son Biome (id = " << p << ")\n";
+		//}
+
 	};
 
 
@@ -69,22 +80,29 @@ namespace Generation
 	public:
 		BiomeMenu(Biome*& _currentBiome);
 
-		template<typename T> void RegisterBiome(int p)
+		template<typename T> void uRegisterBiome(unsigned int p, unsigned int fa)
 		{
-			BiomeList.push_back(std::make_pair(p, []() {return new T(); }));
-			std::cout << "Registering Biome (id = " << p << ")\n";
+			this->BiomeList.push_back(std::make_pair(p, []() {return new T(); }));
+
+			std::cout << "Registering Biome (id = " << p << ", fa = " << fa << ", ID = " << BiomeList.size() - 1 << ", faID = " << Mapid[fa] << ")\n";
+
+			sonid[Mapid[fa]].push_back(BiomeList.size() - 1);
+			Mapid[p] = BiomeList.size() - 1;
 		}
+		
 	
 		Generation::WorldUnit* DivideBiomes(WorldUnit*);
 		Generation::Chunk* Enquiry(int x, int y);
 
 		
 
-	private:
+	
 		Biome*& currentBiome;
-		std::vector <std::pair<int, std::function<Biome* (void)> > >  BiomeList;
+		std::vector <std::pair<unsigned int, std::function<Biome* (void)> > >  BiomeList;
+		//std::stack <std::pair<unsigned int, std::function<Biome* (void)> > >  BiomeStack;
 
-
+		unsigned int Mapid[REGISTER_NULL + 1];
+		std::vector<unsigned int> sonid[REGISTER_NULL + 1];
 	};
 
 }

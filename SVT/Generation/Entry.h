@@ -2,6 +2,7 @@
 #include "Basic.h"
 #include <map>
 #include "../Class/Biome/Test/test.h"
+#include "../Class/Biome/Test/TestSon/testSon.h"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 

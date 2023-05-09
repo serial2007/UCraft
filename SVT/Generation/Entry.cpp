@@ -31,14 +31,29 @@ Generation::Chunk* Enquiry(int x, int y)
 	return nullptr;
 }
 
+#define RegisterBiome(x, y) uRegisterBiome<x>((new x)->id(), y)
+
+
+
 void GenMain::RegisterBiomeMain()
 {
+	
+
+
 	currentB = nullptr;
 	biomeMenu = new Generation::BiomeMenu(currentB);
 	currentB = biomeMenu;
 
-	// Register
-	biomeMenu->RegisterBiome<test::testBiome>(test::id);
+	for(int i = 0; i <= REGISTER_NULL; ++i)
+		biomeMenu->Mapid[i] = REGISTER_NULL;
+
+	biomeMenu->Mapid[REGISTER_BASE] = REGISTER_BASE;
+
+
+	biomeMenu->RegisterBiome(test::testBiome,		0xfffU);
+	biomeMenu->RegisterBiome(testson::testBiome,	15U);
+
+	
 
 }
 

@@ -128,22 +128,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Class\Biome\Test\test.cpp" />
+    <ClCompile Include="Class\Biome\Test\TestSon\testSon.cpp" />
     <ClCompile Include="Generation\Basic.cpp" />
     <ClCompile Include="Generation\Entry.cpp" />
     <ClCompile Include="Generation\Random\BasicRandom.cpp" />
     <ClCompile Include="Generation\Random\ContinuousRandom.cpp" />
     <ClCompile Include="Generation\Random\DispersedRatio.cpp" />
-    <ClCompile Include="Generation\Random\PosStruct.cpp" />
-    <ClCompile Include="SVT.cpp" />
+    <ClCompile Include="Generation\Random\Random.cpp" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Biome\Test\test.h" />
+    <ClInclude Include="Class\Biome\Test\TestSon\testSon.h" />
     <ClInclude Include="Generation\Basic.h" />
     <ClInclude Include="Generation\Entry.h" />
     <ClInclude Include="Generation\Random\BasicRandom.h" />
     <ClInclude Include="Generation\Random\ContinuousRandom.h" />
     <ClInclude Include="Generation\Random\DispersedRatio.h" />
-    <ClInclude Include="Generation\Random\PosStruct.h" />
+    <ClInclude Include="Generation\Random\Random.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

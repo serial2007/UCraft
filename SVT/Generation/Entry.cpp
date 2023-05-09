@@ -72,7 +72,7 @@ void GenMain::RegisterBiomeMain()
 
 	biomeMenu->RegisterBiome(test::testBiome,		0xfffU);
 	biomeMenu->RegisterBiome(testson::testBiome,	15U);
-
+	biomeMenu->RegisterBiome(HILL::Hill,			0xfffU);
 	
 
 }

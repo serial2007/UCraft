@@ -21,10 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{3f6da369-8f52-42be-8f57-d37a0a1350e7}</ProjectGuid>
-    <RootNamespace>SVT</RootNamespace>
+    <ProjectGuid>{c1b6e110-5f76-4f6c-8e2c-d343c0a1ac05}</ProjectGuid>
+    <RootNamespace>Tcp</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Server</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -72,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ExternalIncludePath>D:\LIBS\boost_1_82_0\boost_1_82_0;D:\LIBS\asio2-master\include;D:\LIBS\asio2-master\3rd;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>D:\LIBS\boost_1_82_0\boost_1_82_0;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -108,7 +107,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,31 +129,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Class\Biome\Hill\hill.cpp" />
-    <ClCompile Include="Class\Biome\Test\test.cpp" />
-    <ClCompile Include="Class\Biome\Test\TestSon\testSon.cpp" />
-    <ClCompile Include="Generation\Basic.cpp" />
-    <ClCompile Include="Generation\Entry.cpp" />
-    <ClCompile Include="Generation\Random\BasicRandom.cpp" />
-    <ClCompile Include="Generation\Random\ContinuousRandom.cpp" />
-    <ClCompile Include="Generation\Random\DispersedRatio.cpp" />
-    <ClCompile Include="Generation\Random\Random.cpp" />
-    <ClCompile Include="Generation\WorldPara.cpp" />
-    <ClCompile Include="Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Class\Biome\Hill\hill.h" />
-    <ClInclude Include="Class\Biome\Test\test.h" />
-    <ClInclude Include="Class\Biome\Test\TestSon\testSon.h" />
-    <ClInclude Include="Generation\Basic.h" />
-    <ClInclude Include="Generation\Entry.h" />
-    <ClInclude Include="Generation\Random\BasicRandom.h" />
-    <ClInclude Include="Generation\Random\ContinuousRandom.h" />
-    <ClInclude Include="Generation\Random\DispersedRatio.h" />
-    <ClInclude Include="Generation\Random\Random.h" />
-    <ClInclude Include="Generation\WorldPara.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -1,9 +1,6 @@
 #pragma once
 
-struct Pos
-{
-	int x, y, h = 0;
-};
+
 
 //生成地形的基本参数
 namespace WorldPara
@@ -11,11 +8,6 @@ namespace WorldPara
 	extern double maxh;
 	extern double minh;
 
-	extern int plx;
-	extern int ply;
-
-	extern int minx, maxx;
-	extern int miny, maxy;
 
 	extern int moveR;
 	extern double moveDeglim;

@@ -19,6 +19,10 @@
 #define REGISTER_BASE 0xfff
 #define REGISTER_NULL 0x1000
 
+extern struct Pos
+{
+	int x, y, h = 0;
+};
 
 
 

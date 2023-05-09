@@ -3,6 +3,7 @@
 #include <map>
 #include "../Class/Biome/Test/test.h"
 #include "../Class/Biome/Test/TestSon/testSon.h"
+#include "../Class/Biome/Hill/hill.h"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 

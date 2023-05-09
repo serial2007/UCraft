@@ -1,6 +1,6 @@
 #include "test.h"
 
-void test::testBiome::Divide(Generation::WorldUnit*)
+void test::testBiome::Divide(Generation::WorldUnit* unit)
 {
 	std::cout << "Divide\n";
 

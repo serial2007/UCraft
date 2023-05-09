@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Class\Biome\Test\test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -43,6 +40,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Generation\WorldPara.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\Biome\Hill\hill.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,6 +75,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Generation\WorldPara.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\Biome\Hill\hill.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

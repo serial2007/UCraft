@@ -3,11 +3,7 @@
 double	WorldPara::maxh = 100;
 double	WorldPara::minh = 0;
 
-int		WorldPara::plx = -100;
-int		WorldPara::ply = -100;
 
-int		WorldPara::minx = -300, WorldPara::maxx = 300;
-int		WorldPara::miny = -300, WorldPara::maxy = 300;
 
 int		WorldPara::moveR = 4;
 double	WorldPara::moveDeglim = 10;

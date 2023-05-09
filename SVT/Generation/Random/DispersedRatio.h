@@ -15,5 +15,6 @@ public:
 	double Expectation();
 	double TotalChance() const;
 
-	double Rand(int p);
+
+	double Rand(int p, RandomMachine* rm);
 };

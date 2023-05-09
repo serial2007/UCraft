@@ -45,13 +45,13 @@ void ContinuousRatio::Sort()
 	this->Sorted = 1;
 }
 
-double ContinuousRatio::Rand(int p, double ran )
+double ContinuousRatio::Rand(int p, double ran, RandomMachine* rm)
 {
 
 	if (this->Sorted == 0) this->Sort();
 	if (this->Adjusted == 0) this->Adjust();
 
-	if (ran < 0)	ran = Randd(0, 1, p);
+	if (ran < 0)	ran = rm->Randd(0, 1, p);
 	int it;
 	for(it = 0; it < this->chance.size() - 1; ++it)
 	{

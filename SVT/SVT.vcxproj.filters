@@ -48,6 +48,9 @@
     <ClCompile Include="Class\Biome\Hill\hill.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Generation\Random\PositionRandom.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Biome\Test\test.h">
@@ -78,6 +81,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Class\Biome\Hill\hill.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Generation\Random\PositionRandom.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

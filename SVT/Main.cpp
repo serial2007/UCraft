@@ -13,4 +13,5 @@ int main()
 	std::cout << "SSSAAAVEE\n";
 	SaveAll();
 	system("pause");
+	return 0;
 }

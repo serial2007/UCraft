@@ -37,11 +37,11 @@ double DispersedRatio::TotalChance() const
 	return res;
 }
 
-double DispersedRatio::Rand(int p = 0)
+double DispersedRatio::Rand(int p = 0, RandomMachine* rm = &DefaultRandomMachine)
 {
 	if (this->Adjusted == 0) this->Adjust();
 
-	double ran = Randd(0, 1, p);
+	double ran = rm->Randd(0, 1, p);
 	unsigned long long it = 1;
 	while (ran > this->chance[it].chan)
 	{

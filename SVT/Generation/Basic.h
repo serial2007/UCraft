@@ -4,6 +4,7 @@
 #include <fstream>
 #include <algorithm>
 #include <functional>
+#include <iomanip>
 #include <vector>
 #include <map>
 #include <sstream>
@@ -60,8 +61,17 @@ namespace Generation
 		WorldUnit(int _x, int _y):
 			x(_x), y(_y) {}
 
-		unsigned short* PosBiome(int x, int y) { return &(chunk[x / 16][y / 16]->biomeid[x % 16][y % 16]); }
-		unsigned short* PosBlock(int x, int y, int z) { return &(chunk[x / 16][y / 16]->block[x % 16][y % 16][z]); }
+		unsigned short* PosBiome(int x, int y) {
+			if (x < 0 || x >= 256) return nullptr;
+			if (y < 0 || y >= 256) return nullptr;
+
+			return &(chunk[x / 16][y / 16]->biomeid[x % 16][y % 16]); }
+		unsigned short* PosBlock(int x, int y, int z) {
+			if (x < 0 || x >= 256) return nullptr;
+			if (y < 0 || y >= 256) return nullptr;
+			if (z < 0 || x >= 128) return nullptr;
+
+			return &(chunk[x / 16][y / 16]->block[x % 16][y % 16][z]); }
 		void NewChunks()
 		{
 			for (int i = 0; i < 16; ++i)
@@ -72,6 +82,7 @@ namespace Generation
 				}
 			}
 		}
+
 	};
 
 	class Biome
@@ -101,7 +112,10 @@ namespace Generation
 		{
 			this->BiomeList.push_back(std::make_pair(p, []() {return new T(); }));
 
-			std::cout << "Registering Biome (id = " << p << ", fa = " << fa << ", ID = " << BiomeList.size() - 1 << ", faID = " << Mapid[fa] << ")\n";
+			std::cout << "id = " << std::setw(6) << p << "  | fa = " << std::setw(7) << fa << "  | ID = " << std::setw(6) << BiomeList.size() - 1 << "  | faID = ";
+			if (Mapid[fa] == REGISTER_NULL)			std::cout << " <None>" << '\n';
+			else if (Mapid[fa] == REGISTER_BASE)	std::cout << "[START]" << '\n';
+			else std::cout << std::setw(6) << Mapid[fa] << '\n';
 
 			sonid[Mapid[fa]].push_back(BiomeList.size() - 1);
 			Mapid[p] = BiomeList.size() - 1;

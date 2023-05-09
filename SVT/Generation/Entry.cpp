@@ -1,5 +1,6 @@
 #include "Entry.h"
-
+#include <iostream>
+#include <iomanip>
 
 Generation::Biome* currentB = nullptr;
 Generation::BiomeMenu* biomeMenu = nullptr;
@@ -51,7 +52,7 @@ Generation::Chunk* Enquiry(int x, int y)
 	return nullptr;*/
 }
 
-#define RegisterBiome(x, y) uRegisterBiome<x>((new x)->id(), y)
+#define RegisterBiome(x, y) std::cout << std::setw(20) << #x << "  |  "; biomeMenu->uRegisterBiome<x>((new x)->id(), y);
 
 
 
@@ -70,9 +71,9 @@ void GenMain::RegisterBiomeMain()
 	biomeMenu->Mapid[REGISTER_BASE] = REGISTER_BASE;
 
 
-	biomeMenu->RegisterBiome(test::testBiome,		0xfffU);
-	biomeMenu->RegisterBiome(testson::testBiome,	15U);
-	biomeMenu->RegisterBiome(HILL::Hill,			0xfffU);
+	RegisterBiome(test::testBiome,		0xfffU);
+	RegisterBiome(testson::testBiome,	15U);
+	RegisterBiome(HILL::Hill,			0xfffU);
 	
 
 }

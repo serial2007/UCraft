@@ -16,5 +16,6 @@ public:
 	double TotalChance();
 	void Sort();
 
-	double Rand(int p, double ran = -1);
+	//如果指明ram，则输出为从左到右ran的概率
+	double Rand(int p, double ran = -1, RandomMachine* rm = &DefaultRandomMachine);
 };

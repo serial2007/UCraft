@@ -89,6 +89,7 @@ void Generation::WorldUnit::Save()
 	fout.close();
 }
 
+
 Generation::BiomeMenu::BiomeMenu(Biome*& _currentBiome) :
 	currentBiome(_currentBiome)
 {

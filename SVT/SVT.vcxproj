@@ -143,6 +143,7 @@
     <ClCompile Include="Generation\Random\Random.cpp" />
     <ClCompile Include="Generation\WorldPara.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Generation\Random\PositionRandom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Biome\Hill\hill.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Generation\Random\DispersedRatio.h" />
     <ClInclude Include="Generation\Random\Random.h" />
     <ClInclude Include="Generation\WorldPara.h" />
+    <ClInclude Include="Generation\Random\PositionRandom.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

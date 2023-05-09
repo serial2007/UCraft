@@ -2,6 +2,7 @@
 //#include "probability/DispersedRatio.h"
 #include "DispersedRatio.h"
 #include "ContinuousRandom.h"
+#include "PositionRandom.h"
 
 #include <iostream>
 #include <fstream>

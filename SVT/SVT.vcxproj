@@ -24,6 +24,7 @@
     <ProjectGuid>{3f6da369-8f52-42be-8f57-d37a0a1350e7}</ProjectGuid>
     <RootNamespace>SVT</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Server</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -135,6 +136,7 @@
     <ClCompile Include="Generation\Random\ContinuousRandom.cpp" />
     <ClCompile Include="Generation\Random\DispersedRatio.cpp" />
     <ClCompile Include="Generation\Random\Random.cpp" />
+    <ClCompile Include="Generation\WorldPara.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +148,7 @@
     <ClInclude Include="Generation\Random\ContinuousRandom.h" />
     <ClInclude Include="Generation\Random\DispersedRatio.h" />
     <ClInclude Include="Generation\Random\Random.h" />
+    <ClInclude Include="Generation\WorldPara.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

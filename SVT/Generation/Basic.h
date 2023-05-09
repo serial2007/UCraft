@@ -1,12 +1,14 @@
 #pragma once
-
+#include <io.h>
 #include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <functional>
 #include <vector>
 #include <map>
+#include <sstream>
 #include <string>
+#include <cstdio>
 #include <Windows.h>
 #include <stack>
 #include "Random/Random.h"
@@ -34,6 +36,7 @@ namespace Generation
 		unsigned short biomeid[16][16];
 
 		Chunk() { memset(block, 0, sizeof(block)); memset(biomeid, 0, sizeof(biomeid)); }
+		Chunk(int _X, int _Y) { memset(block, 0, sizeof(block)); memset(biomeid, 0, sizeof(biomeid)); this->x = _X, this->y = _Y; }
 		void Save();
 
 		
@@ -48,13 +51,23 @@ namespace Generation
 	public:
 		int x = 0, y = 0;
 		Chunk* chunk[16][16];
-		inline void Save();
+		void Save();
 
 		WorldUnit(int _x, int _y):
 			x(_x), y(_y) {}
 
-		inline unsigned short* PosBiome(int x, int y) { return &(chunk[x / 16][y / 16]->biomeid[x % 16][y % 16]); }
-		inline unsigned short* PosBlock(int x, int y, int z) { return &(chunk[x / 16][y / 16]->block[x % 16][y % 16][z]); }
+		unsigned short* PosBiome(int x, int y) { return &(chunk[x / 16][y / 16]->biomeid[x % 16][y % 16]); }
+		unsigned short* PosBlock(int x, int y, int z) { return &(chunk[x / 16][y / 16]->block[x % 16][y % 16][z]); }
+		void NewChunks()
+		{
+			for (int i = 0; i < 16; ++i)
+			{
+				for (int j = 0; j < 16; ++j)
+				{
+					chunk[i][j] = new Chunk(x * 16 + i, y * 16 + j);
+				}
+			}
+		}
 	};
 
 	class Biome
@@ -107,4 +120,5 @@ namespace Generation
 
 }
 
-Generation::Chunk* ImportChunk(int, int);
+Generation::WorldUnit* ImportWorldUnit(int x, int y);
+

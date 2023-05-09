@@ -1,6 +1,6 @@
 ﻿#include "Generation/Random/Random.h"
 #include "Generation/Entry.h"
-
+#include <cstdio>
 
 int main()
 {
@@ -10,6 +10,7 @@ int main()
 
 
 	Enquiry(0, 0);
-
+	std::cout << "SSSAAAVEE\n";
+	SaveAll();
 	system("pause");
 }

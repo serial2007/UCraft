@@ -15,7 +15,7 @@ namespace GenMain
 
 	extern inline void RegisterBiomeMain();
 
-
+	
 }
 
 extern  Generation::Biome* currentB;
@@ -24,4 +24,4 @@ extern  Generation::BiomeMenu* biomeMenu;
 
 Generation::Chunk* Enquiry(int x, int y);
 
-extern int G;
+extern void SaveAll();

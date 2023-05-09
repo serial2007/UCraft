@@ -1,44 +1,53 @@
 #include "Basic.h"
 
 int Generation::seed;
+#define WORLDUNIT_BLOCKS 8388608
 
+std::string Generation::dir = "D:/Ucraft";
 
-std::string Generation::dir;
-
-Generation::Chunk* ImportChunk(int x, int y)
+Generation::WorldUnit* ImportWorldUnit(int x, int y)
 {
-	Generation::Chunk* it = nullptr;
-	std::ifstream fin(Generation::dir + "/chunks/" + std::to_string(x) + '.' + std::to_string(y) + ".chunk");
-	if (!fin.good()) return nullptr;
+	Generation::WorldUnit* it = nullptr;
+	std::string f = Generation::dir + "/world/" + std::to_string(x) + '.' + std::to_string(y) + ".unit";
+	std::ifstream fin(f.c_str());
+	try
+	{
+		if (!fin.good()) return nullptr;
 
-	it = new Generation::Chunk();
-	for (int i = 0; i < 16; ++i)
-		for (int j = 0; j < 16; ++j)
-		{
-			fin >> it->biomeid[i][j];
-			for (int k = 0; k < 128; ++k)
+		
+		std::stringstream buf;
+		buf << fin.rdbuf();
+		std::string tmp(buf.str());
+
+
+		unsigned int q = 0;
+		it = new Generation::WorldUnit(x, y);
+		for (int I = 0; I < 16; ++I)
+			for (int J = 0; J < 16; ++J)
 			{
-				fin >> it->block[i][j][k];
+				it->chunk[I][J] = new Generation::Chunk(x * 16 + I, y * 16 + J);
+				
+				for (int i = 0; i < 16; ++i)
+					for (int j = 0; j < 16; ++j)
+					{
+						it->chunk[I][J]->biomeid[i][j] = tmp[q] - 1;
+						++q;
+						for (int k = 0; k < 128; ++k)
+						{
+							it->chunk[I][J]->block[i][j][k] = tmp[q] - 1;
+							++q;
+						}
+					}
 			}
-		}
+		fin.close();
+	}
+	catch (...)
+	{
+		std::cout << "Import WorldUnit Failed " << f << '\n';
+		remove(f.c_str());
+		return nullptr;
+	}
 	return it;
-}
-
-void Generation::Chunk::Save()
-{
-	std::string tmp = (Generation::dir + "/chunks/" + std::to_string(this->x) + '.' + std::to_string(this->y) + ".chunk");
-	const char* f = tmp.c_str();
-	DeleteFile((LPCWSTR)f);
-	std::ofstream fout(f);
-	for (int i = 0; i < 16; ++i)
-		for (int j = 0; j < 16; ++j)
-		{
-			fout << this->biomeid[i][j] << ' ';
-			for (int k = 0; k < 128; ++k)
-			{
-				fout << this->block[i][j][k] << ' ';
-			}
-		}
 }
 
 void Generation::Chunk::Biome2DOut()
@@ -54,13 +63,30 @@ void Generation::Chunk::Biome2DOut()
 	}
 }
 
-inline void Generation::WorldUnit::Save()
+void Generation::WorldUnit::Save()
 {
-	for(int i = 0; i < 16; ++i)
+	std::string k = (Generation::dir + "/world/" + std::to_string(x) + '.' + std::to_string(y) + ".unit");
+	remove(k.c_str());
+	std::ofstream fout(k.c_str());
+
+	std::string tmp;
+	for (int I = 0; I < 16; ++I)
+	for (int J = 0; J < 16; ++J)
+	{
+		for (int i = 0; i < 16; ++i)
 		for (int j = 0; j < 16; ++j)
 		{
-			this->chunk[i][j]->Save();
+			tmp += char(this->chunk[I][J]->biomeid[i][j] + 1);
+			for (int k = 0; k < 128; ++k)
+			{
+				tmp += char(this->chunk[I][J]->block[i][j][k]);
+			}	
 		}
+	}
+
+	fout << tmp;
+
+	fout.close();
 }
 
 Generation::BiomeMenu::BiomeMenu(Biome*& _currentBiome) :
@@ -70,24 +96,11 @@ Generation::BiomeMenu::BiomeMenu(Biome*& _currentBiome) :
 
 Generation::WorldUnit* Generation::BiomeMenu::DivideBiomes(WorldUnit* unit)
 {
-	/*auto stack = this->BiomeStack;
-	while (!stack.empty())
-	{
-		Generation::Biome* biome = stack.top().second();
-		biome->Divide(unit);
-		biome->Generate(unit);
-		for (int i = biome->son.size() - 1; i >= 0; --i)
-		{
-			stack.push(biome->son[i]);
-		}
-	}*/
-
+	std::cout << "Divide Biomes (" << unit->x << ", " << unit->y << ")\n";
 	std::stack<unsigned int> stk;
 	stk.push(0xfff);
 	while (!stk.empty())
 	{
-
-		//Generation::Biome* biome = 
 		unsigned p = stk.top();
 		std::cout << "p = " << p << '\n';
 		stk.pop();
@@ -101,31 +114,9 @@ Generation::WorldUnit* Generation::BiomeMenu::DivideBiomes(WorldUnit* unit)
 
 		for (int i = sonid[p].size() - 1; i >= 0; --i)
 		{
-			//if (sonid[p][i])
-				stk.push(sonid[p][i]);
+			stk.push(sonid[p][i]);
 		}
 	}
 	std::cout << "END\n";
-	/*for (auto& it : BiomeList)
-	{
-		currentBiome = it.second();
-		currentBiome->Divide(unit);
-	}
-
-	for (auto& it : BiomeList)
-	{
-		currentBiome = it.second();
-		currentBiome->Generate(unit);
-	}*/
-
 	return unit;
 }
-
-//std::vector <std::pair<unsigned int, std::function<Generation::Biome* (void)> > >  Generation::BiomeList;
-
-
-//template<typename T> void Generation::RegisterBiome(unsigned int p, unsigned int fa)
-//{
-//
-//	
-//}

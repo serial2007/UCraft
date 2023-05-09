@@ -7,7 +7,26 @@ Generation::BiomeMenu* biomeMenu = nullptr;
 std::map<std::pair<int, int>, Generation::WorldUnit*> GenMain::WorldUnitTmp;
 Generation::Chunk* Enquiry(int x, int y)
 {
-	Generation::Chunk* chunk = ImportChunk(x, y);
+	if (GenMain::WorldUnitTmp.find(std::make_pair(x / 16, y / 16)) != GenMain::WorldUnitTmp.end())
+	{
+		return GenMain::WorldUnitTmp[std::make_pair(x / 16, y / 16)]->chunk[x % 16][y % 16];
+	}
+	else
+	{
+		Generation::WorldUnit* unit = ImportWorldUnit(x / 16, y / 16);
+		if (unit == nullptr)
+		{
+			unit = new Generation::WorldUnit(x / 16, y / 16);
+			unit->NewChunks();
+			biomeMenu->DivideBiomes(unit);
+
+		}
+
+		GenMain::WorldUnitTmp[std::make_pair(x / 16, y / 16)] = unit;
+		return unit->chunk[x % 16][y % 16];
+		
+	}
+	/*Generation::Chunk* chunk = ImportChunk(x, y);
 	if (chunk == nullptr)
 	{
 		std::cout << "Unexisted chunk\n";
@@ -17,6 +36,7 @@ Generation::Chunk* Enquiry(int x, int y)
 		{
 			std::cout << "Unexisted worldunit\n";
 			Generation::WorldUnit* unit = new Generation::WorldUnit(x / 16, y / 16);
+			unit->NewChunks();
 			biomeMenu->DivideBiomes(unit);
 			GenMain::WorldUnitTmp[std::make_pair(x / 16, y / 16)] = unit;
 			return unit->chunk[x % 16][y % 16];
@@ -28,7 +48,7 @@ Generation::Chunk* Enquiry(int x, int y)
 		}
 	}
 	else return chunk;
-	return nullptr;
+	return nullptr;*/
 }
 
 #define RegisterBiome(x, y) uRegisterBiome<x>((new x)->id(), y)
@@ -57,4 +77,10 @@ void GenMain::RegisterBiomeMain()
 
 }
 
-int G = 0;
+void SaveAll()
+{
+	for (auto& it : GenMain::WorldUnitTmp)
+	{
+		it.second->Save();
+	}
+}

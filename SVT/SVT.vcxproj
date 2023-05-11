@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -24,7 +24,7 @@
     <ProjectGuid>{3f6da369-8f52-42be-8f57-d37a0a1350e7}</ProjectGuid>
     <RootNamespace>SVT</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Server</ProjectName>
+    <ProjectName>UCraft</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -72,7 +72,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ExternalIncludePath>D:\LIBS\boost_1_82_0\boost_1_82_0;D:\LIBS\asio2-master\include;D:\LIBS\asio2-master\3rd;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>D:\LIBS\boost_1_82_0\boost_1_82_0;D:\LIBS\asio2-master\include;D:\LIBS\asio2-master\3rd;$(ExternalIncludePath);D:\LIBS\glm;C:\Program Files (x86)\freetype\include\freetype2;C:\Program Files %28x86%29\soil2\include;D:\LIBS\glew-2.1.0\include;D:\LIBS\glfw\include;C:\Program Files (x86)\freetype\include;</ExternalIncludePath>
+    <LibraryPath>C:\Program Files (x86)\freetype\lib;C:\Program Files %28x86%29\soil2\lib;D:\LIBS\glew-2.1.0\lib\Debug\x64;D:\LIBS\glfw\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,6 +114,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;freetyped.lib;glew32sd.lib;glew32d.lib;soil2.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -132,6 +134,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="UCLient\Graph\ChunkDraw.cpp" />
     <ClCompile Include="Class\Biome\Hill\hill.cpp" />
     <ClCompile Include="Class\Biome\Test\test.cpp" />
     <ClCompile Include="Class\Biome\Test\TestSon\testSon.cpp" />
@@ -142,10 +146,24 @@
     <ClCompile Include="Generation\Random\DispersedRatio.cpp" />
     <ClCompile Include="Generation\Random\Random.cpp" />
     <ClCompile Include="Generation\WorldPara.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Generation\Random\PositionRandom.cpp" />
+    <ClCompile Include="UCLient\Graph\BasicClass\cpp\BasicHeaders.cpp" />
+    <ClCompile Include="UCLient\Graph\BasicClass\cpp\IndexBuffer.cpp" />
+    <ClCompile Include="UCLient\Graph\BasicClass\cpp\Renderer.cpp" />
+    <ClCompile Include="UCLient\Graph\BasicClass\cpp\Shader.cpp" />
+    <ClCompile Include="UCLient\Graph\BasicClass\cpp\Texture.cpp" />
+    <ClCompile Include="UCLient\Graph\BasicClass\cpp\VertexArray.cpp" />
+    <ClCompile Include="UCLient\Graph\BasicClass\cpp\VertexBuffer.cpp" />
+    <ClCompile Include="UCLient\Graph\BasicClass\lib\lib\stb_vorbis.c" />
+    <ClCompile Include="UCLient\Graph\imgui\imgui.cpp" />
+    <ClCompile Include="UCLient\Graph\imgui\imgui_demo.cpp" />
+    <ClCompile Include="UCLient\Graph\imgui\imgui_draw.cpp" />
+    <ClCompile Include="UCLient\Graph\imgui\imgui_impl_glfw_gl3.cpp" />
+    <ClCompile Include="UCLient\Graph\imgui\misc\freetype\imgui_freetype.cpp" />
+    <ClCompile Include="UCLient\Graph\RenderBlockProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="UCLient\Graph\ChunkDraw.h" />
     <ClInclude Include="Class\Biome\Hill\hill.h" />
     <ClInclude Include="Class\Biome\Test\test.h" />
     <ClInclude Include="Class\Biome\Test\TestSon\testSon.h" />
@@ -157,6 +175,43 @@
     <ClInclude Include="Generation\Random\Random.h" />
     <ClInclude Include="Generation\WorldPara.h" />
     <ClInclude Include="Generation\Random\PositionRandom.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\BasicHeaders.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\IndexBuffer.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_connected_components.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_c_lexer.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_divide.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_ds.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_dxt.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_easy_font.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_herringbone_wang_tile.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_hexwave.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_image.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_image_resize.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_image_write.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_include.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_leakcheck.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_perlin.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_rect_pack.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_sprintf.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_textedit.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_tilemap_editor.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_truetype.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\lib\stb_voxel_render.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\Renderer.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\Shader.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\Texture.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\VertexArray.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\lib\VertexBuffer.h" />
+    <ClInclude Include="UCLient\Graph\BasicClass\Main.h" />
+    <ClInclude Include="UCLient\Graph\imgui\imconfig.h" />
+    <ClInclude Include="UCLient\Graph\imgui\imgui.h" />
+    <ClInclude Include="UCLient\Graph\imgui\imgui_impl_glfw_gl3.h" />
+    <ClInclude Include="UCLient\Graph\imgui\imgui_internal.h" />
+    <ClInclude Include="UCLient\Graph\imgui\misc\freetype\imgui_freetype.h" />
+    <ClInclude Include="UCLient\Graph\imgui\stb_rect_pack.h" />
+    <ClInclude Include="UCLient\Graph\imgui\stb_textedit.h" />
+    <ClInclude Include="UCLient\Graph\imgui\stb_truetype.h" />
+    <ClInclude Include="UCLient\Graph\RenderBlockProcess.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

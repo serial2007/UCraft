@@ -26,9 +26,6 @@ inline void HILL::Hill::GenSonHill(Generation::WorldUnit* h, HILL::Single& con, 
 
 		this->GenSonHill(h, tmp, x, y);
 	}
-
-	std::cout << "SonHill : " << tmp.x << ' ' << tmp.y << ' ' << tmp.h << ' ' << tmp.deg << '\n';
-
 	return;
 }
 
@@ -39,8 +36,8 @@ void HILL::Hill::ValidateHill(Generation::WorldUnit* h, HILL::Single& con, int x
 	int cx = con.x - x;
 	int cy = con.y - y;
 
-	if (cx < 0 || cx >= 128) { std::cout << "No\n"; return; }
-	if (cy < 0 || cy >= 128) { std::cout << "No\n"; return; }
+	if (cx < 0 || cx >= 256) { std::cout << "No\n"; return; }
+	if (cy < 0 || cy >= 256) { std::cout << "No\n"; return; }
 
 	this->WorldHill.push_back(con);
 	{ std::cout << "Yes\n"; return; }
@@ -52,8 +49,8 @@ inline void HILL::Hill::Genmain(Generation::WorldUnit* h, int x, int y)
 	HILL::Single peek;
 	while (peekn--)
 	{
-		peek.x = rm.Randi(x, x + 127, (long long)(std::sin(peekn) * INT_MAX) % 10000000);
-		peek.y = rm.Randi(x, y + 127, (long long)(std::log(peekn) * INT_MAX) % 10000000);
+		peek.x = rm.Randi(x, x + 255, (long long)(std::sin(peekn) * INT_MAX) % 10000000);
+		peek.y = rm.Randi(x, y + 255, (long long)(std::log(peekn) * INT_MAX) % 10000000);
 		peek.h = rm.Randd(0, WorldPara::maxh, (long long)(std::cos(peekn) * INT_MAX) % 10000000);
 
 		peek.deg = (int)(std::log(peek.h) * WorldPara::moveDeglim / std::log(WorldPara::maxh));
@@ -91,10 +88,9 @@ inline void HILL::Hill::Print(Generation::WorldUnit* h, int x, int y)
 
 	for (int k = 0; k < this->WorldHill.size(); ++k)
 	{
-		std::cout << "HILL" << this->WorldHill[k].h;
+		std::cout << "HILL" << this->WorldHill[k].h << ' ';
 		std::cout << this->WorldHill[k].x - x << ' ' << this->WorldHill[k].y - y << std::endl;
 	}
-	system("pause");
 }
 
 double HILL::Hill::SmoothHill(double dis2, int p = 0)
@@ -111,6 +107,12 @@ double HILL::Hill::SmoothHill(double dis2, int p = 0)
 inline void HILL::Hill::PrintHill(Generation::WorldUnit* h, int x, int y)
 {
 	std::cout << "PrintHill\n";
+	if (h == nullptr)
+	{
+		std::cout << "Empty World Unit";
+		system("pause");
+	}
+
 
 	for (int k = 0; k < this->WorldHill.size(); ++k)
 	{
@@ -121,8 +123,6 @@ inline void HILL::Hill::PrintHill(Generation::WorldUnit* h, int x, int y)
 
 		this->LocTmp[k].h = 100000 * this->WorldHill[k].x * this->WorldHill[k].y;
 	}
-
-	system("pause");
 
 	for (int i = 0; i < 256; ++i)
 		for (int j = 0; j < 256; ++j)
@@ -142,8 +142,17 @@ inline void HILL::Hill::PrintHill(Generation::WorldUnit* h, int x, int y)
 			{
 			
 				auto it = h->PosBlock(i, j, k);
-				if(it != nullptr)
-				*it = 10U;
+				if (it == nullptr)
+				{
+					std::cout << "nullptr block (" << i << ", " << j << ", " << k << ")\n";
+					Sleep(100);
+				}
+				else
+				{
+					*it = 10U;
+					//std::cout << "        block (" << i << ", " << j << ", " << k << ")\n";
+					//5Sleep(100);
+				}
 			}
 		}
 }

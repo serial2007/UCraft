@@ -63,6 +63,21 @@ void Generation::Chunk::Biome2DOut()
 	}
 }
 
+void Generation::Chunk::Biome3Dout()
+{
+	std::cout << "Chunk(" << this->x << ", " << this->y << ")\n";
+	for (int i = 0; i < 16; ++i)
+	{
+		for (int j = 0; j < 16; ++j)
+		{
+			for(int k = 0; k < 128; ++k)
+			std::cout << "(" << i << ", " << j << ", " << k << ") = " <<this->block[i][j][k] << '\n';
+		}
+		//std::cout << std::endl;
+	}
+}
+
+
 void Generation::WorldUnit::Save()
 {
 	std::string k = (Generation::dir + "/world/" + std::to_string(x) + '.' + std::to_string(y) + ".unit");
@@ -79,7 +94,7 @@ void Generation::WorldUnit::Save()
 			tmp += char(this->chunk[I][J]->biomeid[i][j] + 1);
 			for (int k = 0; k < 128; ++k)
 			{
-				tmp += char(this->chunk[I][J]->block[i][j][k]);
+				tmp += char(this->chunk[I][J]->block[i][j][k] + 1);
 			}	
 		}
 	}

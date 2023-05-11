@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{a49825c4-919d-429c-9efc-09342aacaa88}</ProjectGuid>
-    <RootNamespace>Client</RootNamespace>
+    <ProjectGuid>{55742ab0-61ee-4c63-a0c1-5511b2276996}</ProjectGuid>
+    <RootNamespace>open</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -71,7 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ExternalIncludePath>D:\LIBS\boost_1_82_0\boost_1_82_0;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>D:\LIBS\glm;C:\Program Files (x86)\freetype\include\freetype2;C:\Program Files %28x86%29\soil2\include;D:\LIBS\glew-2.1.0\include;D:\LIBS\glfw\include;C:\Program Files (x86)\freetype\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>C:\Program Files (x86)\freetype\lib;C:\Program Files %28x86%29\soil2\lib;D:\LIBS\glew-2.1.0\lib\Debug\x64;D:\LIBS\glfw\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -111,6 +112,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;freetyped.lib;glew32sd.lib;glew32d.lib;soil2.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -130,7 +132,80 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="BasicClass\cpp\Shader.cpp" />
+    <ClCompile Include="BasicClass\cpp\IndexBuffer.cpp" />
+    <ClCompile Include="BasicClass\cpp\BasicHeaders.cpp" />
+    <ClCompile Include="BasicClass\cpp\Renderer.cpp" />
+    <ClCompile Include="BasicClass\lib\lib\stb_vorbis.c" />
+    <ClCompile Include="imgui\imgui.cpp" />
+    <ClCompile Include="imgui\imgui_demo.cpp" />
+    <ClCompile Include="imgui\imgui_draw.cpp" />
+    <ClCompile Include="imgui\misc\freetype\imgui_freetype.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="BasicClass\cpp\Texture.cpp" />
+    <ClCompile Include="BasicClass\cpp\VertexBuffer.cpp" />
+    <ClCompile Include="BasicClass\cpp\VertexArray.cpp" />
+    <ClCompile Include="imgui\imgui_impl_glfw_gl3.cpp" />
+    <ClCompile Include="TESTS\Test.cpp" />
+    <ClCompile Include="TESTS\TestClearColor.cpp" />
+    <ClCompile Include="TESTS\TestTexture2D.cpp" />
+    <ClCompile Include="TESTS\TestTexture2D2.cpp" />
+    <ClCompile Include="TESTS\TestTexture2D3.cpp" />
+    <ClCompile Include="TESTS\TestTexture2D4.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BasicClass\lib\BasicHeaders.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_connected_components.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_c_lexer.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_divide.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_ds.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_dxt.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_easy_font.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_herringbone_wang_tile.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_hexwave.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_image.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_image_resize.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_image_write.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_include.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_leakcheck.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_perlin.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_rect_pack.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_sprintf.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_textedit.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_tilemap_editor.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_truetype.h" />
+    <ClInclude Include="BasicClass\lib\lib\stb_voxel_render.h" />
+    <ClInclude Include="BasicClass\lib\Shader.h" />
+    <ClInclude Include="BasicClass\lib\IndexBuffer.h" />
+    <ClInclude Include="BasicClass\lib\Renderer.h" />
+    <ClInclude Include="BasicClass\lib\Texture.h" />
+    <ClInclude Include="BasicClass\lib\VertexBuffer.h" />
+    <ClInclude Include="BasicClass\lib\VertexArray.h" />
+    <ClInclude Include="BasicClass\Main.h" />
+    <ClInclude Include="ImguiEntry.h" />
+    <ClInclude Include="imgui\imconfig.h" />
+    <ClInclude Include="imgui\imgui.h" />
+    <ClInclude Include="imgui\imgui_impl_glfw_gl3.h" />
+    <ClInclude Include="imgui\imgui_internal.h" />
+    <ClInclude Include="imgui\misc\freetype\imgui_freetype.h" />
+    <ClInclude Include="imgui\stb_rect_pack.h" />
+    <ClInclude Include="imgui\stb_textedit.h" />
+    <ClInclude Include="imgui\stb_truetype.h" />
+    <ClInclude Include="TESTS\Test.h" />
+    <ClInclude Include="TESTS\TestClearColor.h" />
+    <ClInclude Include="TESTS\TestTexture2D.h" />
+    <ClInclude Include="TESTS\TestTexture2D2.h" />
+    <ClInclude Include="TESTS\TestTexture2D3.h" />
+    <ClInclude Include="TESTS\TestTexture2D4.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Basic.shader" />
+    <None Include="TESTS\Color.shader" />
+    <None Include="TESTS\MultiTexture.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="BasicClass\lib\lib\test.png" />
+    <Image Include="test.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

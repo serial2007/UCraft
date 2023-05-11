@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BasicClass\cpp\Texture.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicClass\cpp\VertexBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicClass\cpp\Shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicClass\cpp\IndexBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicClass\cpp\BasicHeaders.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicClass\cpp\VertexArray.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicClass\cpp\Renderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_glfw_gl3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\misc\freetype\imgui_freetype.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicClass\lib\lib\stb_vorbis.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TESTS\Test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TESTS\TestTexture2D.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TESTS\TestClearColor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TESTS\TestTexture2D2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TESTS\TestTexture2D3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TESTS\TestTexture2D4.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BasicClass\lib\Texture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\VertexBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\BasicHeaders.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\Shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\IndexBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\VertexArray.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\Renderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_glfw_gl3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\stb_textedit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\stb_truetype.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\stb_rect_pack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\misc\freetype\imgui_freetype.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_c_lexer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_connected_components.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_divide.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_ds.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_dxt.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_easy_font.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_herringbone_wang_tile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_hexwave.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_image_resize.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_image_write.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_include.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_leakcheck.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_perlin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_rect_pack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_sprintf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_textedit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_tilemap_editor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_truetype.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\lib\lib\stb_voxel_render.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ImguiEntry.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TESTS\Test.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TESTS\TestTexture2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TESTS\TestClearColor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicClass\Main.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TESTS\TestTexture2D2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TESTS\TestTexture2D3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TESTS\TestTexture2D4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Basic.shader">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="TESTS\Color.shader" />
+    <None Include="TESTS\MultiTexture.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="BasicClass\lib\lib\test.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="test.png">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

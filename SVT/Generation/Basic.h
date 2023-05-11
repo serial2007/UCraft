@@ -47,6 +47,7 @@ namespace Generation
 		
 
 		void Biome2DOut();
+		void Biome3Dout();
 	};
 
 	
@@ -69,7 +70,7 @@ namespace Generation
 		unsigned short* PosBlock(int x, int y, int z) {
 			if (x < 0 || x >= 256) return nullptr;
 			if (y < 0 || y >= 256) return nullptr;
-			if (z < 0 || x >= 128) return nullptr;
+			if (z < 0 || z >= 128) return nullptr;
 
 			return &(chunk[x / 16][y / 16]->block[x % 16][y % 16][z]); }
 		void NewChunks()

@@ -21,9 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{c1b6e110-5f76-4f6c-8e2c-d343c0a1ac05}</ProjectGuid>
-    <RootNamespace>Tcp</RootNamespace>
+    <ProjectGuid>{9aaf0905-e174-4d3b-a37c-a5a63e9af073}</ProjectGuid>
+    <RootNamespace>UCLient</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>UClient</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -71,7 +72,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ExternalIncludePath>D:\LIBS\boost_1_82_0\boost_1_82_0;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>D:\LIBS\glm;C:\Program Files (x86)\freetype\include\freetype2;C:\Program Files %28x86%29\soil2\include;D:\LIBS\glew-2.1.0\include;D:\LIBS\glfw\include;C:\Program Files (x86)\freetype\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>C:\Program Files (x86)\freetype\lib;C:\Program Files %28x86%29\soil2\lib;D:\LIBS\glew-2.1.0\lib\Debug\x64;D:\LIBS\glfw\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -107,10 +109,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;freetyped.lib;glew32sd.lib;glew32d.lib;soil2.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -129,6 +134,71 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Graph\BasicClass\cpp\BasicHeaders.cpp" />
+    <ClCompile Include="Graph\BasicClass\cpp\IndexBuffer.cpp" />
+    <ClCompile Include="Graph\BasicClass\cpp\Renderer.cpp" />
+    <ClCompile Include="Graph\BasicClass\cpp\Shader.cpp" />
+    <ClCompile Include="Graph\BasicClass\cpp\Texture.cpp" />
+    <ClCompile Include="Graph\BasicClass\cpp\VertexArray.cpp" />
+    <ClCompile Include="Graph\BasicClass\cpp\VertexBuffer.cpp" />
+    <ClCompile Include="Graph\BasicClass\lib\lib\stb_vorbis.c" />
+    <ClCompile Include="Graph\imgui\imgui.cpp" />
+    <ClCompile Include="Graph\imgui\imgui_demo.cpp" />
+    <ClCompile Include="Graph\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Graph\imgui\imgui_impl_glfw_gl3.cpp" />
+    <ClCompile Include="Graph\imgui\misc\freetype\imgui_freetype.cpp" />
+    <ClCompile Include="Graph\RenderBlockProcess.cpp" />
+    <ClCompile Include="Tick\Basic.cpp" />
+    <ClCompile Include="源.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Graph\BasicClass\lib\BasicHeaders.h" />
+    <ClInclude Include="Graph\BasicClass\lib\IndexBuffer.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_connected_components.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_c_lexer.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_divide.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_ds.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_dxt.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_easy_font.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_herringbone_wang_tile.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_hexwave.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_image.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_image_resize.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_image_write.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_include.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_leakcheck.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_perlin.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_rect_pack.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_sprintf.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_textedit.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_tilemap_editor.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_truetype.h" />
+    <ClInclude Include="Graph\BasicClass\lib\lib\stb_voxel_render.h" />
+    <ClInclude Include="Graph\BasicClass\lib\Renderer.h" />
+    <ClInclude Include="Graph\BasicClass\lib\Shader.h" />
+    <ClInclude Include="Graph\BasicClass\lib\Texture.h" />
+    <ClInclude Include="Graph\BasicClass\lib\VertexArray.h" />
+    <ClInclude Include="Graph\BasicClass\lib\VertexBuffer.h" />
+    <ClInclude Include="Graph\BasicClass\Main.h" />
+    <ClInclude Include="Graph\ImguiEntry.h" />
+    <ClInclude Include="Graph\imgui\imconfig.h" />
+    <ClInclude Include="Graph\imgui\imgui.h" />
+    <ClInclude Include="Graph\imgui\imgui_impl_glfw_gl3.h" />
+    <ClInclude Include="Graph\imgui\imgui_internal.h" />
+    <ClInclude Include="Graph\imgui\misc\freetype\imgui_freetype.h" />
+    <ClInclude Include="Graph\imgui\stb_rect_pack.h" />
+    <ClInclude Include="Graph\imgui\stb_textedit.h" />
+    <ClInclude Include="Graph\imgui\stb_truetype.h" />
+    <ClInclude Include="Graph\RenderBlockProcess.h" />
+    <ClInclude Include="Tick\Basic.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Basic.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="test.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

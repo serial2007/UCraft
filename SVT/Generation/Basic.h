@@ -66,6 +66,14 @@ namespace Generation
 		WorldUnit(int _x, int _y):
 			x(_x), y(_y) {}
 
+		~WorldUnit() {
+			for(int i = 0; i < 16; ++i)
+			for(int j = 0; j < 16; ++j)
+			{
+				delete this->chunk[i][j];
+			}
+		}
+
 		unsigned short* PosBiome(int x, int y) {
 			if (x < 0 || x >= 256) {
 				std::cout << "x = " << x << '\n';

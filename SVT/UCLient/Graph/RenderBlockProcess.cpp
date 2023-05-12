@@ -3,10 +3,12 @@
 #include "../../Generation/Entry.h"
 
 bool				RenderBlock::shouldUpdate = 0;
-unsigned			RenderBlock::offset = 0;
-RenderBlock::UBasic RenderBlock::wh[1024 * 256];
+unsigned			RenderBlock::offset = 0, RenderBlock::offset1 = 0;
+RenderBlock::UBasic RenderBlock::wh[1024 * 256 * 4 * 8 * 4 ];
+RenderBlock::UBasic RenderBlock::wh1[1024 * 256 * 4 * 8 * 4];
 unsigned			RenderBlock::RendererN = 0;
-unsigned			RenderBlock::indices[65537 * 4];
+unsigned			RenderBlock::RendererN1 = 0;
+unsigned			RenderBlock::indices[65537 * 4 * 4 * 8 * 4 ];
 float				RenderBlock::GHeight, RenderBlock::GWidth;
 int					RenderBlock::WinWidth = 2560, RenderBlock::WinHeight = 1440;
 glm::vec3			RenderBlock::cameraPos;
@@ -63,7 +65,7 @@ void RenderBlockProcess()
 {
 	Renderer::ActivateImgui = 1;
 
-	for (int i = 0, k = 0; i < 65537 * 4 - 6; i += 6, k += 4)
+	for (int i = 0, k = 0; i < 65537 * 4 * 4  - 6; i += 6, k += 4)
 	{
 		RenderBlock::indices[i]		= k;
 		RenderBlock::indices[i + 1]	= k + 1;
@@ -78,20 +80,20 @@ void RenderBlockProcess()
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	RenderBlock::window		= Renderer::NewWindow(RenderBlock::WinWidth, RenderBlock::WinHeight);
-	auto projection	= glm::perspective(glm::radians(30.0f), RenderBlock::WinWidth / float(RenderBlock::WinHeight), 0.1f, 100.0f);
+	auto projection	= glm::perspective(glm::radians(30.0f), RenderBlock::WinWidth / float(RenderBlock::WinHeight), 0.1f, 10000.0f);
 	//auto view		= glm::translate(glm::mat4(1.0), glm::vec3(0.0f, 0.0f, -3.0f));
 	
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	VertexArray va;
-	VertexBuffer vb(nullptr, 65536 * 128, 0);
+	VertexBuffer vb(nullptr, 65536 * 128 * 4 * 8 * 4 , 0);
 
 	
 	VertexBufferLayout layout;
 	layout.push<int>(3);
 	layout.push<float>(2);
 	va.AddBuffer(vb, layout);
-	IndexBuffer ib(RenderBlock::indices, 65536 * 8);
+	IndexBuffer ib(RenderBlock::indices, 65536 * 8 * 2 * 4 * 4 );
 
 	Shader shader("UCLient/Basic.shader");
 	shader.Bind();
@@ -119,6 +121,8 @@ void RenderBlockProcess()
 	float rg = -90.0f;
 	RenderBlock::lstFrame = glfwGetTime();
 
+	glClearColor(161 / 255.0f, 219 / 255.0f, 255 / 255.0f, 1.0f);
+
 	while (!glfwWindowShouldClose(RenderBlock::window))
 	{
 		RenderBlock::currentFrame = glfwGetTime();
@@ -126,24 +130,24 @@ void RenderBlockProcess()
 		//lstFrame = currentFrame;
 		//glfwGetWindowSize(window, &RenderBlock::WinWidth, &RenderBlock::WinHeight);
 
+		RenderBlock::processInput(RenderBlock::window, RenderBlock::currentFrame - RenderBlock::lstFrame);
+		RenderBlock::lstFrame = RenderBlock::currentFrame;
+
+
+
+
 		
-
-
-
-
-
-		Renderer::Clear();
-		auto look = glm::perspective(glm::radians(45.0f), RenderBlock::WinWidth / float(RenderBlock::WinHeight), 0.1f, 100.0f);
+		auto look = glm::perspective(glm::radians(45.0f), RenderBlock::WinWidth / float(RenderBlock::WinHeight), 0.1f, 300.0f);
 		auto model = glm::rotate(glm::mat4(1.0), glm::radians(rg), glm::vec3(1.0f, 0.0f, 0.0f));
 
 
 
 		//float currentFrame = glfwGetTime();
-		while(!RenderBlock::shouldUpdate) {
-			//RenderBlock::processInput(window, deltaTime);
-		}
-		RenderBlock::shouldUpdate = 0;
-
+		//while(!RenderBlock::shouldUpdate) {
+		////	//RenderBlock::processInput(window, deltaTime);
+		//}
+		
+		
 		glClear(GL_DEPTH_BUFFER_BIT);
 		shader.SetUniformMat4f("proj", look);
 		
@@ -158,18 +162,18 @@ void RenderBlockProcess()
 		
 
 		vb.Bind();
-		glBufferSubData(GL_ARRAY_BUFFER, 0, RenderBlock::offset * sizeof(RenderBlock::UBasic), RenderBlock::wh);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, RenderBlock::offset1 * sizeof(RenderBlock::UBasic), RenderBlock::wh1);
 
 		projection = glm::perspective(glm::radians(h), RenderBlock::WinWidth / float(RenderBlock::WinHeight), 0.1f, 100.0f);
 		glEnable(GL_DEPTH_TEST);
-		
-		if(RenderBlock::RegisterDone)
-			Renderer::Draw(va, ib, shader, RenderBlock::RendererN * 6);
-		RenderBlock::RegisterDone = 0;
+
+		Renderer::Clear();
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			Renderer::Draw(va, ib, shader, RenderBlock::RendererN1 * 6);
 
 		ImGui::Begin("Test");
 
-		ImGui::DragInt3("VertxPos", &RenderBlock::wh->x);
 		ImGui::DragFloat3("CamPos", &RenderBlock::cameraPos.x);
 		ImGui::DragFloat2("View", EyeAngle);
 		ImGui::DragFloat("Rotate", &rg);
@@ -190,7 +194,7 @@ void RenderBlockProcess()
 
 #include "../ImportInfo.h"
 
-void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id)
+void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id, unsigned layout)
 {
 	/*binfo[id] = {
 		stx, sty, endx, endy,

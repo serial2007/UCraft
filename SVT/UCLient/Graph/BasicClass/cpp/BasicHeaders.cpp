@@ -33,6 +33,7 @@ int IntDiv(int a, int b)
 int IntMod(int a, int b)
 {
 	if (a >= 0) return a % b;
+	if (a % b == 0) return 0;
 	return b + a % b;
 }
 

@@ -62,19 +62,19 @@ inline void HILL::Hill::Genmain(Generation::WorldUnit* h, int x, int y)
 
 	}*/
 	RandomMachine rm(15);
-	auto mt = PositionRandom::GenLocation(0.03, x, x + 255, y, y + 255, 0, 15, &rm);
+	auto mt = PositionRandom::GenLocation(0.03, x - WorldPara::HillExtendLength, x + 255 + WorldPara::HillExtendLength, y - WorldPara::HillExtendLength, y + 255 + WorldPara::HillExtendLength, 0, 15, &rm);
 	std::cout << mt.size();
 	//system("pause");
 	for (int i = 0; i < mt.size(); ++i)
 	{
-		if(mt[i].first < x || mt[i].first >= x + 256) continue;
-		if (mt[i].second < y || mt[i].second >= y + 256) continue;
+		if(mt[i].first < x - WorldPara::HillExtendLength || mt[i].first >= x + 256 + WorldPara::HillExtendLength) continue;
+		if (mt[i].second < y  - WorldPara::HillExtendLength || mt[i].second >= y + 256 + WorldPara::HillExtendLength) continue;
 
 		peek.x = mt[i].first;
 		peek.y = mt[i].second;
 		peek.h = DefaultRandomMachine.magic2(peek.x, peek.y) % 16 + 8;
 
-		if (*(h->PosBiome(peek.x - x, peek.y - y)) == this->id())
+		//if (*(h->PosBiome(peek.x - x, peek.y - y)) == this->id())
 		{
 			peek.deg = (int)(std::log(peek.h) * WorldPara::moveDeglim / std::log(WorldPara::maxh));
 			this->GenSonHill(h, peek, x, y);
@@ -118,12 +118,9 @@ inline void HILL::Hill::Print(Generation::WorldUnit* h, int x, int y)
 double HILL::Hill::SmoothHill(double dis2, int p = 0)
 {
 	if (abs(dis2) < 1.5) return 1;
-	dis2 = sqrt(dis2);
-	dis2 /= rm.Randd(7, 35, p);
-	double tmp1 = 1.0 - std::tanh(dis2 - 0.35);
-	double tmp2 = log10(dis2 + 0.65);
-	double tmp3 = dis2 - 0.35;
-	return tmp1 / tmp2 * tmp3 / 25;
+	//dis2 = sqrt(dis2);
+	dis2 /= rm.Randd(60, 200, p);
+	return tanhf(dis2) / dis2;
 }
 
 inline void HILL::Hill::PrintHill(Generation::WorldUnit* h, int x, int y)
@@ -155,12 +152,17 @@ inline void HILL::Hill::PrintHill(Generation::WorldUnit* h, int x, int y)
 				int dy = this->LocTmp[k].y - j;
 
 
-				hi[i][j] += this->SmoothHill(dx * dx + dy * dy, this->LocTmp[k].h) * this->WorldHill[k].h;
+				hi[i][j] += this->SmoothHill(dx * dx + dy * dy, this->WorldHill[k].h) * this->WorldHill[k].h;
 			}
-			if (isnan(hi[i][j]) || isinf(hi[i][j]))
-				hi[i][j] = *(&hi[i][j] - 1);
+			if ((isnan(hi[i][j]) || isinf(hi[i][j])))
+			{
+				if (i == 0 && j == 0)
+					hi[i][j] = WorldPara::minh;
+				else 	hi[i][j] = *(&hi[i][j] - 1);
+			}
 
-			for (int k = 0; k <= hi[i][j]; ++k)
+			int mx = std::min((int)hi[i][j], 127);
+			for (int k = 0; k <= mx; ++k)
 			{
 			
 				auto it = h->PosBlock(i, j, k);
@@ -171,7 +173,8 @@ inline void HILL::Hill::PrintHill(Generation::WorldUnit* h, int x, int y)
 				}
 				else
 				{
-					*it = 2U;
+					if (k == mx) *it = 2U;
+					else *it = 3U;
 					//std::cout << "        block (" << i << ", " << j << ", " << k << ")\n";
 					//5Sleep(100);
 				}

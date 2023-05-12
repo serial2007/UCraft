@@ -5,11 +5,11 @@
 
 extern int seed;
 
-extern std::uniform_int_distribution<> distrib;
+extern std::default_random_engine RanEng;
 
 extern unsigned uRand(int p);
 
-extern double uRandd(double minn, double maxn, int p = 0, int tm = 1);
+extern double uRandd(double minn, double maxn, int p = 0);
 
 extern int uRandi(int minn, int maxn, int p = 0);
 
@@ -38,8 +38,8 @@ public:
 	unsigned magic3(int a, int b, int c);
 
 	unsigned Rand(int p) { return uRand(p + this->magic1(p)); }
-	unsigned Randd(double minn, double maxn, int p = 0, int tm = 1) { return uRandd((int)minn, (int)maxn, this->magic3(minn, maxn, p), tm); }
-	unsigned Randi(int minn, int maxn, int p = 0) {return uRandd(minn, maxn, this->magic3(minn, p, maxn));}
+	double Randd(double minn, double maxn, int p = 0) { return uRandd((int)minn, (int)maxn, this->magic3(minn, maxn, p)); }
+	int Randi(int minn, int maxn, int p = 0) {return uRandi(minn, maxn, this->magic3(minn, p, maxn));}
 
 	int id;
 private:

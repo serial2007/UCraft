@@ -11,9 +11,9 @@ std::vector<PositionRandom::Pos2> PositionRandom::GenLocation(double chan, int m
 	{
 		for (int j = miny; j <= maxy; j += q)
 		{
-			unsigned mj = rm->magic3(i, j, p);
+			unsigned mj = rm->magic3(i, j, p) + rm->magic2(i, j);
 			//std::cout << "mj = " << mj << '\n';
-			auto m = uRandd(0, 1, mj);
+			auto m = uRandd(0, 1, mj ^ seed ^ i ^ j);
 			//std::cout << "m = " << m << '\n';
 			//std::cout << mj << "                " << m << '\n';
 			if (m > chan) continue;

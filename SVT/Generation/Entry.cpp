@@ -2,7 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include "../UCLient/Graph/BasicClass/lib/BasicHeaders.h"
-
+#include "../Class/Biome/Hill/Tree/tree.h"
 Generation::Biome* currentB = nullptr;
 Generation::BiomeMenu* biomeMenu = nullptr;
 
@@ -75,7 +75,8 @@ void GenMain::RegisterBiomeMain()
 	RegisterBiome(test::testBiome,		0xfffU);
 	RegisterBiome(testson::testBiome,	15U);
 	RegisterBiome(HILL::Hill,			0xfffU);
-	
+	RegisterBiome(HILL::Tree,			4U);
+	//Register
 
 }
 

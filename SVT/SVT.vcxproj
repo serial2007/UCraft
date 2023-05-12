@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Class\Biome\Hill\Tree\tree.cpp" />
     <ClCompile Include="UCLient\Graph\DynamicRegister.cpp" />
     <ClCompile Include="UCLient\ImportInfo.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="UCLient\Graph\RenderBlockProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Class\Biome\Hill\Tree\tree.h" />
     <ClInclude Include="UCLient\Graph\DynamicRegister.h" />
     <ClInclude Include="UCLient\ImportInfo.h" />
     <ClInclude Include="UCLient\Graph\ChunkDraw.h" />

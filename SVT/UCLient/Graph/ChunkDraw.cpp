@@ -7,13 +7,23 @@ void UGraph::DrawChunk(Generation::Chunk* chunk)
 		std::cout << "Error : invalid chunk!\n";
 		return;
 	}
+	
 	for(int i = 0; i < 16; ++i)
 	for(int j = 0; j < 16; ++j)
 	{
 		for (int k = 0; k < 128; ++k)
 		{
-			if (chunk->block[i][j][k] == 0)
-				continue;
+			//if (chunk->)
+			try
+			{
+
+				if (chunk->block[i][j][k] == 0)
+					continue;
+			}
+			catch (...)
+			{
+				return;
+			}
 			unsigned nd = 0;
 			if (i > 0 && chunk->block[i - 1][j][k] == 0)	nd += 0b100000;
 			if (i < 15 && chunk->block[i + 1][j][k] == 0)	nd += 0b000100;
@@ -29,7 +39,9 @@ void UGraph::DrawChunk(Generation::Chunk* chunk)
 
 			if (nd)
 			{
-				RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k]);
+				if(chunk->block[i][j][k] == 51)
+					RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k], 1);
+				else RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k], 0);
 				//std::cout << "Rendered block (" << i + chunk->x * 16 << ", " << j + chunk->y * 16 << ", " << k << ") with id = " << chunk->block[i][j][k] << '\n';
 			}
 		}

@@ -14,21 +14,26 @@ void DynamicRegister()
 		
 		int x = IntDiv(RenderBlock::cameraPos.x, 16);
 		int y = -IntDiv(RenderBlock::cameraPos.z, 16);
-		std::cout << x << ' ' << y << std::endl;
+		//std::cout << x << ' ' << y << std::endl;
 		RenderBlock::RegisterDone = 1;
 		
+		//std::cout << "keybo";
 
-		if (RenderBlock::processInput(RenderBlock::window, RenderBlock::currentFrame - RenderBlock::lstFrame) && (x != lx || y != ly) || lx == 0xffffff)
+		if ((x != lx || y != ly) || lx == 0xffffff)
 		{
-			RenderBlock::shouldUpdate = 0;
+			
 			RenderBlock::ClearAll();
-			for (int i = -3; i <= 3; ++i)
-				for (int j = -3; j <= 3; ++j)
+			for (int i = -7; i <= 7; ++i)
+				for (int j = -7; j <= 7; ++j)
 				{
 					auto p = Enquiry(i + x, j + y);
+					//std::cout << "Register chunk (" << i + x << ", " << j + y << ")\n";
+					if(p != nullptr)
 					UGraph::DrawChunk(p);
-					//std::cout << "Registered chunk (" << i + x << ", " << j + y << ")\n";
+					
 				}
+			
+			
 			lx = x; ly = y;
 
 			int xu = IntDiv(x, 16);
@@ -41,6 +46,7 @@ void DynamicRegister()
 				{
 					it->second->Save();
 					std::cout << "Uninstalled Unit (" << it->second->x << ", " << it->second->y << ")\n";
+					delete it->second;
 					GenMain::WorldUnitTmp.erase(it++);
 
 					//system("pause");
@@ -49,6 +55,12 @@ void DynamicRegister()
 
 			}
 		}
+		RenderBlock::shouldUpdate = 0;
+		memcpy(RenderBlock::wh1, RenderBlock::wh, sizeof(RenderBlock::wh));
+
+		RenderBlock::RendererN1 = RenderBlock::RendererN;
+		RenderBlock::offset1 = RenderBlock::offset;
+
 		RenderBlock::lstFrame = RenderBlock::currentFrame;
 		RenderBlock::shouldUpdate = 1;
 	}

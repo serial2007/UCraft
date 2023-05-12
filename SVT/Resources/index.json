@@ -1,6 +1,7 @@
 [
 	{
 		"id": 1,
+		"name": "Stone",
 		"type": 1,
 		"index": {
 			"basic": {
@@ -17,6 +18,7 @@
 	},
 	{
 		"id": 2,
+		"name": "Grass Block",
 		"type": 2,
 		"index": {
 			"top": {
@@ -47,6 +49,94 @@
 				"end": {
 					"x": 16,
 					"y": 64
+				}
+			}
+		}
+	},
+	{
+		"id": 3,
+		"name": "Dirt",
+		"type": 1,
+		"index": {
+			"basic": {
+				"start": {
+					"x": 0,
+					"y": 48
+				},
+				"end": {
+					"x": 16,
+					"y": 64
+				}
+			}
+		}
+	},
+	{
+		"id": 4,
+		"name": "Cobblestone",
+		"type": 1,
+		"index": {
+			"basic": {
+				"start": {
+					"x": 0,
+					"y": 64
+				},
+				"end": {
+					"x": 16,
+					"y": 80
+				}
+			}
+		}
+	},
+	{
+		"id": 50,
+		"name": "Oak Log",
+		"type": 2,
+		"index": {
+			"top": {
+				"start": {
+					"x": 32,
+					"y": 16
+				},
+				"end": {
+					"x": 48,
+					"y": 32
+				}
+			},
+			"middle": {
+				"start": {
+					"x": 16,
+					"y": 16
+				},
+				"end": {
+					"x": 32,
+					"y": 32
+				}
+			},
+			"bottom": {
+				"start": {
+					"x": 32,
+					"y": 16
+				},
+				"end": {
+					"x": 48,
+					"y": 32
+				}
+			}
+		}
+	},
+	{
+		"id": 51,
+		"name": "Oak leaves",
+		"type": 1,
+		"index": {
+			"basic": {
+				"start": {
+					"x": 48,
+					"y": 16
+				},
+				"end": {
+					"x": 64,
+					"y": 32
 				}
 			}
 		}

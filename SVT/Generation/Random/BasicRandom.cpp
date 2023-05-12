@@ -2,29 +2,20 @@
 
 
 int		seed = 0;
-
+std::default_random_engine RanEng;
 
 
 unsigned uRand(int p)
 {
-	std::uniform_int_distribution<> distrib(0, RAND_MAX);
-	std::ranlux48 engine(seed + p);
-	return distrib(engine);
+	RanEng.seed(seed + p);
+	return RanEng();
 }
 
-double uRandd(double minn, double maxn, int p, int tm)
+double uRandd(double minn, double maxn, int p)
 {
 	if (maxn < minn) std::swap(maxn, minn);
-	double gap, dif, res = minn;
-	gap = dif = maxn - minn;
-	while (tm--)
-	{
-		gap = dif / RAND_MAX;
-		res += (double)(uRand(p)) * dif / RAND_MAX;
-		dif = gap;
-	}
-	if (isinf(res)) res = maxn;
-	return res;
+	float q = uRand(p);
+	return minn + (maxn - minn) * q / UINT_MAX;
 }
 
 int uRandi(int minn, int maxn, int p)
@@ -34,8 +25,8 @@ int uRandi(int minn, int maxn, int p)
 	gap = dif = maxn - minn;
 	while (dif)
 	{
-		gap = dif / RAND_MAX;
-		res += uRand(p) * dif / RAND_MAX;
+		gap = dif / 0xffffffffU;
+		res += uRand(p) * dif / 0xffffffffU;
 		dif = gap;
 	}
 	if (res > maxn) res = maxn;

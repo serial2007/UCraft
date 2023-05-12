@@ -9,6 +9,7 @@
 #include "UCLient/ImportInfo.h"
 #include "UCLient/Graph/DynamicRegister.h"
 
+
 int main()
 {
 	ImportInfo::StartImport();
@@ -55,3 +56,14 @@ int main()
 	}
 	return 0;
 }
+
+//int main()
+//{
+//	system("pause");
+//	//HILL::Hill p;
+//	for (int i = 0; i < 10; ++i)
+//	{
+//		std::cout << thHill(i, 1) << std::endl;
+//	}
+//	system("pause");
+//}

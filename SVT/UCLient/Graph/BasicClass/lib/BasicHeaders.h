@@ -21,3 +21,5 @@ extern void glClearError();
 extern void glCheckError();
 extern bool glLogCall(const char* function, const char* file, int line);
 
+extern int IntDiv(int a, int b);
+extern int IntMod(int a, int b);

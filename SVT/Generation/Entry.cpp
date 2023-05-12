@@ -1,6 +1,7 @@
 #include "Entry.h"
 #include <iostream>
 #include <iomanip>
+#include "../UCLient/Graph/BasicClass/lib/BasicHeaders.h"
 
 Generation::Biome* currentB = nullptr;
 Generation::BiomeMenu* biomeMenu = nullptr;
@@ -8,23 +9,23 @@ Generation::BiomeMenu* biomeMenu = nullptr;
 std::map<std::pair<int, int>, Generation::WorldUnit*> GenMain::WorldUnitTmp;
 Generation::Chunk* Enquiry(int x, int y)
 {
-	if (GenMain::WorldUnitTmp.find(std::make_pair(x / 16, y / 16)) != GenMain::WorldUnitTmp.end())
+	if (GenMain::WorldUnitTmp.find(std::make_pair(IntDiv(x, 16), IntDiv(y, 16))) != GenMain::WorldUnitTmp.end())
 	{
-		return GenMain::WorldUnitTmp[std::make_pair(x / 16, y / 16)]->chunk[x % 16][y % 16];
+		return GenMain::WorldUnitTmp[std::make_pair(IntDiv(x, 16), IntDiv(y, 16))]->chunk[IntMod(x, 16)][IntMod(y, 16)];
 	}
 	else
 	{
-		Generation::WorldUnit* unit = ImportWorldUnit(x / 16, y / 16);
+		Generation::WorldUnit* unit = ImportWorldUnit(IntDiv(x, 16), IntDiv(y, 16));
 		if (unit == nullptr)
 		{
-			unit = new Generation::WorldUnit(x / 16, y / 16);
+			unit = new Generation::WorldUnit(IntDiv(x, 16), IntDiv(y, 16));
 			unit->NewChunks();
 			biomeMenu->DivideBiomes(unit);
 
 		}
 
-		GenMain::WorldUnitTmp[std::make_pair(x / 16, y / 16)] = unit;
-		return unit->chunk[x % 16][y % 16];
+		GenMain::WorldUnitTmp[std::make_pair(IntDiv(x, 16), IntDiv(y, 16))] = unit;
+		return unit->chunk[IntMod(x, 16)][IntMod(y, 16)];
 		
 	}
 	/*Generation::Chunk* chunk = ImportChunk(x, y);

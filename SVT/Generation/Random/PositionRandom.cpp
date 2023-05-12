@@ -12,7 +12,9 @@ std::vector<PositionRandom::Pos2> PositionRandom::GenLocation(double chan, int m
 		for (int j = miny; j <= maxy; j += q)
 		{
 			unsigned mj = rm->magic3(i, j, p);
-			auto m = rm->Randd(0, 1, mj);
+			//std::cout << "mj = " << mj << '\n';
+			auto m = uRandd(0, 1, mj);
+			//std::cout << "m = " << m << '\n';
 			//std::cout << mj << "                " << m << '\n';
 			if (m > chan) continue;
 			auto th = std::make_pair(i, j);

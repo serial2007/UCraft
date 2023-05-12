@@ -3,8 +3,8 @@
 
 inline void HILL::Hill::GenSonHill(Generation::WorldUnit* h, HILL::Single& con, int x, int y)
 {
-	if ((con.x < x - WorldPara::HillExtendLength) || (con.x >= x + 128 + WorldPara::HillExtendLength))	return;
-	if ((con.y < y - WorldPara::HillExtendLength) || (con.y >= y + 128 + WorldPara::HillExtendLength))	return;
+	if ((con.x < x - WorldPara::HillExtendLength) || (con.x >= x + 256 + WorldPara::HillExtendLength))	return;
+	if ((con.y < y - WorldPara::HillExtendLength) || (con.y >= y + 256 + WorldPara::HillExtendLength))	return;
 
 	this->ValidateHill(h, con, x, y);
 
@@ -47,18 +47,40 @@ inline void HILL::Hill::Genmain(Generation::WorldUnit* h, int x, int y)
 {
 	int peekn = WorldPara::peek;
 	HILL::Single peek;
-	while (peekn--)
+	/*while (peekn--)
 	{
 		peek.x = rm.Randi(x, x + 255, (long long)(std::sin(peekn) * INT_MAX) % 10000000);
-		peek.y = rm.Randi(x, y + 255, (long long)(std::log(peekn) * INT_MAX) % 10000000);
+		peek.y = rm.Randi(y, y + 255, (long long)(std::log(peekn) * INT_MAX) % 10000000);
 		peek.h = rm.Randd(0, WorldPara::maxh, (long long)(std::cos(peekn) * INT_MAX) % 10000000);
 
 		peek.deg = (int)(std::log(peek.h) * WorldPara::moveDeglim / std::log(WorldPara::maxh));
 
-		if(*(h->PosBiome(x, y)) == this->id())
-			this->GenSonHill(h, peek, x, y);
+		if(*(h->PosBiome(peek.x - x, peek.y - y)) == this->id())
+		this->GenSonHill(h, peek, x, y);
 
+
+
+	}*/
+	RandomMachine rm(15);
+	auto mt = PositionRandom::GenLocation(0.03, x, x + 255, y, y + 255, 0, 15, &rm);
+	std::cout << mt.size();
+	//system("pause");
+	for (int i = 0; i < mt.size(); ++i)
+	{
+		if(mt[i].first < x || mt[i].first >= x + 256) continue;
+		if (mt[i].second < y || mt[i].second >= y + 256) continue;
+
+		peek.x = mt[i].first;
+		peek.y = mt[i].second;
+		peek.h = DefaultRandomMachine.magic2(peek.x, peek.y) % 16 + 8;
+
+		if (*(h->PosBiome(peek.x - x, peek.y - y)) == this->id())
+		{
+			peek.deg = (int)(std::log(peek.h) * WorldPara::moveDeglim / std::log(WorldPara::maxh));
+			this->GenSonHill(h, peek, x, y);
+		}
 	}
+
 
 	this->Print(h, x, y);
 }
@@ -149,7 +171,7 @@ inline void HILL::Hill::PrintHill(Generation::WorldUnit* h, int x, int y)
 				}
 				else
 				{
-					*it = 10U;
+					*it = 2U;
 					//std::cout << "        block (" << i << ", " << j << ", " << k << ")\n";
 					//5Sleep(100);
 				}

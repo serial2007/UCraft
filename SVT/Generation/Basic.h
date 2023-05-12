@@ -13,6 +13,10 @@
 #include <Windows.h>
 #include <stack>
 #include "Random/Random.h"
+//#include "../Generation/lib/BasicHeaders.h"
+#include "../UCLient/Graph/BasicClass/lib/BasicHeaders.h"
+;
+
 //inline Generation::Chunk* ImportChunk(int x, int y);
 
 #define ReserveWorldUnit 64
@@ -63,16 +67,22 @@ namespace Generation
 			x(_x), y(_y) {}
 
 		unsigned short* PosBiome(int x, int y) {
-			if (x < 0 || x >= 256) return nullptr;
-			if (y < 0 || y >= 256) return nullptr;
+			if (x < 0 || x >= 256) {
+				std::cout << "x = " << x << '\n';
+				return nullptr;
+			}
+			if (y < 0 || y >= 256) {
+				std::cout << "y = " << y << '\n';
+				return nullptr;
+			}
 
-			return &(chunk[x / 16][y / 16]->biomeid[x % 16][y % 16]); }
+			return &(chunk[IntDiv(x, 16)][IntDiv(y, 16)]->biomeid[IntMod(x, 16)][IntMod(y, 16)]); }
 		unsigned short* PosBlock(int x, int y, int z) {
 			if (x < 0 || x >= 256) return nullptr;
 			if (y < 0 || y >= 256) return nullptr;
 			if (z < 0 || z >= 128) return nullptr;
 
-			return &(chunk[x / 16][y / 16]->block[x % 16][y % 16][z]); }
+			return &(chunk[IntDiv(x, 16)][IntDiv(y, 16)]->block[IntMod(x, 16)][IntMod(y, 16)][z]); }
 		void NewChunks()
 		{
 			for (int i = 0; i < 16; ++i)

@@ -22,5 +22,19 @@ bool glLogCall(const char* function, const char* file, int line)
 	return true;
 }
 
+int IntDiv(int a, int b)
+{
+	if (a >= 0) return a / b;
+	if (a % b == 0) return a / b;
+	else return a / b - 1;
+	return 0;
+}
+
+int IntMod(int a, int b)
+{
+	if (a >= 0) return a % b;
+	return b + a % b;
+}
+
 
 

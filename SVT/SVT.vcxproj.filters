@@ -96,6 +96,12 @@
     <ClCompile Include="Main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="UCLient\ImportInfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UCLient\Graph\DynamicRegister.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Biome\Test\test.h">
@@ -245,5 +251,23 @@
     <ClInclude Include="UCLient\Graph\ChunkDraw.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="UCLient\ImportInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UCLient\Graph\DynamicRegister.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\index.json" />
+    <None Include="UCLient\Basic.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\index.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="UCLient\test.png">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -72,8 +72,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ExternalIncludePath>D:\LIBS\boost_1_82_0\boost_1_82_0;D:\LIBS\asio2-master\include;D:\LIBS\asio2-master\3rd;$(ExternalIncludePath);D:\LIBS\glm;C:\Program Files (x86)\freetype\include\freetype2;C:\Program Files %28x86%29\soil2\include;D:\LIBS\glew-2.1.0\include;D:\LIBS\glfw\include;C:\Program Files (x86)\freetype\include;</ExternalIncludePath>
-    <LibraryPath>C:\Program Files (x86)\freetype\lib;C:\Program Files %28x86%29\soil2\lib;D:\LIBS\glew-2.1.0\lib\Debug\x64;D:\LIBS\glfw\lib-vc2022;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>D:\LIBS\boost_1_82_0\boost_1_82_0;C:\Program Files (x86)\jsoncpp\include;D:\LIBS\asio2-master\include;D:\LIBS\asio2-master\3rd;$(ExternalIncludePath);D:\LIBS\glm;C:\Program Files (x86)\freetype\include\freetype2;C:\Program Files %28x86%29\soil2\include;D:\LIBS\glew-2.1.0\include;D:\LIBS\glfw\include;C:\Program Files (x86)\freetype\include</ExternalIncludePath>
+    <LibraryPath>C:\Program Files (x86)\jsoncpp\lib;C:\Program Files (x86)\freetype\lib;C:\Program Files %28x86%29\soil2\lib;D:\LIBS\glew-2.1.0\lib\Debug\x64;D:\LIBS\glfw\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -114,7 +114,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;freetyped.lib;glew32sd.lib;glew32d.lib;soil2.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;jsoncpp.lib;jsoncpp_static.lib;freetyped.lib;glew32sd.lib;glew32d.lib;soil2.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -134,6 +134,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="UCLient\Graph\DynamicRegister.cpp" />
+    <ClCompile Include="UCLient\ImportInfo.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="UCLient\Graph\ChunkDraw.cpp" />
     <ClCompile Include="Class\Biome\Hill\hill.cpp" />
@@ -163,6 +165,8 @@
     <ClCompile Include="UCLient\Graph\RenderBlockProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="UCLient\Graph\DynamicRegister.h" />
+    <ClInclude Include="UCLient\ImportInfo.h" />
     <ClInclude Include="UCLient\Graph\ChunkDraw.h" />
     <ClInclude Include="Class\Biome\Hill\hill.h" />
     <ClInclude Include="Class\Biome\Test\test.h" />
@@ -212,6 +216,14 @@
     <ClInclude Include="UCLient\Graph\imgui\stb_textedit.h" />
     <ClInclude Include="UCLient\Graph\imgui\stb_truetype.h" />
     <ClInclude Include="UCLient\Graph\RenderBlockProcess.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\index.json" />
+    <None Include="UCLient\Basic.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\index.png" />
+    <Image Include="UCLient\test.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

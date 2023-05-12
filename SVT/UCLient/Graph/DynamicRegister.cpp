@@ -55,6 +55,17 @@ void DynamicRegister()
 
 			}
 		}
+
+		for (int i = 1; i < 10; ++i)
+		{
+			memcpy(RenderBlock::wh + RenderBlock::offset, RenderBlock::whm[i], RenderBlock::offsetm[i] * sizeof(RenderBlock::UBasic));
+			RenderBlock::offset += RenderBlock::offsetm[i];
+			RenderBlock::RendererN += RenderBlock::RendererNm[i];
+		}
+
+
+
+
 		RenderBlock::shouldUpdate = 0;
 		memcpy(RenderBlock::wh1, RenderBlock::wh, sizeof(RenderBlock::wh));
 

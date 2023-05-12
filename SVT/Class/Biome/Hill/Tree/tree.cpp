@@ -11,16 +11,22 @@ void HILL::Tree::Generate(Generation::WorldUnit* unit)
 {
 	std::cout << "Generate\n";
 
-	auto arr = PositionRandom::GenLocation(0.01, unit->x * 16, unit->x * 16 + 255, unit->y * 16, unit->y * 16 + 255, 0, 3, &(this->rm));
+	auto arr = PositionRandom::GenLocation(0.01, unit->x * 16, unit->x * 16 + 255, unit->y * 16, unit->y * 16 + 255, 0, 2, &(this->rm));
 	for (auto& p : arr)
 	{
 		int h = this->rm.Randi(4, 7, this->rm.magic2(p.first, p.second));
-		
+		bool skp = 0;
 		int i;
 		for (i = 127; i > 0; --i)
 		{
-			if (*(unit->PosBlock(p.first - unit->x * 16, p.second - unit->y * 16, i)) != 0) break;
+			auto bl = *(unit->PosBlock(p.first - unit->x * 16, p.second - unit->y * 16, i));
+			if (bl != 0) {
+				if (bl != 2)
+				skp = 1;
+				break;
+			}
 		}
+		if (skp) continue;
 		int ht = h;
 		while (ht--)
 		{

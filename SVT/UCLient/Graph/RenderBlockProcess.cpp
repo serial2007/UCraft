@@ -3,11 +3,13 @@
 #include "../../Generation/Entry.h"
 
 bool				RenderBlock::shouldUpdate = 0;
-unsigned			RenderBlock::offset = 0, RenderBlock::offset1 = 0;
+unsigned			RenderBlock::offset = 0, RenderBlock::offset1 = 0, RenderBlock::offsetm[10];
 RenderBlock::UBasic RenderBlock::wh[1024 * 256 * 4 * 8 * 4 ];
 RenderBlock::UBasic RenderBlock::wh1[1024 * 256 * 4 * 8 * 4];
+RenderBlock::UBasic RenderBlock::whm[10][1024 * 256]; //
 unsigned			RenderBlock::RendererN = 0;
 unsigned			RenderBlock::RendererN1 = 0;
+unsigned			RenderBlock::RendererNm[10] = {}; //
 unsigned			RenderBlock::indices[65537 * 4 * 4 * 8 * 4 ];
 float				RenderBlock::GHeight, RenderBlock::GWidth;
 int					RenderBlock::WinWidth = 2560, RenderBlock::WinHeight = 1440;
@@ -218,9 +220,18 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 		{x,     y,  z + 1, ImportInfo::binfo[id][0 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 3] / RenderBlock::GHeight},
 		{x + 1, y,     z,  ImportInfo::binfo[id][0 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 1] / RenderBlock::GHeight},
 		{x + 1, y, z + 1,  ImportInfo::binfo[id][0 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 3] / RenderBlock::GHeight} };
-		memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
-		++RenderBlock::RendererN;
-		RenderBlock::offset += 4;
+		if (layout)
+		{
+			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
+			++RenderBlock::RendererNm[layout];
+			RenderBlock::offsetm[layout] += 4;
+		}
+		else
+		{
+			memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
+			++RenderBlock::RendererN;
+			RenderBlock::offset += 4;
+		}
 	}
 
 	if (sur & 0b001000)
@@ -230,9 +241,18 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 		{x,     y + 1,  z, ImportInfo::binfo[id][1 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][1 * 4 + 3] / RenderBlock::GHeight},
 		{x + 1, y,     z,  ImportInfo::binfo[id][1 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][1 * 4 + 1] / RenderBlock::GHeight},
 		{x + 1, y + 1, z,  ImportInfo::binfo[id][1 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][1 * 4 + 3] / RenderBlock::GHeight} };
-		memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
-		++RenderBlock::RendererN;
-		RenderBlock::offset += 4;
+		if (layout)
+		{
+			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
+			++RenderBlock::RendererNm[layout];
+			RenderBlock::offsetm[layout] += 4;
+		}
+		else
+		{
+			memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
+			++RenderBlock::RendererN;
+			RenderBlock::offset += 4;
+		}
 	}
 
 	if (sur & 0b100000)
@@ -242,9 +262,18 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 		{ x,     y,  z + 1, ImportInfo::binfo[id][2 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 3] / RenderBlock::GHeight},
 		{ x, y + 1,     z,  ImportInfo::binfo[id][2 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 1] / RenderBlock::GHeight},
 		{ x, y + 1, z + 1,  ImportInfo::binfo[id][2 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 3] / RenderBlock::GHeight} };
-		memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
-		++RenderBlock::RendererN;
-		RenderBlock::offset += 4;
+		if (layout)
+		{
+			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
+			++RenderBlock::RendererNm[layout];
+			RenderBlock::offsetm[layout] += 4;
+		}
+		else
+		{
+			memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
+			++RenderBlock::RendererN;
+			RenderBlock::offset += 4;
+		}
 	}
 
 	if (sur & 0b000010)
@@ -254,9 +283,18 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 		{ x,     y + 1,  z + 1, ImportInfo::binfo[id][3 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 3] / RenderBlock::GHeight },
 		{ x + 1, y + 1,     z,  ImportInfo::binfo[id][3 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 1] / RenderBlock::GHeight },
 		{ x + 1, y + 1, z + 1,  ImportInfo::binfo[id][3 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 3] / RenderBlock::GHeight } };
-		memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
-		++RenderBlock::RendererN;
-		RenderBlock::offset += 4;
+		if (layout)
+		{
+			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
+			++RenderBlock::RendererNm[layout];
+			RenderBlock::offsetm[layout] += 4;
+		}
+		else
+		{
+			memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
+			++RenderBlock::RendererN;
+			RenderBlock::offset += 4;
+		}
 	}
 
 	if (sur & 0b000001)
@@ -266,9 +304,18 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 		{x,     y + 1, z + 1, ImportInfo::binfo[id][4 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][4 * 4 + 3] / RenderBlock::GHeight},
 		{x + 1, y,     z + 1, ImportInfo::binfo[id][4 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][4 * 4 + 1] / RenderBlock::GHeight},
 		{x + 1, y + 1, z + 1, ImportInfo::binfo[id][4 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][4 * 4 + 3] / RenderBlock::GHeight} };
-		memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
-		++RenderBlock::RendererN;
-		RenderBlock::offset += 4;
+		if (layout)
+		{
+			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
+			++RenderBlock::RendererNm[layout];
+			RenderBlock::offsetm[layout] += 4;
+		}
+		else
+		{
+			memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
+			++RenderBlock::RendererN;
+			RenderBlock::offset += 4;
+		}
 	}
 
 	if (sur & 0b000100)
@@ -278,9 +325,18 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 		{x + 1,     y,  z + 1, ImportInfo::binfo[id][5 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 3] / RenderBlock::GHeight},
 		{x + 1, y + 1,     z,  ImportInfo::binfo[id][5 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 1] / RenderBlock::GHeight},
 		{x + 1, y + 1, z + 1,  ImportInfo::binfo[id][5 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 3] / RenderBlock::GHeight} };
-		memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
-		++RenderBlock::RendererN;
-		RenderBlock::offset += 4;
+		if (layout)
+		{
+			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
+			++RenderBlock::RendererNm[layout];
+			RenderBlock::offsetm[layout] += 4;
+		}
+		else
+		{
+			memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
+			++RenderBlock::RendererN;
+			RenderBlock::offset += 4;
+		}
 	}
 }
 
@@ -288,4 +344,6 @@ void RenderBlock::ClearAll()
 {
 	RenderBlock::RendererN = 0;
 	RenderBlock::offset = 0;
+	memset(RenderBlock::RendererNm, 0, sizeof(RenderBlock::RendererNm));
+	memset(RenderBlock::offsetm, 0, sizeof(RenderBlock::offsetm));
 }

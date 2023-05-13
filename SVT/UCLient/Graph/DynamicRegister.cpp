@@ -1,9 +1,13 @@
 #include "DynamicRegister.h"
+#include "SmoothLight.h"
+#pragma omp parallel for
 
 
 
 void DynamicRegister()
 {
+	
+
 	//RenderBlock::cameraPos;
 	while(RenderBlock::window == nullptr) {}
 	int lx = 0xffffff, ly = 0xffffff;
@@ -29,7 +33,7 @@ void DynamicRegister()
 					auto p = Enquiry(i + x, j + y);
 					//std::cout << "Register chunk (" << i + x << ", " << j + y << ")\n";
 					if(p != nullptr)
-					UGraph::DrawChunk(p);
+					UGraph::DrawChunk(p, GenMain::WorldUnitTmp[std::make_pair(IntDiv(i + x, 16), IntDiv(j + y, 16))]);
 					
 				}
 			
@@ -56,7 +60,7 @@ void DynamicRegister()
 			}
 		}
 
-		for (int i = 1; i < 10; ++i)
+		for (int i = 1; i < 2; ++i)
 		{
 			memcpy(RenderBlock::wh + RenderBlock::offset, RenderBlock::whm[i], RenderBlock::offsetm[i] * sizeof(RenderBlock::UBasic));
 			RenderBlock::offset += RenderBlock::offsetm[i];

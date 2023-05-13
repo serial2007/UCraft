@@ -8,6 +8,7 @@
 #include <json/json.h>
 #include "UCLient/ImportInfo.h"
 #include "UCLient/Graph/DynamicRegister.h"
+#pragma omp parallel for
 
 
 int main()

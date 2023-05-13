@@ -1,6 +1,6 @@
 #include "ChunkDraw.h"
 
-void UGraph::DrawChunk(Generation::Chunk* chunk)
+void UGraph::DrawChunk(Generation::Chunk* chunk, Generation::WorldUnit* unit)
 {
 	if (chunk == nullptr)
 	{
@@ -40,8 +40,8 @@ void UGraph::DrawChunk(Generation::Chunk* chunk)
 			if (nd)
 			{
 				if(chunk->block[i][j][k] == 51)
-					RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k], 1);
-				else RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k], 0);
+					RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k], 1, unit);
+				else RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k], 0, unit);
 				//std::cout << "Rendered block (" << i + chunk->x * 16 << ", " << j + chunk->y * 16 << ", " << k << ") with id = " << chunk->block[i][j][k] << '\n';
 			}
 		}

@@ -105,6 +105,9 @@
     <ClCompile Include="Class\Biome\Hill\Tree\tree.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="UCLient\Graph\SmoothLight.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Biome\Test\test.h">
@@ -261,6 +264,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Class\Biome\Hill\Tree\tree.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UCLient\Graph\SmoothLight.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -110,6 +110,10 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>MaxSpeed</Optimization>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,6 +140,7 @@
   <ItemGroup>
     <ClCompile Include="Class\Biome\Hill\Tree\tree.cpp" />
     <ClCompile Include="UCLient\Graph\DynamicRegister.cpp" />
+    <ClCompile Include="UCLient\Graph\SmoothLight.cpp" />
     <ClCompile Include="UCLient\ImportInfo.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="UCLient\Graph\ChunkDraw.cpp" />
@@ -167,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Biome\Hill\Tree\tree.h" />
+    <ClInclude Include="UCLient\Graph\SmoothLight.h" />
     <ClInclude Include="UCLient\Graph\DynamicRegister.h" />
     <ClInclude Include="UCLient\ImportInfo.h" />
     <ClInclude Include="UCLient\Graph\ChunkDraw.h" />

@@ -4,6 +4,7 @@
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
+#include "../../../../Generation/Entry.h"
 
 namespace Renderer
 {

@@ -8,6 +8,7 @@ namespace RenderBlock
 	struct UBasic {
 		int x, y, z;
 		float tx, ty;
+		float light;
 	};
 
 	extern bool shouldUpdate;
@@ -22,7 +23,7 @@ namespace RenderBlock
 	extern unsigned indices[65537 * 4 * 4 * 8 * 4];
 
 	extern unsigned offset, offset1, offsetm[10];
-	void RegisterBlock(int x, int y, int z, unsigned short sur = 0b111111, int id = 1, unsigned layout = 0);
+	void RegisterBlock(int x, int y, int z, unsigned short sur = 0b111111, int id = 1, unsigned layout = 0, Generation::WorldUnit* unit = nullptr);
 
 	extern void ClearAll();
 

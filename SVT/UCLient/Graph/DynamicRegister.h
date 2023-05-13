@@ -1,4 +1,5 @@
 #pragma once
 #include "ChunkDraw.h"
-void DynamicRegister();
+extern void DynamicRegister();
+
 

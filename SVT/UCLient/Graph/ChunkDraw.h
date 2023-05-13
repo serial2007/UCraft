@@ -4,5 +4,5 @@
 
 namespace UGraph
 {
-	void DrawChunk(Generation::Chunk* chunk);
+	void DrawChunk(Generation::Chunk* chunk, Generation::WorldUnit* unit);
 }

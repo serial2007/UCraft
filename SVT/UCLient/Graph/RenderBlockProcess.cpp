@@ -1,6 +1,7 @@
 ﻿#include "RenderBlockProcess.h"
 #include "BasicClass/lib/Texture.h"
 #include "../../Generation/Entry.h"
+#pragma omp parallel for
 
 bool				RenderBlock::shouldUpdate = 0;
 unsigned			RenderBlock::offset = 0, RenderBlock::offset1 = 0, RenderBlock::offsetm[10];
@@ -94,6 +95,7 @@ void RenderBlockProcess()
 	VertexBufferLayout layout;
 	layout.push<int>(3);
 	layout.push<float>(2);
+	layout.push<float>(1);
 	va.AddBuffer(vb, layout);
 	IndexBuffer ib(RenderBlock::indices, 65536 * 8 * 2 * 4 * 4 );
 
@@ -164,7 +166,7 @@ void RenderBlockProcess()
 		
 
 		vb.Bind();
-		glBufferSubData(GL_ARRAY_BUFFER, 0, RenderBlock::offset1 * sizeof(RenderBlock::UBasic), RenderBlock::wh1);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, min(RenderBlock::offset1 * sizeof(RenderBlock::UBasic), sizeof(RenderBlock::wh1)), RenderBlock::wh1);
 
 		projection = glm::perspective(glm::radians(h), RenderBlock::WinWidth / float(RenderBlock::WinHeight), 0.1f, 100.0f);
 		glEnable(GL_DEPTH_TEST);
@@ -195,8 +197,8 @@ void RenderBlockProcess()
 }
 
 #include "../ImportInfo.h"
-
-void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id, unsigned layout)
+#include "../Graph/SmoothLight.h"
+void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id, unsigned layout, Generation::WorldUnit* unit)
 {
 	/*binfo[id] = {
 		stx, sty, endx, endy,
@@ -207,6 +209,8 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 		stx, sty, endx, endy,
 	};*/
 
+	
+
 	if (ImportInfo::binfo.find(id) == ImportInfo::binfo.end())
 	{
 		std::cout << "Texture of Block id = " << id << " Cannot find.\n";
@@ -215,11 +219,13 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 
 	if (sur & 0b010000)
 	{
+		auto lit = ULight::GenLight(x, y, z, unit, 0b010000);
+
 		RenderBlock::UBasic w[] = {
-		{x,     y    , z,  ImportInfo::binfo[id][0 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 1] / RenderBlock::GHeight},
-		{x,     y,  z + 1, ImportInfo::binfo[id][0 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 3] / RenderBlock::GHeight},
-		{x + 1, y,     z,  ImportInfo::binfo[id][0 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 1] / RenderBlock::GHeight},
-		{x + 1, y, z + 1,  ImportInfo::binfo[id][0 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 3] / RenderBlock::GHeight} };
+		{x,     y    , z,  ImportInfo::binfo[id][0 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 1] / RenderBlock::GHeight, lit.l[1][0]},
+		{x,     y,  z + 1, ImportInfo::binfo[id][0 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 3] / RenderBlock::GHeight, lit.l[0][0]},
+		{x + 1, y,     z,  ImportInfo::binfo[id][0 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 1] / RenderBlock::GHeight, lit.l[1][1]},
+		{x + 1, y, z + 1,  ImportInfo::binfo[id][0 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 3] / RenderBlock::GHeight, lit.l[0][1]} };
 		if (layout)
 		{
 			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
@@ -236,11 +242,13 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 
 	if (sur & 0b001000)
 	{
+		auto lit = ULight::GenLight(x, y, z, unit, 0b001000);
+
 		RenderBlock::UBasic w[] = {
-		{x,     y    , z,  ImportInfo::binfo[id][1 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][1 * 4 + 1] / RenderBlock::GHeight},
-		{x,     y + 1,  z, ImportInfo::binfo[id][1 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][1 * 4 + 3] / RenderBlock::GHeight},
-		{x + 1, y,     z,  ImportInfo::binfo[id][1 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][1 * 4 + 1] / RenderBlock::GHeight},
-		{x + 1, y + 1, z,  ImportInfo::binfo[id][1 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][1 * 4 + 3] / RenderBlock::GHeight} };
+		{x,     y    , z,  ImportInfo::binfo[id][1 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][1 * 4 + 1] / RenderBlock::GHeight, lit.l[0][0]},
+		{x,     y + 1,  z, ImportInfo::binfo[id][1 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][1 * 4 + 3] / RenderBlock::GHeight, lit.l[0][1]},
+		{x + 1, y,     z,  ImportInfo::binfo[id][1 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][1 * 4 + 1] / RenderBlock::GHeight, lit.l[1][0]},
+		{x + 1, y + 1, z,  ImportInfo::binfo[id][1 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][1 * 4 + 3] / RenderBlock::GHeight, lit.l[1][1]} };
 		if (layout)
 		{
 			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
@@ -257,11 +265,13 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 
 	if (sur & 0b100000)
 	{
+		auto lit = ULight::GenLight(x, y, z, unit, 0b100000);
+
 		RenderBlock::UBasic w[] = {
-		{x,     y    , z,   ImportInfo::binfo[id][2 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 1] / RenderBlock::GHeight},
-		{ x,     y,  z + 1, ImportInfo::binfo[id][2 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 3] / RenderBlock::GHeight},
-		{ x, y + 1,     z,  ImportInfo::binfo[id][2 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 1] / RenderBlock::GHeight},
-		{ x, y + 1, z + 1,  ImportInfo::binfo[id][2 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 3] / RenderBlock::GHeight} };
+		{x,     y    , z,   ImportInfo::binfo[id][2 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 1] / RenderBlock::GHeight, lit.l[1][0]},
+		{ x,     y,  z + 1, ImportInfo::binfo[id][2 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 3] / RenderBlock::GHeight, lit.l[0][0]},
+		{ x, y + 1,     z,  ImportInfo::binfo[id][2 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 1] / RenderBlock::GHeight, lit.l[1][1]},
+		{ x, y + 1, z + 1,  ImportInfo::binfo[id][2 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 3] / RenderBlock::GHeight, lit.l[0][1]} };
 		if (layout)
 		{
 			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
@@ -278,11 +288,12 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 
 	if (sur & 0b000010)
 	{
+		auto lit = ULight::GenLight(x, y, z, unit, 0b000010);
 		RenderBlock::UBasic w[] = {
-		{x, y + 1, z,           ImportInfo::binfo[id][3 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 1] / RenderBlock::GHeight},
-		{ x,     y + 1,  z + 1, ImportInfo::binfo[id][3 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 3] / RenderBlock::GHeight },
-		{ x + 1, y + 1,     z,  ImportInfo::binfo[id][3 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 1] / RenderBlock::GHeight },
-		{ x + 1, y + 1, z + 1,  ImportInfo::binfo[id][3 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 3] / RenderBlock::GHeight } };
+		{x, y + 1, z,           ImportInfo::binfo[id][3 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 1] / RenderBlock::GHeight, lit.l[1][0]},
+		{ x,     y + 1,  z + 1, ImportInfo::binfo[id][3 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 3] / RenderBlock::GHeight, lit.l[0][0] },
+		{ x + 1, y + 1,     z,  ImportInfo::binfo[id][3 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 1] / RenderBlock::GHeight, lit.l[1][1] },
+		{ x + 1, y + 1, z + 1,  ImportInfo::binfo[id][3 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 3] / RenderBlock::GHeight, lit.l[0][1] } };
 		if (layout)
 		{
 			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
@@ -299,11 +310,12 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 
 	if (sur & 0b000001)
 	{
+		auto lit = ULight::GenLight(x, y, z, unit, 0b000001);
 		RenderBlock::UBasic w[] = {
-		{x,     y    , z + 1, ImportInfo::binfo[id][4 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][4 * 4 + 1] / RenderBlock::GHeight},
-		{x,     y + 1, z + 1, ImportInfo::binfo[id][4 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][4 * 4 + 3] / RenderBlock::GHeight},
-		{x + 1, y,     z + 1, ImportInfo::binfo[id][4 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][4 * 4 + 1] / RenderBlock::GHeight},
-		{x + 1, y + 1, z + 1, ImportInfo::binfo[id][4 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][4 * 4 + 3] / RenderBlock::GHeight} };
+		{x,     y    , z + 1, ImportInfo::binfo[id][4 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][4 * 4 + 1] / RenderBlock::GHeight, lit.l[0][0]},
+		{x,     y + 1, z + 1, ImportInfo::binfo[id][4 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][4 * 4 + 3] / RenderBlock::GHeight, lit.l[0][1]},
+		{x + 1, y,     z + 1, ImportInfo::binfo[id][4 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][4 * 4 + 1] / RenderBlock::GHeight, lit.l[1][0]},
+		{x + 1, y + 1, z + 1, ImportInfo::binfo[id][4 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][4 * 4 + 3] / RenderBlock::GHeight, lit.l[1][1]} };
 		if (layout)
 		{
 			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
@@ -320,11 +332,12 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 
 	if (sur & 0b000100)
 	{
+		auto lit = ULight::GenLight(x, y, z, unit, 0b000100);
 		RenderBlock::UBasic w[] = {
-		{x + 1,     y    , z,  ImportInfo::binfo[id][5 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 1] / RenderBlock::GHeight},
-		{x + 1,     y,  z + 1, ImportInfo::binfo[id][5 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 3] / RenderBlock::GHeight},
-		{x + 1, y + 1,     z,  ImportInfo::binfo[id][5 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 1] / RenderBlock::GHeight},
-		{x + 1, y + 1, z + 1,  ImportInfo::binfo[id][5 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 3] / RenderBlock::GHeight} };
+		{x + 1,     y    , z,  ImportInfo::binfo[id][5 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 1] / RenderBlock::GHeight, lit.l[1][0]},
+		{x + 1,     y,  z + 1, ImportInfo::binfo[id][5 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 3] / RenderBlock::GHeight, lit.l[0][0]},
+		{x + 1, y + 1,     z,  ImportInfo::binfo[id][5 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 1] / RenderBlock::GHeight, lit.l[1][1]},
+		{x + 1, y + 1, z + 1,  ImportInfo::binfo[id][5 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 3] / RenderBlock::GHeight, lit.l[0][1]} };
 		if (layout)
 		{
 			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));

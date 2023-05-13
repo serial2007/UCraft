@@ -1,5 +1,5 @@
 #include "BasicRandom.h"
-
+#pragma omp parallel for
 
 int		seed = 0;
 std::default_random_engine RanEng;

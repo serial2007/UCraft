@@ -1,6 +1,7 @@
 ﻿#include "RenderBlockProcess.h"
 #include "BasicClass/lib/Texture.h"
 #include "../../Generation/Entry.h"
+#include <GLFW/glfw3.h>
 #pragma omp parallel for
 
 bool				RenderBlock::shouldUpdate = 0;
@@ -24,6 +25,38 @@ float				RenderBlock::lstFrame;
 float				RenderBlock::currentFrame;
 glm::vec3			RenderBlock::Velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 bool				RenderBlock::OnGround = 0;
+bool				RenderBlock::ChunkShouldUpdate = 0;
+
+glm::vec3 RenderBlock::PlayerLookAt()
+{
+	glm::vec3 w = RenderBlock::cameraPos + glm::vec3(0.5f, 0, 0);
+	glm::vec3 lst = glm::vec3(NAN, NAN, NAN);
+
+	int p = 50;
+	while (p--)
+	{
+		if (w == lst) {
+			//w += RenderBlock::camFront * 0.02f;
+			w.x += RenderBlock::camFront.x * 0.2f;
+			w.y += RenderBlock::camFront.y * 0.2f;
+			w.z += RenderBlock::camFront.z * 0.2f;
+			continue;
+		}
+		auto tmp = GenMain::WorldBlock(floorf(w.x), floorf(w.y), floorf(w.z));
+		//std::cout << "Try to locate block (" << w.x << ", " << w.y << ", " << w.z << ")\n";
+
+		if (tmp == nullptr)
+			return glm::vec3(NAN, NAN, NAN);
+		if (*tmp != 0)
+			return glm::vec3(floorf(w.x), floorf(w.y), floorf(w.z));
+		lst = w;
+		w.x += RenderBlock::camFront.x * 0.2f;
+		w.y += RenderBlock::camFront.y * 0.2f;
+		w.z += RenderBlock::camFront.z * 0.2f;
+	}
+	return glm::vec3(NAN, NAN, NAN);
+
+}
 
 void RenderBlock::ProcessInput(float deltatime)
 {
@@ -120,6 +153,7 @@ void RenderBlockProcess()
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	RenderBlock::window		= Renderer::NewWindow(RenderBlock::WinWidth, RenderBlock::WinHeight);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	auto projection	= glm::perspective(glm::radians(30.0f), RenderBlock::WinWidth / float(RenderBlock::WinHeight), 0.1f, 10000.0f);
 	//auto view		= glm::translate(glm::mat4(1.0), glm::vec3(0.0f, 0.0f, -3.0f));
 	
@@ -163,16 +197,48 @@ void RenderBlockProcess()
 	RenderBlock::lstFrame = glfwGetTime();
 
 	glClearColor(161 / 255.0f, 219 / 255.0f, 255 / 255.0f, 1.0f);
-
+	
+	double MouseX, MouseY;
+	double dMouseX, dMouseY;
+	bool MouseButtonDown = 0;
+	
 	while (!glfwWindowShouldClose(RenderBlock::window))
 	{
+		
+		
+
+		glfwGetCursorPos(RenderBlock::window, &MouseX, &MouseY);
+		dMouseX = MouseX - RenderBlock::WinWidth / 2;
+		dMouseY = MouseY - RenderBlock::WinHeight / 2;
+		glfwSetCursorPos(RenderBlock::window, RenderBlock::WinWidth / 2, RenderBlock::WinHeight / 2);
+
+
+		
+		
 		RenderBlock::currentFrame = glfwGetTime();
 		//float deltaTime = currentFrame - lstFrame;
 		//lstFrame = currentFrame;
 		//glfwGetWindowSize(window, &RenderBlock::WinWidth, &RenderBlock::WinHeight);
 
 		RenderBlock::ProcessInput(RenderBlock::currentFrame - RenderBlock::lstFrame);
-
+		if (glfwGetMouseButton(RenderBlock::window, GLFW_MOUSE_BUTTON_LEFT))
+		{
+			if (!MouseButtonDown)
+			{
+				auto look = RenderBlock::PlayerLookAt();
+				if (!isnan(look.x))
+				{
+					*GenMain::WorldBlock(look.x, look.y, look.z) = 0;
+					RenderBlock::ChunkShouldUpdate = 1;
+				}
+				std::cout << "BREAK\n";
+			}
+			MouseButtonDown = 1;
+		}
+		else
+		{
+			MouseButtonDown = 0;
+		}
 
 
 		RenderBlock::lstFrame = RenderBlock::currentFrame;
@@ -216,7 +282,15 @@ void RenderBlockProcess()
 
 		ImGui::DragFloat3("CamPos", &RenderBlock::cameraPos.x);
 		ImGui::DragFloat2("View", EyeAngle);
-		ImGui::DragFloat("Rotate", &rg);
+
+		EyeAngle[0] -= dMouseY * 0.12f;
+		EyeAngle[1] += dMouseX * 0.12f;
+
+		EyeAngle[0] = max(-89.5f, EyeAngle[0]);
+		EyeAngle[0] = min( 89.5f, EyeAngle[0]);
+
+
+
 		ImGui::End();
 		Renderer::Refresh(RenderBlock::window);
 	}
@@ -227,6 +301,7 @@ void RenderBlockProcess()
 
 	std::cout << "Saved!\n";
 	RenderBlock::ProgramEnd = 1;
+	exit(0);
 
 	system("pause");
 	

@@ -23,7 +23,7 @@ void DynamicRegister()
 		
 		//std::cout << "keybo";
 
-		if ((x != lx || y != ly) || lx == 0xffffff)
+		if ((x != lx || y != ly) || lx == 0xffffff || RenderBlock::ChunkShouldUpdate)
 		{
 			
 			RenderBlock::ClearAll();
@@ -61,6 +61,7 @@ void DynamicRegister()
 				else  it++;
 
 			}
+			RenderBlock::ChunkShouldUpdate = 0;
 		}
 
 		for (int i = 1; i < 2; ++i)

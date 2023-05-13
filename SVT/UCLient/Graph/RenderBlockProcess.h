@@ -48,4 +48,7 @@ namespace RenderBlock
 	extern glm::vec3 Velocity;
 
 	extern bool OnGround;
+	extern bool ChunkShouldUpdate;
+
+	extern glm::vec3 PlayerLookAt();
 }

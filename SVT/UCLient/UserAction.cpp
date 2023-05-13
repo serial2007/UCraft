@@ -4,31 +4,7 @@
 
 
 
-glm::vec3 UserAction::PlayerLookAt()
-{
-	glm::vec3 w = RenderBlock::cameraPos;
-	glm::vec3 lst = glm::vec3(NAN, NAN, NAN);
 
-	int p = 100;
-	while(p--)
-	{
-		if (w == lst) {
-			w += RenderBlock::camFront * 0.08f;
-			continue;
-		}
-		auto tmp = GenMain::WorldBlock(floorf(w.x), floorf(w.y), floorf(w.z));
-		//std::cout << "Try to locate block (" << w.x << ", " << w.y << ", " << w.z << ")\n";
-		
-		if(tmp == nullptr)
-			return glm::vec3(NAN, NAN, NAN);
-		if (*tmp != 0)
-			return glm::vec3(floorf(w.x), floorf(w.y), floorf(w.z));
-		lst = w;
-		w += RenderBlock::camFront * 0.08f;
-	}
-	return glm::vec3(NAN, NAN, NAN);
-
-}
 
 void UserAction::PLayerMain()
 {
@@ -99,7 +75,8 @@ void UserAction::PLayerMain()
 
 		RenderBlock::Velocity.x *= 0.8;
 		RenderBlock::Velocity.z *= 0.8;
-
+		//glfwSetCursorPosCallback(RenderBlock::window, );
+		
 		Sleep(10);
 	}
 }

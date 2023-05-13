@@ -57,6 +57,30 @@ Generation::Chunk* Enquiry(int x, int y)
 
 
 
+unsigned short* GenMain::WorldBlock(int x, int y, int z)
+{
+	//x = -;
+	std::swap(y, z); y = -y;
+	if (WorldUnitTmp.find(std::make_pair(IntDiv(x, 256), IntDiv(y, 256))) == WorldUnitTmp.end())
+	{
+		//std::cout << "No Unit" << IntDiv(x, 256) << ' ' << IntDiv(y, 256) << '\n';
+		return nullptr;
+	}
+	auto unit = WorldUnitTmp[std::make_pair(IntDiv(x, 256), IntDiv(y, 256))];
+
+	x = IntMod(x, 256);
+	y = IntMod(y, 256);
+	auto chunk = unit->chunk[x / 16][y / 16];
+	//if (chunk == nullptr) return nullptr;
+	x = x % 16;
+	y = y % 16;
+	if (x < 0 || x >= 16 || y < 0 || y >= 16 || z < 0 || z >= 128) {
+		//std::cout << "Invalid Pos " << x << ' ' << y << ' ' << z << '\n';
+		return nullptr;
+	}
+	return &(chunk->block[x][y][z]);
+}
+
 void GenMain::RegisterBiomeMain()
 {
 	

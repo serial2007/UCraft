@@ -8,6 +8,7 @@
 #include <json/json.h>
 #include "UCLient/ImportInfo.h"
 #include "UCLient/Graph/DynamicRegister.h"
+#include "UCLient/UserAction.h"
 #pragma omp parallel for
 
 
@@ -22,8 +23,8 @@ int main()
 	GenMain::RegisterBiomeMain();
 
 	std::thread Dyn(DynamicRegister);
-
-
+	while (RenderBlock::window == nullptr) {}
+	std::thread User(UserAction::PLayerMain);
 	//auto p1 = Enquiry(0, 0);
 	//auto p2 = Enquiry(1, 0);
 	//auto p3 = Enquiry(-1, 0);
@@ -53,7 +54,10 @@ int main()
 	SaveAll();*/
 	while(!RenderBlock::ProgramEnd)
 	{
-		Sleep(200);
+		/*auto wh = UserAction::PlayerLookAt();
+		std::cout << wh.x << ' ' << wh.y << ' ' << wh.z << std::endl;*/
+		//std::cout << RenderBlock::camFront.x << ' ' << RenderBlock::camFront.y << ' ' << RenderBlock::camFront.z << '\n';
+		Sleep(1000);
 	}
 	return 0;
 }

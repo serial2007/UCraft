@@ -20,6 +20,7 @@ namespace RenderBlock
 	extern RenderBlock::UBasic wh1[1024 * 256 * 4 * 8 * 4];
 	extern RenderBlock::UBasic whm[10][1024 * 256];
 
+	extern void ProcessInput(float deltatime);
 	extern unsigned indices[65537 * 4 * 4 * 8 * 4];
 
 	extern unsigned offset, offset1, offsetm[10];
@@ -35,7 +36,7 @@ namespace RenderBlock
 
 	extern bool ProgramEnd;
 	extern glm::vec3 cameraPos;
-	extern bool processInput(GLFWwindow* window, float);
+	
 
 	extern glm::vec3 camFront;
 	extern glm::vec3 camUp;
@@ -44,4 +45,7 @@ namespace RenderBlock
 	extern GLFWwindow* window;
 
 	extern float lstFrame, currentFrame;
+	extern glm::vec3 Velocity;
+
+	extern bool OnGround;
 }

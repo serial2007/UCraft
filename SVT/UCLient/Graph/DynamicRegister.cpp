@@ -34,6 +34,9 @@ void DynamicRegister()
 					//std::cout << "Register chunk (" << i + x << ", " << j + y << ")\n";
 					if(p != nullptr)
 					UGraph::DrawChunk(p, GenMain::WorldUnitTmp[std::make_pair(IntDiv(i + x, 16), IntDiv(j + y, 16))]);
+
+
+
 					
 				}
 			

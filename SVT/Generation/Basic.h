@@ -27,6 +27,7 @@
 extern struct Pos
 {
 	int x, y, h = 0;
+	bool e = 0;
 };
 
 

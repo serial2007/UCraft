@@ -1,5 +1,5 @@
 #include "SmoothLight.h"
-#define SHADOW_THICKNESS 0.15f
+#define SHADOW_THICKNESS 0.25f
 
 ULight::SurfLight ULight::GenLight(int x, int y, int z, Generation::WorldUnit* unit, unsigned short w)
 {

@@ -14,7 +14,7 @@ unsigned			RenderBlock::RendererNm[10] = {}; //
 unsigned			RenderBlock::indices[65537 * 4 * 4 * 8 * 4 ];
 float				RenderBlock::GHeight, RenderBlock::GWidth;
 int					RenderBlock::WinWidth = 2560, RenderBlock::WinHeight = 1440;
-glm::vec3			RenderBlock::cameraPos;
+glm::vec3			RenderBlock::cameraPos = glm::vec3(0.0f, 10.0f, 0.0f);
 bool				RenderBlock::ProgramEnd = 0;
 glm::vec3			RenderBlock::camFront;
 glm::vec3			RenderBlock::camUp;
@@ -22,46 +22,83 @@ bool				RenderBlock::RegisterDone = 1;
 GLFWwindow*			RenderBlock::window = nullptr;
 float				RenderBlock::lstFrame;
 float				RenderBlock::currentFrame;
+glm::vec3			RenderBlock::Velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+bool				RenderBlock::OnGround = 0;
 
-bool RenderBlock::processInput(GLFWwindow* window, float deltatime)
+void RenderBlock::ProcessInput(float deltatime)
 {
-	bool f = 0;
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-	float cameraSpeed = 30.0f * deltatime;    //用于控制移动速度
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	//std::cout << "inp";
+	if (glfwGetKey(RenderBlock::window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(RenderBlock::window, true);
+	float cameraSpeed = 3.0f * deltatime;
+	glm::vec3 ktot(0.0f);
+
+	//if (glfwGetKey(RenderBlock::window, GLFW_KEY_W) == GLFW_PRESS)
+	if (GetKeyState('W') < 0)
 	{
-		RenderBlock::cameraPos += cameraSpeed * RenderBlock::camFront;     //按下W，摄像机向前移动
-		f = 1;
+		//while (1) std::cout << '_';
+		auto k = RenderBlock::camFront;     //按下W，摄像机向前移动
+		k.y = 0;
+		float tot = std::sqrtf(k.x * k.x + k.z * k.z);
+		k.x /= tot;
+		k.z /= tot;
+		ktot += k;
+		//RenderBlock::Velocity += k * cameraSpeed;
+		
 	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	if (glfwGetKey(RenderBlock::window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		RenderBlock::cameraPos -= cameraSpeed * RenderBlock::camFront;     //按下S，摄像机向后移动
-		f = 1;
+		auto k = RenderBlock::camFront;     //按下W，摄像机向前移动
+		k.y = 0;
+		float tot = std::sqrtf(k.x * k.x + k.z * k.z);
+		k.x /= tot;
+		k.z /= tot;
+		ktot -= k;
+		//RenderBlock::Velocity -= k * cameraSpeed;
 	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	if (glfwGetKey(RenderBlock::window, GLFW_KEY_A) == GLFW_PRESS)
 		//glm::cross(cameraFront, cameraUp)得出的是摄像机的右方向
 	{
-		RenderBlock::cameraPos -= glm::normalize(glm::cross(RenderBlock::camFront, RenderBlock::camUp)) * cameraSpeed;  //按下A，摄像机向左移动
-		f = 1;
+		auto k = glm::normalize(glm::cross(RenderBlock::camFront, RenderBlock::camUp));  //按下A，摄像机向左移动
+		k.y = 0;
+		float tot = std::sqrtf(k.x * k.x + k.z * k.z);
+		k.x /= tot;
+		k.z /= tot;
+		ktot -= k;
+		//RenderBlock::Velocity -= k * cameraSpeed;
 	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	if (glfwGetKey(RenderBlock::window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		RenderBlock::cameraPos += glm::normalize(glm::cross(RenderBlock::camFront, RenderBlock::camUp)) * cameraSpeed;  //按下D，摄像机向右移动
-		f = 1;
+		auto k = glm::normalize(glm::cross(RenderBlock::camFront, RenderBlock::camUp));  //按下D，摄像机向右移动
+		k.y = 0;
+		float tot = std::sqrtf(k.x * k.x + k.z * k.z);
+		k.x /= tot;
+		k.z /= tot;
+		ktot += k;
+		
 	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+	/*if (glfwGetKey(RenderBlock::window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
 		RenderBlock::cameraPos.y -= cameraSpeed;
-		f = 1;
-	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-	{
-		RenderBlock::cameraPos.y += cameraSpeed;
-		f = 1;
-	}
 
-	return f;
+	}*/
+	float tot = std::sqrtf(ktot.x * ktot.x + ktot.z * ktot.z);
+	if (tot > 0.0001f)
+	{
+		ktot.x /= tot;
+		ktot.z /= tot;
+		RenderBlock::Velocity += ktot * cameraSpeed;
+	}
+	if (glfwGetKey(RenderBlock::window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	{
+		if (RenderBlock::OnGround)
+		{
+			//while (1)
+			RenderBlock::Velocity.y = 0.25f;
+		}
+
+	}
+	return;
 }
 
 void RenderBlockProcess()
@@ -134,12 +171,11 @@ void RenderBlockProcess()
 		//lstFrame = currentFrame;
 		//glfwGetWindowSize(window, &RenderBlock::WinWidth, &RenderBlock::WinHeight);
 
-		RenderBlock::processInput(RenderBlock::window, RenderBlock::currentFrame - RenderBlock::lstFrame);
+		RenderBlock::ProcessInput(RenderBlock::currentFrame - RenderBlock::lstFrame);
+
+
+
 		RenderBlock::lstFrame = RenderBlock::currentFrame;
-
-
-
-
 		
 		auto look = glm::perspective(glm::radians(45.0f), RenderBlock::WinWidth / float(RenderBlock::WinHeight), 0.1f, 300.0f);
 		auto model = glm::rotate(glm::mat4(1.0), glm::radians(rg), glm::vec3(1.0f, 0.0f, 0.0f));

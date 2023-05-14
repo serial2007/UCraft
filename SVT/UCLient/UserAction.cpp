@@ -88,9 +88,9 @@ bool UserAction::IsStuck(glm::vec3 pos)
 	for(short k = 0; k < 2; ++k)
 	{
 		auto p = pos + glm::vec3(
-			(i ? 0.3f : -0.3f),
-			(j ? -0.2f : -1.2f),
-			(k ? 0.3f : -0.3f)
+			(i ? 0.4f : -0.4f),
+			(j ? -0.0f : -1.5f),
+			(k ? 0.4f : -0.4f)
 		);
 		auto m = GenMain::WorldBlock(p.x, p.y, p.z);
 		if (m == nullptr || *m != 0)

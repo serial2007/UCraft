@@ -29,17 +29,18 @@ bool				RenderBlock::ChunkShouldUpdate = 0;
 
 glm::vec3 RenderBlock::PlayerLookAt()
 {
-	glm::vec3 w = RenderBlock::cameraPos + glm::vec3(0.5f, 0, 0);
+	glm::vec3 w = RenderBlock::cameraPos;
+	w.z += 1.0f;
 	glm::vec3 lst = glm::vec3(NAN, NAN, NAN);
 
-	int p = 50;
+	int p = 500;
 	while (p--)
 	{
 		if (w == lst) {
 			//w += RenderBlock::camFront * 0.02f;
-			w.x += RenderBlock::camFront.x * 0.2f;
-			w.y += RenderBlock::camFront.y * 0.2f;
-			w.z += RenderBlock::camFront.z * 0.2f;
+			w.x += RenderBlock::camFront.x * 0.02f;
+			w.y += RenderBlock::camFront.y * 0.02f;
+			w.z += RenderBlock::camFront.z * 0.02f;
 			continue;
 		}
 		auto tmp = GenMain::WorldBlock(floorf(w.x), floorf(w.y), floorf(w.z));
@@ -50,9 +51,9 @@ glm::vec3 RenderBlock::PlayerLookAt()
 		if (*tmp != 0)
 			return glm::vec3(floorf(w.x), floorf(w.y), floorf(w.z));
 		lst = w;
-		w.x += RenderBlock::camFront.x * 0.2f;
-		w.y += RenderBlock::camFront.y * 0.2f;
-		w.z += RenderBlock::camFront.z * 0.2f;
+		w.x += RenderBlock::camFront.x * 0.02f;
+		w.y += RenderBlock::camFront.y * 0.02f;
+		w.z += RenderBlock::camFront.z * 0.02f;
 	}
 	return glm::vec3(NAN, NAN, NAN);
 
@@ -204,7 +205,7 @@ void RenderBlockProcess()
 	
 	while (!glfwWindowShouldClose(RenderBlock::window))
 	{
-		
+		std::cout << RenderBlock::cameraPos.x << ' ' << RenderBlock::cameraPos.y << ' ' << RenderBlock::cameraPos.z << std::endl;
 		
 
 		glfwGetCursorPos(RenderBlock::window, &MouseX, &MouseY);

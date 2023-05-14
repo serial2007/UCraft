@@ -6,8 +6,7 @@
 
 void DynamicRegister()
 {
-	
-
+	bool GoOverWrite = 0;
 	//RenderBlock::cameraPos;
 	while(RenderBlock::window == nullptr) {}
 	int lx = 0xffffff, ly = 0xffffff;
@@ -23,21 +22,19 @@ void DynamicRegister()
 		
 		//std::cout << "keybo";
 
-		if ((x != lx || y != ly) || lx == 0xffffff || RenderBlock::ChunkShouldUpdate)
+		if ((x != lx || y != ly) || lx == 0xffffff)
 		{
-			
+			DynamicBackup::tx = x;
+			DynamicBackup::ty = y;
+			GoOverWrite = 1;
 			RenderBlock::ClearAll();
-			for (int i = -7; i <= 7; ++i)
-				for (int j = -7; j <= 7; ++j)
+			for (int i = -4; i <= 4; ++i)
+				for (int j = -4; j <= 4; ++j)
 				{
 					auto p = Enquiry(i + x, j + y);
 					//std::cout << "Register chunk (" << i + x << ", " << j + y << ")\n";
 					if(p != nullptr)
-					UGraph::DrawChunk(p, GenMain::WorldUnitTmp[std::make_pair(IntDiv(i + x, 16), IntDiv(j + y, 16))]);
-
-
-
-					
+					UGraph::DrawChunk(p, GenMain::WorldUnitTmp[std::make_pair(IntDiv(i + x, 16), IntDiv(j + y, 16))]);			
 				}
 			
 			
@@ -63,24 +60,44 @@ void DynamicRegister()
 			}
 			RenderBlock::ChunkShouldUpdate = 0;
 		}
-
-		for (int i = 1; i < 2; ++i)
+		else if (RenderBlock::ChunkShouldUpdate)
 		{
-			memcpy(RenderBlock::wh + RenderBlock::offset, RenderBlock::whm[i], RenderBlock::offsetm[i] * sizeof(RenderBlock::UBasic));
-			RenderBlock::offset += RenderBlock::offsetm[i];
-			RenderBlock::RendererN += RenderBlock::RendererNm[i];
+			RenderBlock::ChunkShouldUpdate = 0;
+			RenderBlock::offsetm[2] = RenderBlock::offsetm[3] = 0;
+			RenderBlock::RendererNm[2] = RenderBlock::RendererNm[3] = 0;
+
+			for (int i = DynamicBackup::tx - 1; i <= DynamicBackup::tx + 1; ++i)
+			for (int j = DynamicBackup::ty - 1; j <= DynamicBackup::ty + 1; ++j)
+			{
+				auto p = Enquiry(i, j);
+				if (p != nullptr)
+				UGraph::DrawChunk(p, GenMain::WorldUnitTmp[std::make_pair(IntDiv(i, 16), IntDiv(j, 16))], 1);
+			}
+
+			GoOverWrite = 1;
+			
 		}
 
+		if (GoOverWrite)
+		{
+			GoOverWrite = 0;
+			unsigned off = RenderBlock::offset;
+			unsigned RendN = RenderBlock::RendererN;
+			for (int i = 1; i < 4; ++i)
+			{
+				memcpy(RenderBlock::wh + off, RenderBlock::whm[i], RenderBlock::offsetm[i] * sizeof(RenderBlock::UBasic));
+				off += RenderBlock::offsetm[i];
+				RendN += RenderBlock::RendererNm[i];
 
+				
+				
+			}
+			memcpy(RenderBlock::wh1, RenderBlock::wh, sizeof(RenderBlock::wh));
+			RenderBlock::RendererN1 = RendN;
+			RenderBlock::offset1 = off;
 
-
-		RenderBlock::shouldUpdate = 0;
-		memcpy(RenderBlock::wh1, RenderBlock::wh, sizeof(RenderBlock::wh));
-
-		RenderBlock::RendererN1 = RenderBlock::RendererN;
-		RenderBlock::offset1 = RenderBlock::offset;
-
-		RenderBlock::lstFrame = RenderBlock::currentFrame;
-		RenderBlock::shouldUpdate = 1;
+			RenderBlock::lstFrame = RenderBlock::currentFrame;
+			RenderBlock::shouldUpdate = 0;
+		}
 	}
 }

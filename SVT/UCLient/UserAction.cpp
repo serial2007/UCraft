@@ -28,6 +28,15 @@ void UserAction::PLayerMain()
 		
 		auto VelocityLock = RenderBlock::Velocity;
 		float x, y, z;
+
+		for (y = 0.0f; y < 1.0f; y += 0.05f)
+		{
+			auto yv = y * VelocityLock.y;
+			if (IsStuck(glm::vec3(RenderBlock::cameraPos.x, RenderBlock::cameraPos.y + yv, RenderBlock::cameraPos.z))) {
+				y -= 0.05f; break;
+			}
+		}
+		RenderBlock::cameraPos.y += VelocityLock.y * y;
 		for (x = 0.0f; x < 1.0f; x += 0.05f)
 		{
 			auto xv = x * VelocityLock.x;
@@ -46,14 +55,7 @@ void UserAction::PLayerMain()
 		}
 		RenderBlock::cameraPos.z += VelocityLock.z * z;
 
-		for (y = 0.0f; y < 1.0f; y += 0.05f)
-		{
-			auto yv = y * VelocityLock.y;
-			if (IsStuck(glm::vec3(RenderBlock::cameraPos.x, RenderBlock::cameraPos.y + yv, RenderBlock::cameraPos.z))) {
-				y -= 0.05f; break;
-			}
-		}
-		RenderBlock::cameraPos.y += VelocityLock.y * y;
+		
 
 		//RenderBlock::cameraPos.x += MovableV.x;
 		//RenderBlock::cameraPos.y += MovableV.y;

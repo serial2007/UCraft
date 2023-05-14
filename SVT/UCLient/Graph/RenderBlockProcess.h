@@ -16,12 +16,12 @@ namespace RenderBlock
 	extern unsigned RendererNm[10];
 	extern unsigned RendererN1;
 
-	extern RenderBlock::UBasic wh[1024 * 256 * 4 * 8 * 4];
-	extern RenderBlock::UBasic wh1[1024 * 256 * 4 * 8 * 4];
+	extern RenderBlock::UBasic wh[1024 * 256 * 4 * 8 * 4 ];
+	extern RenderBlock::UBasic wh1[1024 * 256 * 4 * 8 * 4 ];
 	extern RenderBlock::UBasic whm[10][1024 * 256];
 
 	extern void ProcessInput(float deltatime);
-	extern unsigned indices[65537 * 4 * 4 * 8 * 4];
+	extern unsigned indices[65537 * 4 * 4 * 8 * 4 ];
 
 	extern unsigned offset, offset1, offsetm[10];
 	void RegisterBlock(int x, int y, int z, unsigned short sur = 0b111111, int id = 1, unsigned layout = 0, Generation::WorldUnit* unit = nullptr);

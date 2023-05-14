@@ -1,6 +1,9 @@
 #include "ChunkDraw.h"
+;
+int DynamicBackup::tx = 0;
+int DynamicBackup::ty = 0;
 
-void UGraph::DrawChunk(Generation::Chunk* chunk, Generation::WorldUnit* unit)
+void UGraph::DrawChunk(Generation::Chunk* chunk, Generation::WorldUnit* unit, bool priority)
 {
 	if (chunk == nullptr)
 	{
@@ -8,6 +11,15 @@ void UGraph::DrawChunk(Generation::Chunk* chunk, Generation::WorldUnit* unit)
 		return;
 	}
 	
+	if (!priority)
+	{
+		if (std::abs(DynamicBackup::tx - chunk->x) <= 1 && std::abs(DynamicBackup::ty - chunk->y) <= 1)
+		{
+			priority = 1;
+		}
+	}
+	
+
 	for(int i = 0; i < 16; ++i)
 	for(int j = 0; j < 16; ++j)
 	{
@@ -40,8 +52,8 @@ void UGraph::DrawChunk(Generation::Chunk* chunk, Generation::WorldUnit* unit)
 			if (nd)
 			{
 				if(chunk->block[i][j][k] == 51)
-					RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k], 1, unit);
-				else RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k], 0, unit);
+					RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k], 1 + priority * 2, unit);
+				else RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k], priority * 2, unit);
 				//std::cout << "Rendered block (" << i + chunk->x * 16 << ", " << j + chunk->y * 16 << ", " << k << ") with id = " << chunk->block[i][j][k] << '\n';
 			}
 		}

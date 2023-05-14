@@ -7,7 +7,7 @@
 bool				RenderBlock::shouldUpdate = 0;
 unsigned			RenderBlock::offset = 0, RenderBlock::offset1 = 0, RenderBlock::offsetm[10];
 RenderBlock::UBasic RenderBlock::wh[1024 * 256 * 4 * 8 * 4 ];
-RenderBlock::UBasic RenderBlock::wh1[1024 * 256 * 4 * 8 * 4];
+RenderBlock::UBasic RenderBlock::wh1[1024 * 256 * 4 * 8 * 4 ];
 RenderBlock::UBasic RenderBlock::whm[10][1024 * 256]; //
 unsigned			RenderBlock::RendererN = 0;
 unsigned			RenderBlock::RendererN1 = 0;
@@ -145,7 +145,7 @@ void RenderBlockProcess()
 {
 	Renderer::ActivateImgui = 1;
 
-	for (int i = 0, k = 0; i < 65537 * 4 * 4  - 6; i += 6, k += 4)
+	for (int i = 0, k = 0; i < 65537 * 4 * 4 * 8 * 4 - 6; i += 6, k += 4)
 	{
 		RenderBlock::indices[i]		= k;
 		RenderBlock::indices[i + 1]	= k + 1;
@@ -239,7 +239,6 @@ void RenderBlockProcess()
 					*GenMain::WorldBlock(look.x, look.y, look.z) = 0;
 					RenderBlock::ChunkShouldUpdate = 1;
 				}
-				std::cout << "BREAK\n";
 			}
 			MouseButtonDown = 1;
 		}
@@ -256,10 +255,15 @@ void RenderBlockProcess()
 				auto look = RenderBlock::PlayerLookAt(&surf);
 				if (!isnan(look.x))
 				{
-					*GenMain::WorldBlock(surf.x, surf.y, surf.z) = 4U;
-					RenderBlock::ChunkShouldUpdate = 1;
+					auto r = GenMain::WorldBlock(surf.x, surf.y, surf.z);
+					if (r != nullptr)
+					{
+						*r = 4U;
+						RenderBlock::ChunkShouldUpdate = 1;
+					}
+					
+					
 				}
-				std::cout << "BREAK\n";
 			}
 			MouseRightButton = 1;
 		}
@@ -305,10 +309,6 @@ void RenderBlockProcess()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			Renderer::Draw(va, ib, shader, RenderBlock::RendererN1 * 6);
 
-		ImGui::Begin("Test");
-
-		ImGui::DragFloat3("CamPos", &RenderBlock::cameraPos.x);
-		ImGui::DragFloat2("View", EyeAngle);
 
 		EyeAngle[0] -= dMouseY * 0.12f;
 		EyeAngle[1] += dMouseX * 0.12f;
@@ -316,9 +316,6 @@ void RenderBlockProcess()
 		EyeAngle[0] = max(-89.5f, EyeAngle[0]);
 		EyeAngle[0] = min( 89.5f, EyeAngle[0]);
 
-
-
-		ImGui::End();
 		Renderer::Refresh(RenderBlock::window);
 	}
 
@@ -360,10 +357,10 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 		auto lit = ULight::GenLight(x, y, z, unit, 0b010000);
 
 		RenderBlock::UBasic w[] = {
-		{x,     y    , z,  ImportInfo::binfo[id][0 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 1] / RenderBlock::GHeight, lit.l[1][0]},
-		{x,     y,  z + 1, ImportInfo::binfo[id][0 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 3] / RenderBlock::GHeight, lit.l[0][0]},
-		{x + 1, y,     z,  ImportInfo::binfo[id][0 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 1] / RenderBlock::GHeight, lit.l[1][1]},
-		{x + 1, y, z + 1,  ImportInfo::binfo[id][0 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 3] / RenderBlock::GHeight, lit.l[0][1]} };
+		{x,     y    , z,  ImportInfo::binfo[id][0 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 1] / RenderBlock::GHeight, lit.l[0][0]},
+		{x,     y,  z + 1, ImportInfo::binfo[id][0 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 3] / RenderBlock::GHeight, lit.l[1][0]},
+		{x + 1, y,     z,  ImportInfo::binfo[id][0 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 1] / RenderBlock::GHeight, lit.l[0][1]},
+		{x + 1, y, z + 1,  ImportInfo::binfo[id][0 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][0 * 4 + 3] / RenderBlock::GHeight, lit.l[1][1]} };
 		if (layout)
 		{
 			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
@@ -406,10 +403,10 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 		auto lit = ULight::GenLight(x, y, z, unit, 0b100000);
 
 		RenderBlock::UBasic w[] = {
-		{x,     y    , z,   ImportInfo::binfo[id][2 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 1] / RenderBlock::GHeight, lit.l[1][0]},
-		{ x,     y,  z + 1, ImportInfo::binfo[id][2 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 3] / RenderBlock::GHeight, lit.l[0][0]},
-		{ x, y + 1,     z,  ImportInfo::binfo[id][2 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 1] / RenderBlock::GHeight, lit.l[1][1]},
-		{ x, y + 1, z + 1,  ImportInfo::binfo[id][2 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 3] / RenderBlock::GHeight, lit.l[0][1]} };
+		{x,     y    , z,   ImportInfo::binfo[id][2 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 1] / RenderBlock::GHeight, lit.l[0][0]},
+		{ x,     y,  z + 1, ImportInfo::binfo[id][2 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 3] / RenderBlock::GHeight, lit.l[1][0]},
+		{ x, y + 1,     z,  ImportInfo::binfo[id][2 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 1] / RenderBlock::GHeight, lit.l[0][1]},
+		{ x, y + 1, z + 1,  ImportInfo::binfo[id][2 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][2 * 4 + 3] / RenderBlock::GHeight, lit.l[1][1]} };
 		if (layout)
 		{
 			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
@@ -428,10 +425,10 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 	{
 		auto lit = ULight::GenLight(x, y, z, unit, 0b000010);
 		RenderBlock::UBasic w[] = {
-		{x, y + 1, z,           ImportInfo::binfo[id][3 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 1] / RenderBlock::GHeight, lit.l[1][0]},
-		{ x,     y + 1,  z + 1, ImportInfo::binfo[id][3 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 3] / RenderBlock::GHeight, lit.l[0][0] },
-		{ x + 1, y + 1,     z,  ImportInfo::binfo[id][3 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 1] / RenderBlock::GHeight, lit.l[1][1] },
-		{ x + 1, y + 1, z + 1,  ImportInfo::binfo[id][3 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 3] / RenderBlock::GHeight, lit.l[0][1] } };
+		{x, y + 1, z,           ImportInfo::binfo[id][3 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 1] / RenderBlock::GHeight, lit.l[0][0]},
+		{ x,     y + 1,  z + 1, ImportInfo::binfo[id][3 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 3] / RenderBlock::GHeight, lit.l[1][0] },
+		{ x + 1, y + 1,     z,  ImportInfo::binfo[id][3 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 1] / RenderBlock::GHeight, lit.l[0][1] },
+		{ x + 1, y + 1, z + 1,  ImportInfo::binfo[id][3 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][3 * 4 + 3] / RenderBlock::GHeight, lit.l[1][1] } };
 		if (layout)
 		{
 			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
@@ -472,10 +469,10 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 	{
 		auto lit = ULight::GenLight(x, y, z, unit, 0b000100);
 		RenderBlock::UBasic w[] = {
-		{x + 1,     y    , z,  ImportInfo::binfo[id][5 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 1] / RenderBlock::GHeight, lit.l[1][0]},
-		{x + 1,     y,  z + 1, ImportInfo::binfo[id][5 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 3] / RenderBlock::GHeight, lit.l[0][0]},
-		{x + 1, y + 1,     z,  ImportInfo::binfo[id][5 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 1] / RenderBlock::GHeight, lit.l[1][1]},
-		{x + 1, y + 1, z + 1,  ImportInfo::binfo[id][5 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 3] / RenderBlock::GHeight, lit.l[0][1]} };
+		{x + 1,     y    , z,  ImportInfo::binfo[id][5 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 1] / RenderBlock::GHeight, lit.l[0][0]},
+		{x + 1,     y,  z + 1, ImportInfo::binfo[id][5 * 4 + 0] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 3] / RenderBlock::GHeight, lit.l[1][0]},
+		{x + 1, y + 1,     z,  ImportInfo::binfo[id][5 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 1] / RenderBlock::GHeight, lit.l[0][1]},
+		{x + 1, y + 1, z + 1,  ImportInfo::binfo[id][5 * 4 + 2] / RenderBlock::GWidth, ImportInfo::binfo[id][5 * 4 + 3] / RenderBlock::GHeight, lit.l[1][1]} };
 		if (layout)
 		{
 			memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));

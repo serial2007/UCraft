@@ -50,5 +50,5 @@ namespace RenderBlock
 	extern bool OnGround;
 	extern bool ChunkShouldUpdate;
 
-	extern glm::vec3 PlayerLookAt();
+	extern glm::vec3 PlayerLookAt(glm::vec3* surf = nullptr);
 }

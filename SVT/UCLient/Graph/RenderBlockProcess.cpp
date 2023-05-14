@@ -27,7 +27,7 @@ glm::vec3			RenderBlock::Velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 bool				RenderBlock::OnGround = 0;
 bool				RenderBlock::ChunkShouldUpdate = 0;
 
-glm::vec3 RenderBlock::PlayerLookAt()
+glm::vec3 RenderBlock::PlayerLookAt(glm::vec3* surf)
 {
 	glm::vec3 w = RenderBlock::cameraPos;
 	w.z += 1.0f;
@@ -49,7 +49,13 @@ glm::vec3 RenderBlock::PlayerLookAt()
 		if (tmp == nullptr)
 			return glm::vec3(NAN, NAN, NAN);
 		if (*tmp != 0)
+		{
+			if (surf != nullptr)
+			{
+				*surf = lst;
+			}
 			return glm::vec3(floorf(w.x), floorf(w.y), floorf(w.z));
+		}
 		lst = w;
 		w.x += RenderBlock::camFront.x * 0.02f;
 		w.y += RenderBlock::camFront.y * 0.02f;
@@ -202,10 +208,11 @@ void RenderBlockProcess()
 	double MouseX, MouseY;
 	double dMouseX, dMouseY;
 	bool MouseButtonDown = 0;
+	bool MouseRightButton = 0;
 	
 	while (!glfwWindowShouldClose(RenderBlock::window))
 	{
-		std::cout << RenderBlock::cameraPos.x << ' ' << RenderBlock::cameraPos.y << ' ' << RenderBlock::cameraPos.z << std::endl;
+		//std::cout << RenderBlock::cameraPos.x << ' ' << RenderBlock::cameraPos.y << ' ' << RenderBlock::cameraPos.z << std::endl;
 		
 
 		glfwGetCursorPos(RenderBlock::window, &MouseX, &MouseY);
@@ -241,6 +248,25 @@ void RenderBlockProcess()
 			MouseButtonDown = 0;
 		}
 
+		if (glfwGetMouseButton(RenderBlock::window, GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			if (!MouseRightButton)
+			{
+				glm::vec3 surf;
+				auto look = RenderBlock::PlayerLookAt(&surf);
+				if (!isnan(look.x))
+				{
+					*GenMain::WorldBlock(surf.x, surf.y, surf.z) = 4U;
+					RenderBlock::ChunkShouldUpdate = 1;
+				}
+				std::cout << "BREAK\n";
+			}
+			MouseRightButton = 1;
+		}
+		else
+		{
+			MouseRightButton = 0;
+		}
 
 		RenderBlock::lstFrame = RenderBlock::currentFrame;
 		

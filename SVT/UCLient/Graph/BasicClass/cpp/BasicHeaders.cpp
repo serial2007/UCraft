@@ -22,16 +22,18 @@ bool glLogCall(const char* function, const char* file, int line)
 	return true;
 }
 
-int IntDiv(int a, int b)
+int IntDiv(float _a, int b)
 {
+	int a = floor(_a);
 	if (a >= 0) return a / b;
 	if (a % b == 0) return a / b;
 	else return a / b - 1;
 	return 0;
 }
 
-int IntMod(int a, int b)
+int IntMod(float _a, int b)
 {
+	int a = floor(_a);
 	if (a >= 0) return a % b;
 	if (a % b == 0) return 0;
 	return b + a % b;

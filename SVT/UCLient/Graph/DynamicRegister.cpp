@@ -156,9 +156,9 @@ void DynamicRegister()
 				
 				
 			}
-			memcpy(RenderBlock::wh1, RenderBlock::wh, sizeof(RenderBlock::wh));
 			RenderBlock::RendererN1 = RendN;
 			RenderBlock::offset1 = off;
+			memcpy(RenderBlock::wh1, RenderBlock::wh, sizeof(RenderBlock::wh));
 
 			RenderBlock::lstFrame = RenderBlock::currentFrame;
 			RenderBlock::shouldUpdate = 0;

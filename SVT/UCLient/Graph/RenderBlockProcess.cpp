@@ -2,6 +2,7 @@
 #include "BasicClass/lib/Texture.h"
 #include "../../Generation/Entry.h"
 #include <GLFW/glfw3.h>
+#include "../UserAction.h"
 #pragma omp parallel for
 
 bool				RenderBlock::shouldUpdate = 0;
@@ -35,7 +36,8 @@ double				RenderBlock::MouseX, RenderBlock::MouseY;
 glm::vec3 RenderBlock::PlayerLookAt(glm::vec3* surf)
 {
 	glm::vec3 w = RenderBlock::cameraPos;
-	w.z += 1.0f;
+	//w.x += 1.0f;
+	//w.z += 1.0f;
 	glm::vec3 lst = glm::vec3(NAN, NAN, NAN);
 
 	int p = 500;
@@ -48,7 +50,7 @@ glm::vec3 RenderBlock::PlayerLookAt(glm::vec3* surf)
 			w.z += RenderBlock::camFront.z * 0.02f;
 			continue;
 		}
-		auto tmp = GenMain::WorldBlock(floorf(w.x), floorf(w.y), floorf(w.z));
+		auto tmp = GenMain::WorldBlock(w.x, w.y, w.z);
 		//std::cout << "Try to locate block (" << w.x << ", " << w.y << ", " << w.z << ")\n";
 
 		if (tmp == nullptr)
@@ -59,7 +61,7 @@ glm::vec3 RenderBlock::PlayerLookAt(glm::vec3* surf)
 			{
 				*surf = lst;
 			}
-			return glm::vec3(floorf(w.x), floorf(w.y), floorf(w.z));
+			return glm::vec3(w.x, w.y, w.z);
 		}
 		lst = w;
 		w.x += RenderBlock::camFront.x * 0.02f;
@@ -227,7 +229,7 @@ void RenderBlockProcess()
 
 	while (!glfwWindowShouldClose(RenderBlock::window))
 	{
-		//std::cout << RenderBlock::cameraPos.x << ' ' << RenderBlock::cameraPos.y << ' ' << RenderBlock::cameraPos.z << std::endl;
+		std::cout << RenderBlock::cameraPos.x << ' ' << RenderBlock::cameraPos.y << ' ' << RenderBlock::cameraPos.z << std::endl;
 		
 
 		glfwGetCursorPos(RenderBlock::window, &RenderBlock::MouseX, &RenderBlock::MouseY);
@@ -284,12 +286,15 @@ void RenderBlockProcess()
 			{
 				glm::vec3 surf;
 				auto look = RenderBlock::PlayerLookAt(&surf);
+				auto p = RenderBlock::cameraPos;
 				if (!isnan(look.x))
 				{
 					auto r = GenMain::WorldBlock(surf.x, surf.y, surf.z);
 					if (r != nullptr)
 					{
 						*r = RenderBlock::SelectedBlock;
+						if (UserAction::IsStuck(p))
+							*r = 0;
 						RenderBlock::ChunkShouldUpdate = 1;
 					}
 					
@@ -308,14 +313,6 @@ void RenderBlockProcess()
 		auto look = glm::perspective(glm::radians(45.0f), RenderBlock::WinWidth / float(RenderBlock::WinHeight), 0.1f, 300.0f);
 		auto model = glm::rotate(glm::mat4(1.0), glm::radians(rg), glm::vec3(1.0f, 0.0f, 0.0f));
 
-
-
-		//float currentFrame = glfwGetTime();
-		//while(!RenderBlock::shouldUpdate) {
-		////	//RenderBlock::processInput(window, deltaTime);
-		//}
-		
-		
 		glClear(GL_DEPTH_BUFFER_BIT);
 		shader.SetUniformMat4f("proj", look);
 		
@@ -338,7 +335,7 @@ void RenderBlockProcess()
 		Renderer::Clear();
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			Renderer::Draw(va, ib, shader, RenderBlock::RendererN1 * 6);
+		Renderer::Draw(va, ib, shader, RenderBlock::RendererN1 * 6);
 
 
 		EyeAngle[0] -= dMouseY * 0.12f;

@@ -16,7 +16,11 @@ void UserAction::PLayerMain()
 	RenderBlock::lstFrame = glfwGetTime();
 	while (1)
 	{
-		
+		if (RenderBlock::cameraPos.y < 1.75f)
+		{
+			RenderBlock::Velocity.y = 1.5f;
+		}
+
 
 		auto tmp = RenderBlock::cameraPos;
 		while(GenMain::WorldBlock(RenderBlock::cameraPos.x, RenderBlock::cameraPos.y, RenderBlock::cameraPos.z) == nullptr) {
@@ -92,7 +96,7 @@ bool UserAction::IsStuck(glm::vec3 pos)
 		auto p = pos + glm::vec3(
 			(i ? 0.4f : -0.4f),
 			(j ? -0.0f : -1.5f),
-			(k ? 1.4f : 0.6f)
+			(k ? 0.4f : -0.4f)
 		);
 		auto m = GenMain::WorldBlock(p.x, p.y, p.z);
 		if (m == nullptr || *m != 0)

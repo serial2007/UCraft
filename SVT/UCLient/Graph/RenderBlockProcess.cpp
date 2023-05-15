@@ -26,6 +26,11 @@ float				RenderBlock::currentFrame;
 glm::vec3			RenderBlock::Velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 bool				RenderBlock::OnGround = 0;
 bool				RenderBlock::ChunkShouldUpdate = 0;
+bool				RenderBlock::LockCursor = 1;
+bool				RenderBlock::LastPressE = 0;
+unsigned			RenderBlock::SelectedBlock = 1U;
+double				RenderBlock::MouseX, RenderBlock::MouseY;
+
 
 glm::vec3 RenderBlock::PlayerLookAt(glm::vec3* surf)
 {
@@ -73,8 +78,7 @@ void RenderBlock::ProcessInput(float deltatime)
 	float cameraSpeed = 3.0f * deltatime;
 	glm::vec3 ktot(0.0f);
 
-	//if (glfwGetKey(RenderBlock::window, GLFW_KEY_W) == GLFW_PRESS)
-	if (GetKeyState('W') < 0)
+	if (glfwGetKey(RenderBlock::window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		//while (1) std::cout << '_';
 		auto k = RenderBlock::camFront;     //按下W，摄像机向前移动
@@ -117,6 +121,13 @@ void RenderBlock::ProcessInput(float deltatime)
 		ktot += k;
 		
 	}
+	if (glfwGetKey(RenderBlock::window, GLFW_KEY_E) == GLFW_PRESS)
+	{
+		if(LastPressE == 0)
+		RenderBlock::LockCursor = 1 - RenderBlock::LockCursor;
+		LastPressE = 1;
+	}
+	else LastPressE = 0;
 	/*if (glfwGetKey(RenderBlock::window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
 		RenderBlock::cameraPos.y -= cameraSpeed;
@@ -144,7 +155,8 @@ void RenderBlock::ProcessInput(float deltatime)
 void RenderBlockProcess()
 {
 	Renderer::ActivateImgui = 1;
-
+	//glDisable(GLFW_MOUSE_CURSOR);
+	
 	for (int i = 0, k = 0; i < 65537 * 4 * 4 * 8 * 4 - 6; i += 6, k += 4)
 	{
 		RenderBlock::indices[i]		= k;
@@ -171,7 +183,7 @@ void RenderBlockProcess()
 
 	
 	VertexBufferLayout layout;
-	layout.push<int>(3);
+	layout.push<float>(3);
 	layout.push<float>(2);
 	layout.push<float>(1);
 	va.AddBuffer(vb, layout);
@@ -205,22 +217,41 @@ void RenderBlockProcess()
 
 	glClearColor(161 / 255.0f, 219 / 255.0f, 255 / 255.0f, 1.0f);
 	
-	double MouseX, MouseY;
+	/*double MouseX, MouseY;*/
 	double dMouseX, dMouseY;
 	bool MouseButtonDown = 0;
 	bool MouseRightButton = 0;
-	
+	bool LastCursorLock = 1;
+	/*glm::mat4 ortho = glm::ortho(0.0f, (float)RenderBlock::WinWidth, 0.0f, (float)RenderBlock::WinWidth, 0.1f, 20.0f);
+	shader.SetUniformMat4f("ortho", ortho);*/
+
 	while (!glfwWindowShouldClose(RenderBlock::window))
 	{
 		//std::cout << RenderBlock::cameraPos.x << ' ' << RenderBlock::cameraPos.y << ' ' << RenderBlock::cameraPos.z << std::endl;
 		
 
-		glfwGetCursorPos(RenderBlock::window, &MouseX, &MouseY);
-		dMouseX = MouseX - RenderBlock::WinWidth / 2;
-		dMouseY = MouseY - RenderBlock::WinHeight / 2;
-		glfwSetCursorPos(RenderBlock::window, RenderBlock::WinWidth / 2, RenderBlock::WinHeight / 2);
+		glfwGetCursorPos(RenderBlock::window, &RenderBlock::MouseX, &RenderBlock::MouseY);
+		if (LastCursorLock)
+		{
+			dMouseX = RenderBlock::MouseX - RenderBlock::WinWidth / 2;
+			dMouseY = RenderBlock::MouseY - RenderBlock::WinHeight / 2;
+		}
+		else
+		{
+			dMouseX = dMouseY = 0;
+		}
 
-
+		if (RenderBlock::LockCursor)
+		{
+			glfwSetCursorPos(RenderBlock::window, RenderBlock::WinWidth / 2, RenderBlock::WinHeight / 2);
+			ShowCursor(false);
+		}
+		else
+		{
+			ShowCursor(true);
+		}
+		LastCursorLock = RenderBlock::LockCursor;
+		ShowCursor(true);
 		
 		
 		RenderBlock::currentFrame = glfwGetTime();
@@ -229,7 +260,7 @@ void RenderBlockProcess()
 		//glfwGetWindowSize(window, &RenderBlock::WinWidth, &RenderBlock::WinHeight);
 
 		RenderBlock::ProcessInput(RenderBlock::currentFrame - RenderBlock::lstFrame);
-		if (glfwGetMouseButton(RenderBlock::window, GLFW_MOUSE_BUTTON_LEFT))
+		if (glfwGetMouseButton(RenderBlock::window, GLFW_MOUSE_BUTTON_LEFT) && RenderBlock::LockCursor)
 		{
 			if (!MouseButtonDown)
 			{
@@ -247,7 +278,7 @@ void RenderBlockProcess()
 			MouseButtonDown = 0;
 		}
 
-		if (glfwGetMouseButton(RenderBlock::window, GLFW_MOUSE_BUTTON_RIGHT))
+		if (glfwGetMouseButton(RenderBlock::window, GLFW_MOUSE_BUTTON_RIGHT) && RenderBlock::LockCursor)
 		{
 			if (!MouseRightButton)
 			{
@@ -258,7 +289,7 @@ void RenderBlockProcess()
 					auto r = GenMain::WorldBlock(surf.x, surf.y, surf.z);
 					if (r != nullptr)
 					{
-						*r = 4U;
+						*r = RenderBlock::SelectedBlock;
 						RenderBlock::ChunkShouldUpdate = 1;
 					}
 					
@@ -333,7 +364,7 @@ void RenderBlockProcess()
 
 #include "../ImportInfo.h"
 #include "../Graph/SmoothLight.h"
-void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id, unsigned layout, Generation::WorldUnit* unit)
+void RenderBlock::RegisterBlock(float x, float y, float z, unsigned short sur, int id, unsigned layout, Generation::WorldUnit* unit)
 {
 	/*binfo[id] = {
 		stx, sty, endx, endy,
@@ -486,6 +517,19 @@ void RenderBlock::RegisterBlock(int x, int y, int z, unsigned short sur, int id,
 			RenderBlock::offset += 4;
 		}
 	}
+}
+
+void RenderBlock::RegisterGUI(float stx, float sty, float endx, float endy, float wstx, float wsty, float wendx, float wendy, unsigned lay)
+{
+	RenderBlock::UBasic w[] = {
+	{ stx,  sty,  -100, wstx  / RenderBlock::GWidth, wsty  / RenderBlock::GHeight, 1.0f},
+	{ endx, sty,  -100, wendx / RenderBlock::GWidth, wsty  / RenderBlock::GHeight, 1.0f},
+	{ stx,  endy, -100, wstx  / RenderBlock::GWidth, wendy / RenderBlock::GHeight, 1.0f},
+	{ endx, endy, -100, wendx / RenderBlock::GWidth, wendy / RenderBlock::GHeight, 1.0f} };
+
+	memcpy(RenderBlock::whm[lay] + RenderBlock::offsetm[lay], w, sizeof(w));
+	++RenderBlock::RendererNm[lay];
+	RenderBlock::offsetm[lay] += 4;
 }
 
 void RenderBlock::ClearAll()

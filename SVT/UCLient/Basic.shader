@@ -17,14 +17,24 @@ uniform mat4 proj;
 uniform mat4 view;
 uniform mat4 model;
 
+
 //uniform sampler2D u_Texture;
 
 void main()
 {
-	//gl_Position = projection * view * model * vec4(aPos, 1.0f);
-	gl_Position = proj * view * model * vec4(position, 1.0f);
-	v_TexCoord = texCoord;
-	v_light = a_light;
+		//gl_Position = projection * view * model * vec4(aPos, 1.0f);
+	if (position.z >= -0.05f)
+	{
+		gl_Position = proj * view * model * vec4(position, 1.0f);
+		v_TexCoord = texCoord;
+		v_light = a_light;
+	}
+	else
+	{
+		gl_Position = vec4(position.x, position.y, 0.0f, 1.0f);
+		v_TexCoord = texCoord;
+		v_light = a_light;
+	}
 	//v_Color = u_Color;
 }
 

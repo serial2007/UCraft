@@ -3,6 +3,7 @@
 #include <iomanip>
 #include "../UCLient/Graph/BasicClass/lib/BasicHeaders.h"
 #include "../Class/Biome/Hill/Tree/tree.h"
+#include "../UCLient/Graph/GenBasicLight.h"
 Generation::Biome* currentB = nullptr;
 Generation::BiomeMenu* biomeMenu = nullptr;
 
@@ -25,6 +26,11 @@ Generation::Chunk* Enquiry(int x, int y)
 		}
 
 		GenMain::WorldUnitTmp[std::make_pair(IntDiv(x, 16), IntDiv(y, 16))] = unit;
+		for(int i = 0; i < 16; ++i)
+		for(int j = 0; j < 16; ++j)
+		{
+			ULight::GenBsLight(unit->chunk[i][j]);
+		}
 		return unit->chunk[IntMod(x, 16)][IntMod(y, 16)];
 		
 	}
@@ -81,6 +87,29 @@ unsigned short* GenMain::WorldBlock(float x, float y, float z)
 		return nullptr;
 	}
 	return &(chunk->block[_x][_y][_z]);
+}
+
+float* GenMain::WorldLit(int x, int y, int z)
+{
+	//std::swap(y, z); y = -y;
+	if (WorldUnitTmp.find(std::make_pair(IntDiv(x, 256), IntDiv(y, 256))) == WorldUnitTmp.end())
+	{
+		return nullptr;
+	}
+	auto unit = WorldUnitTmp[std::make_pair(IntDiv(x, 256), IntDiv(y, 256))];
+
+	x = IntMod(x, 256);
+	y = IntMod(y, 256);
+
+	auto chunk = unit->chunk[x / 16][y / 16];
+	//if (chunk == nullptr) return nullptr;
+	x = x % 16;
+	y = y % 16;
+	if (x < 0 || x >= 16 || y < 0 || y >= 16 || z < 0 || z >= 128) {
+		//std::cout << "Invalid Pos " << x << ' ' << y << ' ' << z << '\n';
+		return nullptr;
+	}
+	return &(chunk->lit[x][y][z]);
 }
 
 void GenMain::RegisterBiomeMain()

@@ -13,6 +13,7 @@ namespace GenMain
 	extern std::map<std::pair<int, int>, Generation::WorldUnit*> WorldUnitTmp;
 
 	extern unsigned short* WorldBlock(float x, float y, float z);
+	extern float* WorldLit(int x, int y, int z);
 
 	extern inline void RegisterBiomeMain();
 

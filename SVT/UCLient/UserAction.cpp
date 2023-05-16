@@ -33,7 +33,7 @@ void UserAction::PLayerMain()
 		auto VelocityLock = RenderBlock::Velocity;
 		float x, y, z;
 
-		for (y = 0.0f; y < 1.0f; y += 0.05f)
+		for (y = 0.05f; y < 1.0f; y += 0.05f)
 		{
 			auto yv = y * VelocityLock.y;
 			if (IsStuck(glm::vec3(RenderBlock::cameraPos.x, RenderBlock::cameraPos.y + yv, RenderBlock::cameraPos.z))) {
@@ -41,7 +41,7 @@ void UserAction::PLayerMain()
 			}
 		}
 		RenderBlock::cameraPos.y += VelocityLock.y * y;
-		for (x = 0.0f; x < 1.0f; x += 0.05f)
+		for (x = 0.05f; x < 1.0f; x += 0.05f)
 		{
 			auto xv = x * VelocityLock.x;
 			if (IsStuck(glm::vec3(RenderBlock::cameraPos.x + xv, RenderBlock::cameraPos.y, RenderBlock::cameraPos.z))) {
@@ -50,7 +50,7 @@ void UserAction::PLayerMain()
 		}
 		RenderBlock::cameraPos.x += VelocityLock.x * x;
 
-		for (z = 0.0f; z < 1.0f; z += 0.05f)
+		for (z = 0.05f; z < 1.0f; z += 0.05f)
 		{
 			auto zv = z * VelocityLock.z;
 			if (IsStuck(glm::vec3(RenderBlock::cameraPos.x, RenderBlock::cameraPos.y, RenderBlock::cameraPos.z + zv))) {
@@ -95,7 +95,7 @@ bool UserAction::IsStuck(glm::vec3 pos)
 	{
 		auto p = pos + glm::vec3(
 			(i ? 0.4f : -0.4f),
-			(j ? -0.0f : -1.5f),
+			(j ? 0.0f : -1.5f),
 			(k ? 0.4f : -0.4f)
 		);
 		auto m = GenMain::WorldBlock(p.x, p.y, p.z);

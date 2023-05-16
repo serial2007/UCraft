@@ -9,6 +9,8 @@
 #include "UCLient/ImportInfo.h"
 #include "UCLient/Graph/DynamicRegister.h"
 #include "UCLient/UserAction.h"
+#include "UCLient/Graph/GenBasicLight.h"
+
 #pragma omp parallel for
 
 
@@ -25,50 +27,19 @@ int main()
 	std::thread Dyn(DynamicRegister);
 	while (RenderBlock::window == nullptr) {}
 	std::thread User(UserAction::PLayerMain);
-	//auto p1 = Enquiry(0, 0);
-	//auto p2 = Enquiry(1, 0);
-	//auto p3 = Enquiry(-1, 0);
-	//auto p4 = Enquiry(-2, 0);
-	////auto p5 = Enquiry(-1, -1);
-	////auto p6 = Enquiry(-1, -1);
-	//UGraph::DrawChunk(p1);
-	//UGraph::DrawChunk(p2);
-	//UGraph::DrawChunk(p3);
-	//UGraph::DrawChunk(p4);
-	////UGraph::DrawChunk(p5);
-	////UGraph::DrawChunk(p6);
-	////p->Biome3Dout();
-
-
-
-	////system("pause");
-	//while (1)
-	//{
-
-	//	RenderBlock::shouldUpdate = 1;
-	//	while(RenderBlock::shouldUpdate) {}
-
-	//}
-	/*std::cout << "Save?\n";
-	system("pause");
-	SaveAll();*/
+	Sleep(1000);
 	while(!RenderBlock::ProgramEnd)
 	{
-		/*auto wh = UserAction::PlayerLookAt();
-		std::cout << wh.x << ' ' << wh.y << ' ' << wh.z << std::endl;*/
-		//std::cout << RenderBlock::camFront.x << ' ' << RenderBlock::camFront.y << ' ' << RenderBlock::camFront.z << '\n';
+		/*for (auto& p : GenMain::WorldUnitTmp)
+		{
+			for(int i = 0; i < 16; ++i)
+			for(int j = 0; j < 16; ++j)
+			{
+				ULight::GenBsLight(p.second->chunk[i][j]);
+			}
+		}*/
 		Sleep(1000);
 	}
 	return 0;
 }
 
-//int main()
-//{
-//	system("pause");
-//	//HILL::Hill p;
-//	for (int i = 0; i < 10; ++i)
-//	{
-//		std::cout << thHill(i, 1) << std::endl;
-//	}
-//	system("pause");
-//}

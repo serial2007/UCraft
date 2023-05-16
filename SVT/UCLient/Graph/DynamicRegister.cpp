@@ -1,6 +1,7 @@
 #include "DynamicRegister.h"
 #include "SmoothLight.h"
 #include "../ImportInfo.h"
+#include "GenBasicLight.h"
 #pragma omp parallel for
 
 
@@ -118,6 +119,7 @@ void DynamicRegister()
 		}
 		else if (RenderBlock::ChunkShouldUpdate)
 		{
+				
 			RenderBlock::ChunkShouldUpdate = 0;
 			RenderBlock::offsetm[2] = RenderBlock::offsetm[3] = 0;
 			RenderBlock::RendererNm[2] = RenderBlock::RendererNm[3] = 0;
@@ -126,6 +128,8 @@ void DynamicRegister()
 			for (int j = DynamicBackup::ty - 1; j <= DynamicBackup::ty + 1; ++j)
 			{
 				auto p = Enquiry(i, j);
+				memset(p->lit, 0, sizeof(p->lit));
+				ULight::GenBsLight(p);
 				if (p != nullptr)
 				UGraph::DrawChunk(p, GenMain::WorldUnitTmp[std::make_pair(IntDiv(i, 16), IntDiv(j, 16))], 1);
 			}

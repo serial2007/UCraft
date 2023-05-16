@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClCompile Include="Class\Biome\Hill\Tree\tree.cpp" />
     <ClCompile Include="UCLient\Graph\DynamicRegister.cpp" />
+    <ClCompile Include="UCLient\Graph\GenBasicLight.cpp" />
     <ClCompile Include="UCLient\Graph\SmoothLight.cpp" />
     <ClCompile Include="UCLient\ImportInfo.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -173,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Biome\Hill\Tree\tree.h" />
+    <ClInclude Include="UCLient\Graph\GenBasicLight.h" />
     <ClInclude Include="UCLient\Graph\SmoothLight.h" />
     <ClInclude Include="UCLient\Graph\DynamicRegister.h" />
     <ClInclude Include="UCLient\ImportInfo.h" />

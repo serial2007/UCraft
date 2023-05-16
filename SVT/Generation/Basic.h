@@ -44,10 +44,14 @@ namespace Generation
 		int x = 0, y = 0;
 		unsigned short block[16][16][128];
 		unsigned short biomeid[16][16];
+		float lit[16][16][128];
 
-		Chunk() { memset(block, 0, sizeof(block)); memset(biomeid, 0, sizeof(biomeid)); }
-		Chunk(int _X, int _Y) { memset(block, 0, sizeof(block)); memset(biomeid, 0, sizeof(biomeid)); this->x = _X, this->y = _Y; }
-		void Save();
+		Chunk(int _X, int _Y) { 
+			memset(block, 0, sizeof(block)); 
+			memset(biomeid, 0, sizeof(biomeid)); 
+			memset(lit, 0, sizeof(lit));
+			this->x = _X, this->y = _Y;
+		}
 
 		
 

@@ -74,7 +74,6 @@ glm::vec3 RenderBlock::PlayerLookAt(glm::vec3* surf)
 
 void RenderBlock::ProcessInput(float deltatime)
 {
-	//std::cout << "inp";
 	if (glfwGetKey(RenderBlock::window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(RenderBlock::window, true);
 	float cameraSpeed = 3.0f * deltatime;
@@ -82,46 +81,39 @@ void RenderBlock::ProcessInput(float deltatime)
 
 	if (glfwGetKey(RenderBlock::window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		//while (1) std::cout << '_';
-		auto k = RenderBlock::camFront;     //按下W，摄像机向前移动
+		auto k = RenderBlock::camFront;
 		k.y = 0;
 		float tot = std::sqrtf(k.x * k.x + k.z * k.z);
 		k.x /= tot;
 		k.z /= tot;
 		ktot += k;
-		//RenderBlock::Velocity += k * cameraSpeed;
-		
 	}
 	if (glfwGetKey(RenderBlock::window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		auto k = RenderBlock::camFront;     //按下W，摄像机向前移动
+		auto k = RenderBlock::camFront;
 		k.y = 0;
 		float tot = std::sqrtf(k.x * k.x + k.z * k.z);
 		k.x /= tot;
 		k.z /= tot;
 		ktot -= k;
-		//RenderBlock::Velocity -= k * cameraSpeed;
 	}
 	if (glfwGetKey(RenderBlock::window, GLFW_KEY_A) == GLFW_PRESS)
-		//glm::cross(cameraFront, cameraUp)得出的是摄像机的右方向
 	{
-		auto k = glm::normalize(glm::cross(RenderBlock::camFront, RenderBlock::camUp));  //按下A，摄像机向左移动
+		auto k = glm::normalize(glm::cross(RenderBlock::camFront, RenderBlock::camUp));
 		k.y = 0;
 		float tot = std::sqrtf(k.x * k.x + k.z * k.z);
 		k.x /= tot;
 		k.z /= tot;
 		ktot -= k;
-		//RenderBlock::Velocity -= k * cameraSpeed;
 	}
 	if (glfwGetKey(RenderBlock::window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		auto k = glm::normalize(glm::cross(RenderBlock::camFront, RenderBlock::camUp));  //按下D，摄像机向右移动
+		auto k = glm::normalize(glm::cross(RenderBlock::camFront, RenderBlock::camUp));
 		k.y = 0;
 		float tot = std::sqrtf(k.x * k.x + k.z * k.z);
 		k.x /= tot;
 		k.z /= tot;
 		ktot += k;
-		
 	}
 	if (glfwGetKey(RenderBlock::window, GLFW_KEY_E) == GLFW_PRESS)
 	{
@@ -130,11 +122,6 @@ void RenderBlock::ProcessInput(float deltatime)
 		LastPressE = 1;
 	}
 	else LastPressE = 0;
-	/*if (glfwGetKey(RenderBlock::window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-	{
-		RenderBlock::cameraPos.y -= cameraSpeed;
-
-	}*/
 	float tot = std::sqrtf(ktot.x * ktot.x + ktot.z * ktot.z);
 	if (tot > 0.0001f)
 	{
@@ -146,7 +133,7 @@ void RenderBlock::ProcessInput(float deltatime)
 	{
 		if (RenderBlock::OnGround)
 		{
-			RenderBlock::Velocity.y = 0.2f;
+			RenderBlock::Velocity.y = 0.15f;
 		}
 
 	}
@@ -156,7 +143,6 @@ void RenderBlock::ProcessInput(float deltatime)
 void RenderBlockProcess()
 {
 	Renderer::ActivateImgui = 1;
-	//glDisable(GLFW_MOUSE_CURSOR);
 	
 	for (int i = 0, k = 0; i < 65537 * 4 * 4 * 8 * 4 - 6; i += 6, k += 4)
 	{
@@ -168,16 +154,9 @@ void RenderBlockProcess()
 		RenderBlock::indices[i + 5]	= k + 3;
 	}
 
-	//glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	RenderBlock::window		= Renderer::NewWindow(RenderBlock::WinWidth, RenderBlock::WinHeight);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	auto projection	= glm::perspective(glm::radians(30.0f), RenderBlock::WinWidth / float(RenderBlock::WinHeight), 0.1f, 10000.0f);
-	//auto view		= glm::translate(glm::mat4(1.0), glm::vec3(0.0f, 0.0f, -3.0f));
-	
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	VertexArray va;
 	VertexBuffer vb(nullptr, 65536 * 128 * 4 * 8 * 4 , 0);
@@ -202,12 +181,6 @@ void RenderBlockProcess()
 
 	float h = 30.0f;
 
-	//view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-
-	//auto view = glm::lookAt(glm::vec3(0.0f, -10.0f, 3.0f),   //摄像机的位置
-	//	glm::vec3(0.0f, 0.0f, 0.0f),           //摄像机看向的顶点坐标，这里朝向原点
-	//	glm::vec3(0.0f, 1.0f, 0.0f));
-
 	RenderBlock::cameraPos = glm::vec3(2.0f, 8.0f, 2.0f);
 	RenderBlock::camFront = glm::vec3(0.0f, 0.0f, -1.0f);
 	RenderBlock::camUp = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -218,22 +191,14 @@ void RenderBlockProcess()
 
 	glClearColor(161 / 255.0f, 219 / 255.0f, 255 / 255.0f, 1.0f);
 	
-	/*double MouseX, MouseY;*/
 	double dMouseX, dMouseY;
 	bool MouseButtonDown = 0;
 	bool MouseRightButton = 0;
 	bool LastCursorLock = 1;
-	/*glm::mat4 ortho = glm::ortho(0.0f, (float)RenderBlock::WinWidth, 0.0f, (float)RenderBlock::WinWidth, 0.1f, 20.0f);
-	shader.SetUniformMat4f("ortho", ortho);*/
-
-	
-	
-
+	float DeltaTime;
+	ShowCursor(false);
 	while (!glfwWindowShouldClose(RenderBlock::window))
 	{
-		//std::cout << RenderBlock::cameraPos.x << ' ' << RenderBlock::cameraPos.y << ' ' << RenderBlock::cameraPos.z << std::endl;
-		
-
 		glfwGetCursorPos(RenderBlock::window, &RenderBlock::MouseX, &RenderBlock::MouseY);
 		if (LastCursorLock)
 		{
@@ -248,23 +213,24 @@ void RenderBlockProcess()
 		if (RenderBlock::LockCursor)
 		{
 			glfwSetCursorPos(RenderBlock::window, RenderBlock::WinWidth / 2, RenderBlock::WinHeight / 2);
-			ShowCursor(false);
+			if(!LastCursorLock)
+				ShowCursor(false);
 		}
 		else
 		{
-			ShowCursor(true);
+			if(LastCursorLock)
+				ShowCursor(true);
 		}
 		LastCursorLock = RenderBlock::LockCursor;
-		ShowCursor(true);
 		
 		
 		RenderBlock::currentFrame = glfwGetTime();
-		//float deltaTime = currentFrame - lstFrame;
-		//lstFrame = currentFrame;
+		DeltaTime = RenderBlock::currentFrame - RenderBlock::lstFrame;
+
 		glfwGetWindowSize(RenderBlock::window, &RenderBlock::WinWidth, &RenderBlock::WinHeight);
 		glViewport(0, 0, RenderBlock::WinWidth, RenderBlock::WinHeight);
 
-		RenderBlock::ProcessInput(RenderBlock::currentFrame - RenderBlock::lstFrame);
+		RenderBlock::ProcessInput(DeltaTime);
 		if (glfwGetMouseButton(RenderBlock::window, GLFW_MOUSE_BUTTON_LEFT) && RenderBlock::LockCursor)
 		{
 			if (!MouseButtonDown)
@@ -346,6 +312,11 @@ void RenderBlockProcess()
 
 		EyeAngle[0] = max(-89.5f, EyeAngle[0]);
 		EyeAngle[0] = min( 89.5f, EyeAngle[0]);
+
+		RenderBlock::Velocity.y += -1.0f * DeltaTime;
+		float df = std::powf(0.00005f, DeltaTime);
+		RenderBlock::Velocity.x *= df;
+		RenderBlock::Velocity.z *= df;
 
 		Renderer::Refresh(RenderBlock::window);
 	}

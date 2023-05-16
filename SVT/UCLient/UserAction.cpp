@@ -11,8 +11,6 @@ void UserAction::PLayerMain()
 	//while (1) std::cout << '1';
 	unsigned short* footd;
 	
-	
-
 	RenderBlock::lstFrame = glfwGetTime();
 	while (1)
 	{
@@ -33,28 +31,28 @@ void UserAction::PLayerMain()
 		auto VelocityLock = RenderBlock::Velocity;
 		float x, y, z;
 
-		for (y = 0.02f; y < 1.0f; y += 0.02f)
+		for (y = 0.01f; y < 1.0f; y += 0.01f)
 		{
 			auto yv = y * VelocityLock.y;
 			if (IsStuck(glm::vec3(RenderBlock::cameraPos.x, RenderBlock::cameraPos.y + yv, RenderBlock::cameraPos.z))) {
-				y -= 0.04f; break;
+				y -= 0.01f; break;
 			}
 		}
 		RenderBlock::cameraPos.y += VelocityLock.y * y;
-		for (x = 0.02f; x < 1.0f; x += 0.02f)
+		for (x = 0.01f; x < 1.0f; x += 0.01f)
 		{
 			auto xv = x * VelocityLock.x;
 			if (IsStuck(glm::vec3(RenderBlock::cameraPos.x + xv, RenderBlock::cameraPos.y, RenderBlock::cameraPos.z))) {
-				x -= 0.04f; break;
+				x -= 0.01f; break;
 			}
 		}
 		RenderBlock::cameraPos.x += VelocityLock.x * x;
 
-		for (z = 0.02f; z < 1.0f; z += 0.02f)
+		for (z = 0.01f; z < 1.0f; z += 0.01f)
 		{
 			auto zv = z * VelocityLock.z;
 			if (IsStuck(glm::vec3(RenderBlock::cameraPos.x, RenderBlock::cameraPos.y, RenderBlock::cameraPos.z + zv))) {
-				z -= 0.04f; break;
+				z -= 0.01f; break;
 			}
 		}
 		RenderBlock::cameraPos.z += VelocityLock.z * z;
@@ -76,9 +74,6 @@ void UserAction::PLayerMain()
 				RenderBlock::OnGround = 1;
 			}
 		}
-		RenderBlock::Velocity.y += -0.02f;
-		RenderBlock::Velocity.x *= 0.8f;
-		RenderBlock::Velocity.z *= 0.8f;
 		//glfwSetCursorPosCallback(RenderBlock::window, );
 		
 		Sleep(10);

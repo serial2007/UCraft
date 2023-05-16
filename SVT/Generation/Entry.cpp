@@ -131,7 +131,7 @@ void GenMain::RegisterBiomeMain()
 	RegisterBiome(testson::testBiome,	15U);
 	RegisterBiome(HILL::Hill,			0xfffU);
 	RegisterBiome(HILL::Tree,			4U);
-	//Register
+	Register
 
 }
 

@@ -114,6 +114,9 @@
     <ClCompile Include="UCLient\Graph\GenBasicLight.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Generation\DivideBiomes.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Biome\Test\test.h">
@@ -279,6 +282,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="UCLient\Graph\GenBasicLight.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Generation\DivideBiomes.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

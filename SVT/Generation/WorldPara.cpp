@@ -15,4 +15,4 @@ double	WorldPara::HillSteep = -8;
 double	WorldPara::HillEffect = 0.05;
 double  WorldPara::HirzonWeight = 2;
 
-int		WorldPara::HillExtendLength = 200;
+int		WorldPara::HillExtendLength = 100;

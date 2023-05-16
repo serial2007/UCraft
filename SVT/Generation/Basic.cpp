@@ -104,7 +104,7 @@ void Generation::WorldUnit::Save()
 	fout.close();
 }
 
-
+#include "../Generation/DivideBiomes.h"
 Generation::BiomeMenu::BiomeMenu(Biome*& _currentBiome) :
 	currentBiome(_currentBiome)
 {
@@ -113,6 +113,9 @@ Generation::BiomeMenu::BiomeMenu(Biome*& _currentBiome) :
 Generation::WorldUnit* Generation::BiomeMenu::DivideBiomes(WorldUnit* unit)
 {
 	std::cout << "Divide Biomes (" << unit->x << ", " << unit->y << ")\n";
+
+
+
 	std::stack<unsigned int> stk;
 	stk.push(0xfff);
 	while (!stk.empty())
@@ -123,7 +126,6 @@ Generation::WorldUnit* Generation::BiomeMenu::DivideBiomes(WorldUnit* unit)
 		if (p != 0xfff)
 		{
 			Generation::Biome* biome = this->BiomeList[p].second();
-			biome->Divide(unit);
 			biome->Generate(unit);
 		}
 

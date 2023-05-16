@@ -1,11 +1,16 @@
 #include "PositionRandom.h"
 #include <iostream>
+#include "../../UCLient/Graph/BasicClass/lib/BasicHeaders.h"
 
 
 
 std::vector<PositionRandom::Pos2> PositionRandom::GenLocation(double chan, int minx, int maxx, int miny, int maxy, int p = 0, int q = 1, RandomMachine* rm = &DefaultRandomMachine)
 {
 	std::vector<PositionRandom::Pos2> res;
+
+	minx -= IntMod(minx, q);
+	miny -= IntMod(miny, q);
+
 
 	for (int i = minx; i <= maxx; i += q)
 	{
@@ -32,6 +37,11 @@ std::vector<PositionRandom::Pos2> PositionRandom::GenLocation(double chan, int m
 	}
 
 	return res;
+}
+
+void PositionRandom::SpreadBiome(double chan, Generation::WorldUnit* unit, int id, int p)
+{
+
 }
 
 

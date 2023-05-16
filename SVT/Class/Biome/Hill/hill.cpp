@@ -36,8 +36,6 @@ void HILL::Hill::ValidateHill(Generation::WorldUnit* h, HILL::Single& con, int x
 	int cx = con.x - x;
 	int cy = con.y - y;
 
-	if (cx < 0 || cx >= 256) { std::cout << "No\n"; return; }
-	if (cy < 0 || cy >= 256) { std::cout << "No\n"; return; }
 
 	this->WorldHill.push_back(con);
 	{ std::cout << "Yes\n"; return; }
@@ -47,28 +45,13 @@ inline void HILL::Hill::Genmain(Generation::WorldUnit* h, int x, int y)
 {
 	int peekn = WorldPara::peek;
 	HILL::Single peek;
-	/*while (peekn--)
-	{
-		peek.x = rm.Randi(x, x + 255, (long long)(std::sin(peekn) * INT_MAX) % 10000000);
-		peek.y = rm.Randi(y, y + 255, (long long)(std::log(peekn) * INT_MAX) % 10000000);
-		peek.h = rm.Randd(0, WorldPara::maxh, (long long)(std::cos(peekn) * INT_MAX) % 10000000);
-
-		peek.deg = (int)(std::log(peek.h) * WorldPara::moveDeglim / std::log(WorldPara::maxh));
-
-		if(*(h->PosBiome(peek.x - x, peek.y - y)) == this->id())
-		this->GenSonHill(h, peek, x, y);
-
-
-
-	}*/
-	RandomMachine rm(15);
-	auto mt = PositionRandom::GenLocation(0.03, x - WorldPara::HillExtendLength, x + 255 + WorldPara::HillExtendLength, y - WorldPara::HillExtendLength, y + 255 + WorldPara::HillExtendLength, 0, 15, &rm);
+	auto mt = PositionRandom::GenLocation(0.0003f, x - WorldPara::HillExtendLength, x + 255 + WorldPara::HillExtendLength, y - WorldPara::HillExtendLength, y + 255 + WorldPara::HillExtendLength, 0, 1, &DefaultRandomMachine);
 	std::cout << mt.size();
 	//system("pause");
 	for (int i = 0; i < mt.size(); ++i)
 	{
-		if(mt[i].first < x - WorldPara::HillExtendLength || mt[i].first >= x + 256 + WorldPara::HillExtendLength) continue;
-		if (mt[i].second < y  - WorldPara::HillExtendLength || mt[i].second >= y + 256 + WorldPara::HillExtendLength) continue;
+		//if(mt[i].first < x - WorldPara::HillExtendLength || mt[i].first >= x + 256 + WorldPara::HillExtendLength) continue;
+		//if (mt[i].second < y  - WorldPara::HillExtendLength || mt[i].second >= y + 256 + WorldPara::HillExtendLength) continue;
 
 		peek.x = mt[i].first;
 		peek.y = mt[i].second;
@@ -96,7 +79,7 @@ void HILL::Hill::Divide(Generation::WorldUnit* h)
 
 void HILL::Hill::Generate(Generation::WorldUnit* h)
 {
-	this->Genmain(h, h->x * 16, h->y * 16);
+	this->Genmain(h, h->x * 256, h->y * 256);
 	std::cout << "HILLGEN\n";
 }
 
@@ -151,8 +134,9 @@ inline void HILL::Hill::PrintHill(Generation::WorldUnit* h, int x, int y)
 				int dx = this->LocTmp[k].x - i;
 				int dy = this->LocTmp[k].y - j;
 
-
-				hi[i][j] += this->SmoothHill(dx * dx + dy * dy, this->WorldHill[k].h) * this->WorldHill[k].h;
+				int r = dx * dx + dy * dy;
+				if(r < 5000)
+				hi[i][j] += this->SmoothHill(r, this->WorldHill[k].h) * this->WorldHill[k].h;
 			}
 			if ((isnan(hi[i][j]) || isinf(hi[i][j])))
 			{

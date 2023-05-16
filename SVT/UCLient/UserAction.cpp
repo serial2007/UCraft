@@ -33,28 +33,28 @@ void UserAction::PLayerMain()
 		auto VelocityLock = RenderBlock::Velocity;
 		float x, y, z;
 
-		for (y = 0.05f; y < 1.0f; y += 0.05f)
+		for (y = 0.02f; y < 1.0f; y += 0.02f)
 		{
 			auto yv = y * VelocityLock.y;
 			if (IsStuck(glm::vec3(RenderBlock::cameraPos.x, RenderBlock::cameraPos.y + yv, RenderBlock::cameraPos.z))) {
-				y -= 0.05f; break;
+				y -= 0.04f; break;
 			}
 		}
 		RenderBlock::cameraPos.y += VelocityLock.y * y;
-		for (x = 0.05f; x < 1.0f; x += 0.05f)
+		for (x = 0.02f; x < 1.0f; x += 0.02f)
 		{
 			auto xv = x * VelocityLock.x;
 			if (IsStuck(glm::vec3(RenderBlock::cameraPos.x + xv, RenderBlock::cameraPos.y, RenderBlock::cameraPos.z))) {
-				x -= 0.05f; break;
+				x -= 0.04f; break;
 			}
 		}
 		RenderBlock::cameraPos.x += VelocityLock.x * x;
 
-		for (z = 0.05f; z < 1.0f; z += 0.05f)
+		for (z = 0.02f; z < 1.0f; z += 0.02f)
 		{
 			auto zv = z * VelocityLock.z;
 			if (IsStuck(glm::vec3(RenderBlock::cameraPos.x, RenderBlock::cameraPos.y, RenderBlock::cameraPos.z + zv))) {
-				z -= 0.05f; break;
+				z -= 0.04f; break;
 			}
 		}
 		RenderBlock::cameraPos.z += VelocityLock.z * z;
@@ -68,19 +68,17 @@ void UserAction::PLayerMain()
 		{
 			if (*footd == 0)
 			{
-				RenderBlock::Velocity.y += -0.02;
 				RenderBlock::OnGround = 0;
 			}
 			else
 			{
-				if(RenderBlock::Velocity.y < 0)
-					RenderBlock::Velocity.y = 0;
+
 				RenderBlock::OnGround = 1;
 			}
 		}
-
-		RenderBlock::Velocity.x *= 0.8;
-		RenderBlock::Velocity.z *= 0.8;
+		RenderBlock::Velocity.y += -0.02f;
+		RenderBlock::Velocity.x *= 0.8f;
+		RenderBlock::Velocity.z *= 0.8f;
 		//glfwSetCursorPosCallback(RenderBlock::window, );
 		
 		Sleep(10);
@@ -95,7 +93,7 @@ bool UserAction::IsStuck(glm::vec3 pos)
 	{
 		auto p = pos + glm::vec3(
 			(i ? 0.4f : -0.4f),
-			(j ? 0.0f : -1.5f),
+			(j ? 0.2f : -1.5f),
 			(k ? 0.4f : -0.4f)
 		);
 		auto m = GenMain::WorldBlock(p.x, p.y, p.z);

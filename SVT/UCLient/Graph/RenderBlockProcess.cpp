@@ -146,7 +146,6 @@ void RenderBlock::ProcessInput(float deltatime)
 	{
 		if (RenderBlock::OnGround)
 		{
-			//while (1)
 			RenderBlock::Velocity.y = 0.2f;
 		}
 
@@ -227,6 +226,9 @@ void RenderBlockProcess()
 	/*glm::mat4 ortho = glm::ortho(0.0f, (float)RenderBlock::WinWidth, 0.0f, (float)RenderBlock::WinWidth, 0.1f, 20.0f);
 	shader.SetUniformMat4f("ortho", ortho);*/
 
+	
+	
+
 	while (!glfwWindowShouldClose(RenderBlock::window))
 	{
 		//std::cout << RenderBlock::cameraPos.x << ' ' << RenderBlock::cameraPos.y << ' ' << RenderBlock::cameraPos.z << std::endl;
@@ -259,7 +261,8 @@ void RenderBlockProcess()
 		RenderBlock::currentFrame = glfwGetTime();
 		//float deltaTime = currentFrame - lstFrame;
 		//lstFrame = currentFrame;
-		//glfwGetWindowSize(window, &RenderBlock::WinWidth, &RenderBlock::WinHeight);
+		glfwGetWindowSize(RenderBlock::window, &RenderBlock::WinWidth, &RenderBlock::WinHeight);
+		glViewport(0, 0, RenderBlock::WinWidth, RenderBlock::WinHeight);
 
 		RenderBlock::ProcessInput(RenderBlock::currentFrame - RenderBlock::lstFrame);
 		if (glfwGetMouseButton(RenderBlock::window, GLFW_MOUSE_BUTTON_LEFT) && RenderBlock::LockCursor)

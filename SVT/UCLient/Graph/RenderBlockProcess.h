@@ -41,7 +41,6 @@ namespace RenderBlock
 	extern glm::vec3 camFront;
 	extern glm::vec3 camUp;
 
-	extern bool RegisterDone;
 	extern GLFWwindow* window;
 
 	extern float lstFrame, currentFrame;

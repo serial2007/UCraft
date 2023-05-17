@@ -1,4 +1,5 @@
 #include "GenBasicLight.h"
+#include "../ImportInfo.h"
 #define DecayLight 0.0625f
 
 float ULight::SunLight = 1.0f;
@@ -20,7 +21,7 @@ void ULight::GenBsLight(Generation::Chunk* chunk)
 		{
 			for (int k = 127; k >= 0; --k)
 			{
-				if (chunk->block[i][j][k] != 0) {
+				if (chunk->block[i][j][k] != 0 && ImportInfo::IsTransmit[chunk->block[i][j][k]] == 0) {
 					sunh[i][j] = k;
 					break;
 				}
@@ -28,14 +29,14 @@ void ULight::GenBsLight(Generation::Chunk* chunk)
 			}
 		}
 	}
-	unsigned int U = 32;
+	unsigned int U = 16;
 	while (U--)
 	{
 		for(int i = 0; i < 16; ++i)
 		for(int j = 0; j < 16; ++j)
 		for(int k = sunh[i][j] - 1; k >= 0; --k)
 		{
-			if (chunk->block[i][j][k] != 0) continue;
+			if (chunk->block[i][j][k] != 0 && ImportInfo::IsTransmit[chunk->block[i][j][k]] == 0) continue;
 			for (unsigned m = 0; m < 6; ++m)
 			{
 				int _i = i;

@@ -1,6 +1,11 @@
 #include "ImportInfo.h"
 
 std::map<int, ImportInfo::BlockInfo> ImportInfo::binfo;
+std::map<int, ImportInfo::SpecialBlockInfo> ImportInfo::spbinfo;
+bool	ImportInfo::IsSpecialModel[1024];
+bool	ImportInfo::IsNotSolid[1024];
+bool	ImportInfo::IsTransmit[1024];
+bool	ImportInfo::CanWalkThrough[1024];
 
 void ImportInfo::StartImport()
 {
@@ -27,6 +32,9 @@ void ImportInfo::StartImport()
 		int id = vl["id"].asInt();
 		int type = vl["type"].asInt();
 		Json::Value dx = vl["index"];
+		ImportInfo::IsNotSolid[id] = vl["unsolid"].asInt();
+		ImportInfo::IsTransmit[id] = vl["transmit"].asInt();
+		ImportInfo::CanWalkThrough[id] = vl["canwalkthrough"].asInt();
 		if (type == 1)
 		{
 			Json::Value basic = dx["basic"];
@@ -88,6 +96,49 @@ void ImportInfo::StartImport()
 				top.stx,    top.sty,    top.endx,    top.endy,
 				middle.stx, middle.sty, middle.endx, middle.endy
 			};
+		}
+
+		if (type == -1)
+		{
+			ImportInfo::SpecialBlockInfo tmp;
+			Json::Value general = dx["general"];
+			for (unsigned int j = 0; j < general.size(); ++j) {
+				Json::Value m = general[j];
+				ImportInfo::UnitModel k;
+				/*k.texx = m["TexStart"].asInt();
+				k.texy = m["end"].asInt();
+				k.posx = m["posstart"].asFloat();
+				k.posy = m["posend"].asFloat();*/
+				k.layer = m["layer"].asInt();
+
+				Json::Value t = m["TexStart"];
+				k.TexStartX = t["x"].asInt();
+				k.TexStartY = t["y"].asInt();
+
+				t = m["TexEnd"];
+				k.TexEndX = t["x"].asInt();
+				k.TexEndY = t["y"].asInt();
+
+				t = m["PosStart"];
+				k.PosStartX = t["x"].asFloat();
+				k.PosStartY = t["y"].asFloat();
+				k.PosStartZ = t["z"].asFloat();
+
+				t = m["PosMid"];
+				k.PosMidX = t["x"].asFloat();
+				k.PosMidY = t["y"].asFloat();
+				k.PosMidZ = t["z"].asFloat();
+
+				t = m["PosEnd"];
+				k.PosEndX = t["x"].asFloat();
+				k.PosEndY = t["y"].asFloat();
+				k.PosEndZ = t["z"].asFloat();
+
+
+				tmp[6].push_back(k);
+			}
+			ImportInfo::spbinfo[id] = tmp;
+			ImportInfo::IsSpecialModel[id] = 1;
 		}
 	}
 }

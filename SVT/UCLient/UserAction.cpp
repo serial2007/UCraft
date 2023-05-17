@@ -79,7 +79,7 @@ void UserAction::PLayerMain()
 		Sleep(10);
 	}
 }
-
+#include "ImportInfo.h"
 bool UserAction::IsStuck(glm::vec3 pos)
 {
 	for(short i = 0; i < 2; ++i)
@@ -92,7 +92,7 @@ bool UserAction::IsStuck(glm::vec3 pos)
 			(k ? 0.4f : -0.4f)
 		);
 		auto m = GenMain::WorldBlock(p.x, p.y, p.z);
-		if (m == nullptr || *m != 0)
+		if (m == nullptr || (*m != 0 && ImportInfo::CanWalkThrough[*m] == 0))
 			return true;
 	}
 	return false;

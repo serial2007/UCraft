@@ -2,6 +2,9 @@
 	{
 		"id": 1,
 		"name": "Stone",
+		"transmit": 0,
+		"unsolid": 0,
+		"canwalkthrough": 0,
 		"type": 1,
 		"index": {
 			"basic": {
@@ -19,6 +22,9 @@
 	{
 		"id": 2,
 		"name": "Grass Block",
+		"transmit": 0,
+		"unsolid": 0,
+		"canwalkthrough": 0,
 		"type": 2,
 		"index": {
 			"top": {
@@ -56,6 +62,9 @@
 	{
 		"id": 3,
 		"name": "Dirt",
+		"transmit": 0,
+		"unsolid": 0,
+		"canwalkthrough": 0,
 		"type": 1,
 		"index": {
 			"basic": {
@@ -73,6 +82,9 @@
 	{
 		"id": 4,
 		"name": "Cobblestone",
+		"transmit": 0,
+		"unsolid": 0,
+		"canwalkthrough": 0,
 		"type": 1,
 		"index": {
 			"basic": {
@@ -90,6 +102,9 @@
 	{
 		"id": 5,
 		"name": "Sand",
+		"transmit": 0,
+		"unsolid": 0,
+		"canwalkthrough": 0,
 		"type": 1,
 		"index": {
 			"basic": {
@@ -105,45 +120,11 @@
 		}
 	},
 	{
-		"id": 77,
-		"name": "Cactus",
-		"type": 2,
-		"index": {
-			"top": {
-				"start": {
-					"x": 32,
-					"y": 0
-				},
-				"end": {
-					"x": 48,
-					"y": 16
-				}
-			},
-			"middle": {
-				"start": {
-					"x": 16,
-					"y": 0
-				},
-				"end": {
-					"x": 32,
-					"y": 16
-				}
-			},
-			"bottom": {
-				"start": {
-					"x": 32,
-					"y": 0
-				},
-				"end": {
-					"x": 48,
-					"y": 16
-				}
-			}
-		}
-	},
-	{
 		"id": 50,
 		"name": "Oak Log",
+		"unsolid": 0,
+		"transmit": 0,
+		"canwalkthrough": 0,
 		"type": 2,
 		"index": {
 			"top": {
@@ -181,6 +162,9 @@
 	{
 		"id": 51,
 		"name": "Oak leaves",
+		"unsolid": 1,
+		"transmit": 0,
+		"canwalkthrough": 0,
 		"type": 1,
 		"index": {
 			"basic": {
@@ -196,20 +180,261 @@
 		}
 	},
 	{
-		"id": 114,
-		"name": "イレイナ",
-		"type": 1,
+		"id": 52,
+		"name": "Oak Sapling",
+		"type": -1,
+		"unsolid": 1,
+		"canwalkthrough": 1,
+		"transmit": 1,
 		"index": {
-			"basic": {
-				"start": {
-					"x": 216,
-					"y": 393
+			"general": [
+				{
+					"TexStart": {
+						"x": 0,
+						"y": 160
+					},
+					"TexEnd": {
+						"x": 16,
+						"y": 144
+					},
+					"PosStart": {
+						"x": 0.1,
+						"y": 0.1,
+						"z": 0
+					},
+					"PosMid": {
+						"x": 0.1,
+						"y": 0.1,
+						"z": 1
+					},
+					"PosEnd": {
+						"x": 0.9,
+						"y": 0.9,
+						"z": 1
+					},
+					"layer": 1
 				},
-				"end": {
-					"x": 17,
-					"y": 183
+				{
+					"TexStart": {
+						"x": 0,
+						"y": 160
+					},
+					"TexEnd": {
+						"x": 16,
+						"y": 144
+					},
+					"PosStart": {
+						"x": 0.1,
+						"y": 0.9,
+						"z": 0
+					},
+					"PosMid": {
+						"x": 0.1,
+						"y": 0.9,
+						"z": 1
+					},
+					"PosEnd": {
+						"x": 0.9,
+						"y": 0.1,
+						"z": 1
+					},
+					"layer": 1
 				}
-			}
+			]
+		}
+	},
+	{
+		"id": 77,
+		"name": "Cactus",
+		"type": -1,
+		"unsolid": 1,
+		"canwalkthrough": 0,
+		"transmit": 1,
+		"index": {
+			"general": [
+				{
+					"TexStart": {
+						"x": 16,
+						"y": 0
+					},
+					"TexEnd": {
+						"x": 32,
+						"y": 16
+					},
+					"PosStart": {
+						"x": 0,
+						"y": 0.0625,
+						"z": 0
+					},
+					"PosMid": {
+						"x": 0,
+						"y": 0.0625,
+						"z": 1
+					},
+					"PosEnd": {
+						"x": 1,
+						"y": 0.0625,
+						"z": 1
+					},
+					"layer": 1
+				},
+				{
+					"TexStart": {
+						"x": 16,
+						"y": 0
+					},
+					"TexEnd": {
+						"x": 32,
+						"y": 16
+					},
+					"PosStart": {
+						"x": 0.9375,
+						"y": 1,
+						"z": 0
+					},
+					"PosMid": {
+						"x": 0.9375,
+						"y": 1,
+						"z": 1
+					},
+					"PosEnd": {
+						"x": 0.9375,
+						"y": 0,
+						"z": 1
+					},
+					"layer": 1
+				},
+				{
+					"TexStart": {
+						"x": 16,
+						"y": 0
+					},
+					"TexEnd": {
+						"x": 32,
+						"y": 16
+					},
+					"PosStart": {
+						"x": 0.0625,
+						"y": 1,
+						"z": 0
+					},
+					"PosMid": {
+						"x": 0.0625,
+						"y": 1,
+						"z": 1
+					},
+					"PosEnd": {
+						"x": 0.0625,
+						"y": 0,
+						"z": 1
+					},
+					"layer": 1
+				},
+				{
+					"TexStart": {
+						"x": 16,
+						"y": 0
+					},
+					"TexEnd": {
+						"x": 32,
+						"y": 16
+					},
+					"PosStart": {
+						"x": 0.9375,
+						"y": 0,
+						"z": 0
+					},
+					"PosMid": {
+						"x": 0.9375,
+						"y": 1,
+						"z": 1
+					},
+					"PosEnd": {
+						"x": 0.9375,
+						"y": 1,
+						"z": 1
+					},
+					"layer": 1
+				},
+				{
+					"TexStart": {
+						"x": 16,
+						"y": 0
+					},
+					"TexEnd": {
+						"x": 32,
+						"y": 16
+					},
+					"PosStart": {
+						"x": 0,
+						"y": 0.9375,
+						"z": 0
+					},
+					"PosMid": {
+						"x": 0,
+						"y": 0.9375,
+						"z": 1
+					},
+					"PosEnd": {
+						"x": 1,
+						"y": 0.9375,
+						"z": 1
+					},
+					"layer": 1
+				},
+				{
+					"TexStart": {
+						"x": 33,
+						"y": 1
+					},
+					"TexEnd": {
+						"x": 47,
+						"y": 15
+					},
+					"PosStart": {
+						"x": 0.0625,
+						"y": 0.0625,
+						"z": 0
+					},
+					"PosMid": {
+						"x": 0.0625,
+						"y": 0.9375,
+						"z": 0
+					},
+					"PosEnd": {
+						"x": 0.9375,
+						"y": 0.9375,
+						"z": 0
+					},
+					"layer": 1
+				},
+				{
+					"TexStart": {
+						"x": 33,
+						"y": 1
+					},
+					"TexEnd": {
+						"x": 47,
+						"y": 15
+					},
+					"PosStart": {
+						"x": 0.0625,
+						"y": 0.0625,
+						"z": 1
+					},
+					"PosMid": {
+						"x": 0.0625,
+						"y": 0.9375,
+						"z": 1
+					},
+					"PosEnd": {
+						"x": 0.9375,
+						"y": 0.9375,
+						"z": 1
+					},
+					"layer": 1
+				}
+			]
 		}
 	}
 ]

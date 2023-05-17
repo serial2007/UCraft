@@ -21,7 +21,6 @@ void DynamicRegister()
 		int x = IntDiv(RenderBlock::cameraPos.x, 16);
 		int y = -IntDiv(RenderBlock::cameraPos.z, 16);
 		//std::cout << x << ' ' << y << std::endl;
-		RenderBlock::RegisterDone = 1;
 		
 		//std::cout << "keybo";
 		if (!RenderBlock::LockCursor)
@@ -54,6 +53,38 @@ void DynamicRegister()
 						ey + 10.0f / RenderBlock::WinHeight,
 						ex + 170.0f / RenderBlock::WinWidth, 
 						ey - 170.0f / RenderBlock::WinHeight, 
+						0, 9, 1, 10, 7);
+				}
+
+				ex += 200.0f / RenderBlock::WinWidth;
+				if (ex > 0.8f)
+				{
+					ex = -0.8f;
+					ey += -200.0f / RenderBlock::WinHeight;
+				}
+
+				++blockn;
+			}
+			for (auto& it : ImportInfo::spbinfo) {
+				if (glfwGetMouseButton(RenderBlock::window, GLFW_MOUSE_BUTTON_LEFT))
+				{
+					if (mx >= ex && mx <= float(ex + 160.0f / RenderBlock::WinWidth) && my >= ey - float(160.0f / RenderBlock::WinHeight) && my <= ey)
+					{
+						RenderBlock::offsetm[7] = 0;
+						RenderBlock::RendererNm[7] = 0;
+
+						RenderBlock::SelectedBlock = it.first;
+						std::cout << it.first << std::endl;
+					}
+				}
+				RenderBlock::RegisterGUI(ex, ey, ex + 160.0f / RenderBlock::WinWidth, ey - 160.0f / RenderBlock::WinHeight, it.second[6][0].TexStartX, it.second[6][0].TexEndY, it.second[6][0].TexEndX, it.second[6][0].TexStartY, 6);
+				if (RenderBlock::SelectedBlock == it.first)
+				{
+					RenderBlock::RegisterGUI(
+						ex - 10.0f / RenderBlock::WinWidth,
+						ey + 10.0f / RenderBlock::WinHeight,
+						ex + 170.0f / RenderBlock::WinWidth,
+						ey - 170.0f / RenderBlock::WinHeight,
 						0, 9, 1, 10, 7);
 				}
 

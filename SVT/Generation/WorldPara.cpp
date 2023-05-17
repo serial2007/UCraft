@@ -1,7 +1,7 @@
 #include "WorldPara.h"
 
 double	WorldPara::maxh = 100;
-double	WorldPara::minh = 0;
+double	WorldPara::minh = 40;
 
 
 

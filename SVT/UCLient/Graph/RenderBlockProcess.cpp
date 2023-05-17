@@ -16,7 +16,7 @@ unsigned			RenderBlock::RendererNm[10] = {}; //
 unsigned			RenderBlock::indices[65537 * 4 * 4 * 8 * 4 ];
 float				RenderBlock::GHeight, RenderBlock::GWidth;
 int					RenderBlock::WinWidth = 2560, RenderBlock::WinHeight = 1440;
-glm::vec3			RenderBlock::cameraPos = glm::vec3(0.0f, 10.0f, 0.0f);
+glm::vec3			RenderBlock::cameraPos = glm::vec3(0.0f, 100.0f, 0.0f);
 bool				RenderBlock::ProgramEnd = 0;
 glm::vec3			RenderBlock::camFront;
 glm::vec3			RenderBlock::camUp;

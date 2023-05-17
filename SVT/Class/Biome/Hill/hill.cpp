@@ -13,6 +13,8 @@ inline void HILL::Hill::GenSonHill(Generation::WorldUnit* h, HILL::Single& con, 
 	HILL::Single tmp;
 	for (int i = rm.Randi(0, WorldPara::sonN, con.x + con.y); i >= 1; --i)
 	{
+
+
 		tmp.x = con.x + rm.Randi(-WorldPara::moveR, WorldPara::moveR, con.x * i + seed);
 		tmp.y = con.y + rm.Randi(-WorldPara::moveR, WorldPara::moveR, con.x - con.y * i);
 
@@ -50,14 +52,11 @@ inline void HILL::Hill::Genmain(Generation::WorldUnit* h, int x, int y)
 	//system("pause");
 	for (int i = 0; i < mt.size(); ++i)
 	{
-		//if(mt[i].first < x - WorldPara::HillExtendLength || mt[i].first >= x + 256 + WorldPara::HillExtendLength) continue;
-		//if (mt[i].second < y  - WorldPara::HillExtendLength || mt[i].second >= y + 256 + WorldPara::HillExtendLength) continue;
-
 		peek.x = mt[i].first;
 		peek.y = mt[i].second;
 		peek.h = DefaultRandomMachine.magic2(peek.x, peek.y) % 16 + 8;
 
-		//if (*(h->PosBiome(peek.x - x, peek.y - y)) == this->id())
+		if(*(h->FindBiome(peek.x - x, peek.y - y)) == 4)
 		{
 			peek.deg = (int)(std::log(peek.h) * WorldPara::moveDeglim / std::log(WorldPara::maxh));
 			this->GenSonHill(h, peek, x, y);
@@ -66,15 +65,6 @@ inline void HILL::Hill::Genmain(Generation::WorldUnit* h, int x, int y)
 
 
 	this->Print(h, x, y);
-}
-
-void HILL::Hill::Divide(Generation::WorldUnit* h)
-{
-	for(int i = 0; i < 256; ++i)
-		for (int j = 0; j < 256; ++j)
-		{
-			*(h->PosBiome(i, j)) = this->id();
-		}
 }
 
 void HILL::Hill::Generate(Generation::WorldUnit* h)
@@ -144,6 +134,7 @@ inline void HILL::Hill::PrintHill(Generation::WorldUnit* h, int x, int y)
 					hi[i][j] = WorldPara::minh;
 				else 	hi[i][j] = *(&hi[i][j] - 1);
 			}
+			if (hi[i][j] > WorldPara::minh + 1) *(h->FindBiome(i, j)) = 4;
 
 			int mx = std::min((int)hi[i][j], 127);
 			for (int k = 0; k <= mx; ++k)
@@ -159,8 +150,6 @@ inline void HILL::Hill::PrintHill(Generation::WorldUnit* h, int x, int y)
 				{
 					if (k == mx) *it = 2U;
 					else *it = 3U;
-					//std::cout << "        block (" << i << ", " << j << ", " << k << ")\n";
-					//5Sleep(100);
 				}
 			}
 		}

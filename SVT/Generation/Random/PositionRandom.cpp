@@ -39,9 +39,5 @@ std::vector<PositionRandom::Pos2> PositionRandom::GenLocation(double chan, int m
 	return res;
 }
 
-void PositionRandom::SpreadBiome(double chan, Generation::WorldUnit* unit, int id, int p)
-{
-
-}
 
 

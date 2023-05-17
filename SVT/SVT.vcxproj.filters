@@ -117,6 +117,9 @@
     <ClCompile Include="Generation\DivideBiomes.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Class\Biome\Desert\desert.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Biome\Test\test.h">
@@ -285,6 +288,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Generation\DivideBiomes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\Biome\Desert\desert.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

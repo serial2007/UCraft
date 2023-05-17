@@ -143,7 +143,7 @@ ULight::SurfLight ULight::GenLight(int x, int y, int z, Generation::WorldUnit* u
 					lit.l[0][0] -= SHADOW_THICKNESS;
 					lit.l[0][1] -= SHADOW_THICKNESS;
 				}
-			if (z < 128)
+			if (z < 127)
 				if (*unit->PosBlock(x, y + 1, z + 1) != 0)
 				{
 					lit.l[1][0] -= SHADOW_THICKNESS;

@@ -30,7 +30,8 @@ Generation::WorldUnit* ImportWorldUnit(int x, int y)
 				for (int i = 0; i < 16; ++i)
 					for (int j = 0; j < 16; ++j)
 					{
-						it->chunk[I][J]->biomeid[i][j] = tmp[q] - 1;
+						//it->chunk[I][J]->biomeid[i][j] = tmp[q] - 1;
+						*(it->FindBiome(I * 16 + i, J * 16 + j)) = tmp[q] - 1;
 						++q;
 						for (int k = 0; k < 128; ++k)
 						{
@@ -48,19 +49,6 @@ Generation::WorldUnit* ImportWorldUnit(int x, int y)
 		return nullptr;
 	}
 	return it;
-}
-
-void Generation::Chunk::Biome2DOut()
-{
-	std::cout << "Chunk(" << this->x << ", " << this->y << ")\n";
-	for (int i = 0; i < 16; ++i)
-	{
-		for (int j = 0; j < 16; ++j)
-		{
-			std::cout << this->biomeid[i][j] << ' ';
-		}
-		std::cout << std::endl;
-	}
 }
 
 void Generation::Chunk::Biome3Dout()
@@ -91,7 +79,7 @@ void Generation::WorldUnit::Save()
 		for (int i = 0; i < 16; ++i)
 		for (int j = 0; j < 16; ++j)
 		{
-			tmp += char(this->chunk[I][J]->biomeid[i][j] + 1);
+			tmp += char(*(this->FindBiome(I * 16 + i, J * 16 + j)) + 1);
 			for (int k = 0; k < 128; ++k)
 			{
 				tmp += char(this->chunk[I][J]->block[i][j][k] + 1);
@@ -113,7 +101,7 @@ Generation::BiomeMenu::BiomeMenu(Biome*& _currentBiome) :
 Generation::WorldUnit* Generation::BiomeMenu::DivideBiomes(WorldUnit* unit)
 {
 	std::cout << "Divide Biomes (" << unit->x << ", " << unit->y << ")\n";
-
+	UBiomes::DivideBiomes(unit);
 
 
 	std::stack<unsigned int> stk;

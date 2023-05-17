@@ -3,6 +3,7 @@
 #include <iomanip>
 #include "../UCLient/Graph/BasicClass/lib/BasicHeaders.h"
 #include "../Class/Biome/Hill/Tree/tree.h"
+#include "../Class/Biome/Desert/desert.h"
 #include "../UCLient/Graph/GenBasicLight.h"
 Generation::Biome* currentB = nullptr;
 Generation::BiomeMenu* biomeMenu = nullptr;
@@ -34,29 +35,6 @@ Generation::Chunk* Enquiry(int x, int y)
 		return unit->chunk[IntMod(x, 16)][IntMod(y, 16)];
 		
 	}
-	/*Generation::Chunk* chunk = ImportChunk(x, y);
-	if (chunk == nullptr)
-	{
-		std::cout << "Unexisted chunk\n";
-
-		auto pr = std::make_pair(x / 16, y / 16);
-		if (GenMain::WorldUnitTmp.count(pr) <= 0)
-		{
-			std::cout << "Unexisted worldunit\n";
-			Generation::WorldUnit* unit = new Generation::WorldUnit(x / 16, y / 16);
-			unit->NewChunks();
-			biomeMenu->DivideBiomes(unit);
-			GenMain::WorldUnitTmp[std::make_pair(x / 16, y / 16)] = unit;
-			return unit->chunk[x % 16][y % 16];
-		}
-		
-		else
-		{
-			return GenMain::WorldUnitTmp[std::make_pair(x / 16, y / 16)]->chunk[x % 16][y % 16];
-		}
-	}
-	else return chunk;
-	return nullptr;*/
 }
 
 #define RegisterBiome(x, y) std::cout << std::setw(20) << #x << "  |  "; biomeMenu->uRegisterBiome<x>((new x)->id(), y);
@@ -127,12 +105,10 @@ void GenMain::RegisterBiomeMain()
 	biomeMenu->Mapid[REGISTER_BASE] = REGISTER_BASE;
 
 
-	RegisterBiome(test::testBiome,		0xfffU);
-	RegisterBiome(testson::testBiome,	15U);
+
 	RegisterBiome(HILL::Hill,			0xfffU);
 	RegisterBiome(HILL::Tree,			4U);
-	Register
-
+	RegisterBiome(UBiome::Desert, 0xfffU);
 }
 
 void SaveAll()

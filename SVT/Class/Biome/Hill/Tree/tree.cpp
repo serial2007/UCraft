@@ -11,15 +11,20 @@ void HILL::Tree::Generate(Generation::WorldUnit* unit)
 {
 	std::cout << "Generate\n";
 
-	auto arr = PositionRandom::GenLocation(0.01, unit->x * 16, unit->x * 16 + 255, unit->y * 16, unit->y * 16 + 255, 0, 2, &(this->rm));
+	auto arr = PositionRandom::GenLocation(0.05, unit->x * 256, unit->x * 256 + 255, unit->y * 256, unit->y * 256 + 255, 0, 2, &(this->rm));
 	for (auto& p : arr)
 	{
+		int lx = p.first  - unit->x * 256;
+		int ly = p.second - unit->y * 256;
+
+		/*if (unit->chunk[lx / 16][ly / 16]->biomeid[lx % 16][ly % 16] != 4) continue;*/
+		if (*(unit->FindBiome(lx, ly)) != 4) continue;
 		int h = this->rm.Randi(4, 7, this->rm.magic2(p.first, p.second));
 		bool skp = 0;
 		int i;
 		for (i = 127; i > 0; --i)
 		{
-			auto bl = *(unit->PosBlock(p.first - unit->x * 16, p.second - unit->y * 16, i));
+			auto bl = *(unit->PosBlock(p.first - unit->x * 256, p.second - unit->y * 256, i));
 			if (bl != 0) {
 				if (bl != 2)
 				skp = 1;
@@ -30,10 +35,10 @@ void HILL::Tree::Generate(Generation::WorldUnit* unit)
 		int ht = h;
 		while (ht--)
 		{
-			*(unit->PosBlock(p.first - unit->x * 16, p.second - unit->y * 16, ++i)) = 50;
+			*(unit->PosBlock(p.first - unit->x * 256, p.second - unit->y * 256, ++i)) = 50;
 		}
 
-		this->GenLeaves(unit, p.first - unit->x * 16, p.second - unit->y * 16, i + 1, h + 3);
+		this->GenLeaves(unit, p.first - unit->x * 256, p.second - unit->y * 256, i + 1, h + 3);
 	}
 }
 

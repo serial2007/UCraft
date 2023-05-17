@@ -43,12 +43,10 @@ namespace Generation
 	public:
 		int x = 0, y = 0;
 		unsigned short block[16][16][128];
-		unsigned short biomeid[16][16];
 		float lit[16][16][128];
 
 		Chunk(int _X, int _Y) { 
 			memset(block, 0, sizeof(block)); 
-			memset(biomeid, 0, sizeof(biomeid)); 
 			memset(lit, 0, sizeof(lit));
 			this->x = _X, this->y = _Y;
 		}
@@ -67,9 +65,20 @@ namespace Generation
 		int x = 0, y = 0;
 		Chunk* chunk[16][16];
 		void Save();
+		unsigned short biomeid[656][656];
 
 		WorldUnit(int _x, int _y):
-			x(_x), y(_y) {}
+			x(_x), y(_y) {
+			memset(biomeid, 0, sizeof(biomeid));
+		}
+
+		unsigned short* FindBiome(int x, int y){
+			if (x < -200 || x >= 200 + 256 || y < -200 || y >= 200 + 256) {
+				std::cout << "Invalid Pos with x = " << x << ", y = " << y << '\n';
+				return nullptr;
+			}
+			return &(biomeid[x + 200][y + 200]);
+		}
 
 		~WorldUnit() {
 			for(int i = 0; i < 16; ++i)
@@ -79,21 +88,10 @@ namespace Generation
 			}
 		}
 
-		unsigned short* PosBiome(int x, int y) {
-			if (x < 0 || x >= 256) {
-				std::cout << "x = " << x << '\n';
-				return nullptr;
-			}
-			if (y < 0 || y >= 256) {
-				std::cout << "y = " << y << '\n';
-				return nullptr;
-			}
-
-			return &(chunk[IntDiv(x, 16)][IntDiv(y, 16)]->biomeid[IntMod(x, 16)][IntMod(y, 16)]); }
 		unsigned short* PosBlock(int x, int y, int z) {
-			if (x < 0 || x >= 256) return nullptr;
-			if (y < 0 || y >= 256) return nullptr;
-			if (z < 0 || z >= 128) return nullptr;
+			if (x < 0 || x >= 256 || y < 0 || y >= 256 || z < 0 || z >= 128) {
+				return nullptr;
+			}
 
 			return &(chunk[IntDiv(x, 16)][IntDiv(y, 16)]->block[IntMod(x, 16)][IntMod(y, 16)][z]); }
 		void NewChunks()
@@ -115,7 +113,7 @@ namespace Generation
 		Biome() {}
 		std::vector <std::pair<unsigned int, std::function<Biome* (void)> > >  son;
 		virtual unsigned id() { return REGISTER_NULL; }
-		virtual void Divide(WorldUnit*) {};
+
 		virtual void Generate(WorldUnit*) {};
 
 		//template<typename T> void RegisterSon(int p)

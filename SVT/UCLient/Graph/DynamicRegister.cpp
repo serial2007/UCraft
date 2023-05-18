@@ -25,15 +25,13 @@ void DynamicRegister()
 		//std::cout << "keybo";
 		if (!RenderBlock::LockCursor)
 		{
-			//std::cout << "GUI\n";
-			//std::map<int, ImportInfo::BlockInfo> ImportInfo::binfo;
 			unsigned blockn = 0; float ex = -0.8f, ey = 0.8f;
-			//RenderBlock::RegisterGUI()
 
 			float mx = RenderBlock::MouseX / RenderBlock::WinWidth * 2 - 1.0f;
 			float my = 1.0f - RenderBlock::MouseY / RenderBlock::WinHeight * 2;
 
 			for (auto& it : ImportInfo::binfo) {
+				if (it.first > 400) continue;
 				if (glfwGetMouseButton(RenderBlock::window, GLFW_MOUSE_BUTTON_LEFT))
 				{
 					if (mx >= ex && mx <= float(ex + 160.0f / RenderBlock::WinWidth) && my >= ey - float(160.0f / RenderBlock::WinHeight) && my <= ey)
@@ -66,6 +64,7 @@ void DynamicRegister()
 				++blockn;
 			}
 			for (auto& it : ImportInfo::spbinfo) {
+				if (it.first > 400) continue;
 				if (glfwGetMouseButton(RenderBlock::window, GLFW_MOUSE_BUTTON_LEFT))
 				{
 					if (mx >= ex && mx <= float(ex + 160.0f / RenderBlock::WinWidth) && my >= ey - float(160.0f / RenderBlock::WinHeight) && my <= ey)
@@ -78,6 +77,44 @@ void DynamicRegister()
 					}
 				}
 				RenderBlock::RegisterGUI(ex, ey, ex + 160.0f / RenderBlock::WinWidth, ey - 160.0f / RenderBlock::WinHeight, it.second[6][0].TexStartX, it.second[6][0].TexEndY, it.second[6][0].TexEndX, it.second[6][0].TexStartY, 6);
+				if (RenderBlock::SelectedBlock == it.first)
+				{
+					RenderBlock::RegisterGUI(
+						ex - 10.0f / RenderBlock::WinWidth,
+						ey + 10.0f / RenderBlock::WinHeight,
+						ex + 170.0f / RenderBlock::WinWidth,
+						ey - 170.0f / RenderBlock::WinHeight,
+						0, 9, 1, 10, 7);
+				}
+
+				ex += 200.0f / RenderBlock::WinWidth;
+				if (ex > 0.8f)
+				{
+					ex = -0.8f;
+					ey += -200.0f / RenderBlock::WinHeight;
+				}
+
+				++blockn;
+			}
+			for (auto& it : ImportInfo::nbtinfo) {
+				if (it.first > 400) continue;
+				if (glfwGetMouseButton(RenderBlock::window, GLFW_MOUSE_BUTTON_LEFT))
+				{
+					if (mx >= ex && mx <= float(ex + 160.0f / RenderBlock::WinWidth) && my >= ey - float(160.0f / RenderBlock::WinHeight) && my <= ey)
+					{
+						RenderBlock::offsetm[7] = 0;
+						RenderBlock::RendererNm[7] = 0;
+
+						RenderBlock::SelectedBlock = it.first;
+						std::cout << it.first << std::endl;
+					}
+				}
+
+				float _x = 160.0f / RenderBlock::WinWidth;
+				float _y = 160.0f / RenderBlock::WinHeight;
+
+				RenderBlock::RegisterGUI(ex + _x * it.second.DisplayPosStartX, ey - _y * _x * it.second.DisplayPosStartY, ex + _x * it.second.DisplayPosEndX, ey - _y * it.second.DisplayPosEndY, 
+					it.second.DisplayTexStartX, it.second.DisplayTexEndY, it.second.DisplayTexEndX, it.second.DisplayTexStartY, 6);
 				if (RenderBlock::SelectedBlock == it.first)
 				{
 					RenderBlock::RegisterGUI(

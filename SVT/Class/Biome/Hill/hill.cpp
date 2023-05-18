@@ -54,6 +54,28 @@ inline void HILL::Hill::Genmain(Generation::WorldUnit* h, int x, int y)
 	{
 		peek.x = mt[i].first;
 		peek.y = mt[i].second;
+
+		bool CanGen = 1;
+		for (int _i = -20; _i <= 20; ++_i)
+		{
+			for (int _j = -20; _j <= 20; ++_j)
+			{
+				auto P = h->FindBiome(_i + peek.x - x, _j + peek.y - y);
+				if (P == nullptr)
+				{
+					std::cout << "Invalid " << _i + peek.x - x << ' ' << _j + peek.y - y << '\n';
+				}
+				if (P != nullptr && *P != 4U)
+				{
+					CanGen = 0;
+					break;
+				}
+			}
+			if (!CanGen) break;
+		}
+		if (!CanGen) continue;
+
+
 		peek.h = DefaultRandomMachine.magic2(peek.x, peek.y) % 16 + 8;
 
 		if(*(h->FindBiome(peek.x - x, peek.y - y)) == 4)
@@ -111,7 +133,6 @@ inline void HILL::Hill::PrintHill(Generation::WorldUnit* h, int x, int y)
 		this->LocTmp[k].x = this->WorldHill[k].x - x;
 		this->LocTmp[k].y = this->WorldHill[k].y - y;
 		if (isinf(this->WorldHill[k].h)) this->WorldHill[k].h = 0;
-		std::cout << "H" << this->WorldHill[k].h << '\n';
 
 		this->LocTmp[k].h = 100000 * this->WorldHill[k].x * this->WorldHill[k].y;
 	}
@@ -134,7 +155,7 @@ inline void HILL::Hill::PrintHill(Generation::WorldUnit* h, int x, int y)
 					hi[i][j] = WorldPara::minh;
 				else 	hi[i][j] = *(&hi[i][j] - 1);
 			}
-			if (hi[i][j] > WorldPara::minh + 1) *(h->FindBiome(i, j)) = 4;
+			if (hi[i][j] > WorldPara::minh) *(h->FindBiome(i, j)) = 4;
 
 			int mx = std::min((int)hi[i][j], 127);
 			for (int k = 0; k <= mx; ++k)

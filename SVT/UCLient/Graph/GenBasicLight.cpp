@@ -36,6 +36,7 @@ void ULight::GenBsLight(Generation::Chunk* chunk)
 		for(int j = 0; j < 16; ++j)
 		for(int k = sunh[i][j] - 1; k >= 0; --k)
 		{
+			chunk->lit[i][j][k] = std::max(chunk->lit[i][j][k], ImportInfo::EmitLight[chunk->block[i][j][k]]);
 			if (chunk->block[i][j][k] != 0 && ImportInfo::IsTransmit[chunk->block[i][j][k]] == 0) continue;
 			for (unsigned m = 0; m < 6; ++m)
 			{

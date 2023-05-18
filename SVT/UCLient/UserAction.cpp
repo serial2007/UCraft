@@ -26,7 +26,7 @@ void UserAction::PLayerMain()
 			RenderBlock::cameraPos = tmp;
 		}
 
-		footd = GenMain::WorldBlock(RenderBlock::cameraPos.x, RenderBlock::cameraPos.y - 2.1f, RenderBlock::cameraPos.z);
+		footd = GenMain::WorldBlock(RenderBlock::cameraPos.x, RenderBlock::cameraPos.y - 2.4f, RenderBlock::cameraPos.z);
 		
 		auto VelocityLock = RenderBlock::Velocity;
 		float x, y, z;

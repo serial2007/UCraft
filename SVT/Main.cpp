@@ -16,11 +16,12 @@
 
 int main()
 {
+	seed = 1;
 	ImportInfo::StartImport();
 	Renderer::ActivateImgui = 1;
 
 	std::thread Ren(RenderBlockProcess);
-	seed = 1000;
+	
 	
 	GenMain::RegisterBiomeMain();
 
@@ -42,4 +43,3 @@ int main()
 	}
 	return 0;
 }
-

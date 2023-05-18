@@ -30,7 +30,7 @@ extern struct Pos
 	bool e = 0;
 };
 
-
+extern bool FloatEqual(float x, float y);
 
 
 namespace Generation
@@ -43,11 +43,13 @@ namespace Generation
 	public:
 		int x = 0, y = 0;
 		unsigned short block[16][16][128];
+		unsigned int blockstate[16][16][128];
 		float lit[16][16][128];
 
 		Chunk(int _X, int _Y) { 
 			memset(block, 0, sizeof(block)); 
 			memset(lit, 0, sizeof(lit));
+			memset(blockstate, 0, sizeof(blockstate));
 			this->x = _X, this->y = _Y;
 		}
 

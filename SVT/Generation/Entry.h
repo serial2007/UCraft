@@ -14,6 +14,7 @@ namespace GenMain
 
 	extern unsigned short* WorldBlock(float x, float y, float z);
 	extern float* WorldLit(int x, int y, int z);
+	extern unsigned int* WorldNbt(float x, float y, float z);
 
 	extern inline void RegisterBiomeMain();
 

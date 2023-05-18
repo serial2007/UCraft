@@ -67,6 +67,33 @@ unsigned short* GenMain::WorldBlock(float x, float y, float z)
 	return &(chunk->block[_x][_y][_z]);
 }
 
+
+unsigned int* GenMain::WorldNbt(float x, float y, float z)
+{
+	std::swap(y, z); y = -y;
+	if (WorldUnitTmp.find(std::make_pair(IntDiv(x, 256), IntDiv(y, 256))) == WorldUnitTmp.end())
+	{
+		//std::cout << "No Unit" << IntDiv(x, 256) << ' ' << IntDiv(y, 256) << '\n';
+		return nullptr;
+	}
+	auto unit = WorldUnitTmp[std::make_pair(IntDiv(x, 256), IntDiv(y, 256))];
+
+	x = IntMod(x, 256);
+	y = IntMod(y, 256);
+	int _x = floorf(x);
+	int _y = floorf(y);
+	int _z = floorf(z);
+	auto chunk = unit->chunk[_x / 16][_y / 16];
+	//if (chunk == nullptr) return nullptr;
+	_x = _x % 16;
+	_y = _y % 16;
+	if (_x < 0 || _x >= 16 || _y < 0 || _y >= 16 || _z < 0 || _z >= 128) {
+		//std::cout << "Invalid Pos " << x << ' ' << y << ' ' << z << '\n';
+		return nullptr;
+	}
+	return &(chunk->blockstate[_x][_y][_z]);
+}
+
 float* GenMain::WorldLit(int x, int y, int z)
 {
 	//std::swap(y, z); y = -y;

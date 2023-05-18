@@ -138,12 +138,11 @@ void RenderBlock::ProcessInput(float deltatime)
 	}
 	if (glfwGetKey(RenderBlock::window, GLFW_KEY_Q) == GLFW_PRESS)
 	{
-		std::cout << "SP\n";
-		RenderBlock::SelectedBlock = 52U;
+		RenderBlock::SelectedBlock = 60;
 	}
 	return;
 }
-
+#include "../ImportInfo.h"
 void RenderBlockProcess()
 {
 	Renderer::ActivateImgui = 1;
@@ -269,9 +268,24 @@ void RenderBlockProcess()
 						if (UserAction::IsStuck(p))
 							*r = 0;
 						RenderBlock::ChunkShouldUpdate = 1;
+
+						if (ImportInfo::IsSpecialModel[RenderBlock::SelectedBlock] == 2)
+						{
+							if (ImportInfo::nbtinfo[RenderBlock::SelectedBlock].nbttype == 1)
+							{
+								if (FloatEqual(surf.x, look.x - 1)	&& FloatEqual(surf.y, look.y    ) && FloatEqual(surf.z, look.z)		)	{*(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 0; std::cout << "N-0\n";}
+								if (FloatEqual(surf.x, look.x	)	&& FloatEqual(surf.y, look.y - 1) && FloatEqual(surf.z, look.z)		)	{*(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 1; std::cout << "N-1\n";}
+								if (FloatEqual(surf.x, look.x	)	&& FloatEqual(surf.y, look.y    ) && FloatEqual(surf.z, look.z - 1)	)		{*(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 2; std::cout << "N-2\n";}
+								if (FloatEqual(surf.x, look.x + 1)	&& FloatEqual(surf.y, look.y    ) && FloatEqual(surf.z, look.z)		)	{*(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 3; std::cout << "N-3\n";}
+								if (FloatEqual(surf.x, look.x	)	&& FloatEqual(surf.y, look.y + 1) && FloatEqual(surf.z, look.z)		)	{*(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 4; std::cout << "N-4\n";}
+								if (FloatEqual(surf.x, look.x	)	&& FloatEqual(surf.y, look.y    ) && FloatEqual(surf.z, look.z + 1)	)		{*(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 5; std::cout << "N-5\n";}
+
+								std::cout << "nbt = " << *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) << '\n' ;
+								std::cout << "look = " << look.x << ' ' << look.y << ' ' << look.z << '\n';
+								std::cout << "surf = " << surf.x << ' ' << surf.y << ' ' << surf.z << '\n';
+							}
+						}
 					}
-					
-					
 				}
 			}
 			MouseRightButton = 1;
@@ -338,7 +352,7 @@ void RenderBlockProcess()
 
 #include "../ImportInfo.h"
 #include "../Graph/SmoothLight.h"
-void RenderBlock::RegisterBlock(float x, float y, float z, unsigned short sur, int id, unsigned layout, Generation::WorldUnit* unit)
+void RenderBlock::RegisterBlock(float x, float y, float z, unsigned short sur, int id, unsigned layout, Generation::WorldUnit* unit, unsigned int nbt)
 {
 	float surlit[6], mxsurlit = 0.0f;
 	memset(surlit, 0, sizeof(surlit));
@@ -375,7 +389,7 @@ void RenderBlock::RegisterBlock(float x, float y, float z, unsigned short sur, i
 		mxsurlit = max(mxsurlit, surlit[k]);
 	}
 	
-	if (ImportInfo::IsSpecialModel[id])
+	if (ImportInfo::IsSpecialModel[id] == 1)
 	{
 		for (auto& m : ImportInfo::spbinfo[id][6])
 		{
@@ -400,7 +414,10 @@ void RenderBlock::RegisterBlock(float x, float y, float z, unsigned short sur, i
 			}
 		}
 	}
-
+	else if (ImportInfo::IsSpecialModel[id] == 2)
+	{
+		RenderBlock::RegisterBlock(x, y, z, sur, ImportInfo::nbtinfo[id].go[nbt], layout, unit, 0U);
+	}
 
 	else
 	{

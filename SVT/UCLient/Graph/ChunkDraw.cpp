@@ -45,7 +45,7 @@ void UGraph::DrawChunk(Generation::Chunk* chunk, Generation::WorldUnit* unit, bo
 	for (int i = 15; i >= I; --i)	for (int j = 15; j >= J; --j)	for (int k = 127; k >= K; --k)		UGraph::DrawBlock(chunk, unit, i, j, k, priority);
 }
 
-void UGraph::DrawBlock(Generation::Chunk* chunk, Generation::WorldUnit* unit, int i, int j, int k, bool priority)
+inline void UGraph::DrawBlock(Generation::Chunk* chunk, Generation::WorldUnit* unit, int i, int j, int k, bool priority)
 {
 
 	if (chunk->block[i][j][k] == 0)
@@ -67,8 +67,8 @@ void UGraph::DrawBlock(Generation::Chunk* chunk, Generation::WorldUnit* unit, in
 	if (nd)
 	{
 		if (chunk->block[i][j][k] == 51)
-			RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k], 1 + priority * 2, unit);
-		else RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k], priority * 2, unit);
+			 RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k], 1 + priority * 2, unit, chunk->blockstate[i][j][k]);
+		else RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, nd, chunk->block[i][j][k],     priority * 2, unit, chunk->blockstate[i][j][k]);
 		//std::cout << "Rendered block (" << i + chunk->x * 16 << ", " << j + chunk->y * 16 << ", " << k << ") with id = " << chunk->block[i][j][k] << '\n';
 	}
 }

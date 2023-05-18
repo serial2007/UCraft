@@ -3,44 +3,33 @@
 int Generation::seed;
 #define WORLDUNIT_BLOCKS 8388608
 
-std::string Generation::dir = "D:/Ucraft";
+std::string Generation::dir = "D:/UCraft";
+
+bool FloatEqual(float x, float y)
+{
+	int _x = floorf(x);
+	int _y = floorf(y);
+	return (_x == _y);
+}
 
 Generation::WorldUnit* ImportWorldUnit(int x, int y)
 {
 	Generation::WorldUnit* it = nullptr;
 	std::string f = Generation::dir + "/world/" + std::to_string(x) + '.' + std::to_string(y) + ".unit";
-	std::ifstream fin(f.c_str());
+	std::ifstream inFile(f.c_str(), std::ios::in | std::ios::binary);
 	try
 	{
-		if (!fin.good()) return nullptr;
-
-		
-		std::stringstream buf;
-		buf << fin.rdbuf();
-		std::string tmp(buf.str());
-
-
-		unsigned int q = 0;
+		if (!inFile.good()) return nullptr;
 		it = new Generation::WorldUnit(x, y);
+		inFile.read((char*)it->biomeid, sizeof(it->biomeid));
 		for (int I = 0; I < 16; ++I)
 			for (int J = 0; J < 16; ++J)
 			{
 				it->chunk[I][J] = new Generation::Chunk(x * 16 + I, y * 16 + J);
-				
-				for (int i = 0; i < 16; ++i)
-					for (int j = 0; j < 16; ++j)
-					{
-						//it->chunk[I][J]->biomeid[i][j] = tmp[q] - 1;
-						*(it->FindBiome(I * 16 + i, J * 16 + j)) = tmp[q] - 1;
-						++q;
-						for (int k = 0; k < 128; ++k)
-						{
-							it->chunk[I][J]->block[i][j][k] = tmp[q] - 1;
-							++q;
-						}
-					}
+				inFile.read((char*)it->chunk[I][J]->block, sizeof(it->chunk[I][J]->block));
+				inFile.read((char*)it->chunk[I][J]->blockstate, sizeof(it->chunk[I][J]->blockstate));
 			}
-		fin.close();
+		inFile.close();
 	}
 	catch (...)
 	{
@@ -70,26 +59,16 @@ void Generation::WorldUnit::Save()
 {
 	std::string k = (Generation::dir + "/world/" + std::to_string(x) + '.' + std::to_string(y) + ".unit");
 	remove(k.c_str());
-	std::ofstream fout(k.c_str());
+	std::ofstream outFile(k.c_str(), std::ios::out | std::ios::binary);
 
-	std::string tmp;
+	outFile.write((char*)this->biomeid, sizeof(this->biomeid));
 	for (int I = 0; I < 16; ++I)
 	for (int J = 0; J < 16; ++J)
 	{
-		for (int i = 0; i < 16; ++i)
-		for (int j = 0; j < 16; ++j)
-		{
-			tmp += char(*(this->FindBiome(I * 16 + i, J * 16 + j)) + 1);
-			for (int k = 0; k < 128; ++k)
-			{
-				tmp += char(this->chunk[I][J]->block[i][j][k] + 1);
-			}	
-		}
+		outFile.write((char*)this->chunk[I][J]->block, sizeof(this->chunk[I][J]->block));
+		outFile.write((char*)this->chunk[I][J]->blockstate, sizeof(this->chunk[I][J]->blockstate));
 	}
-
-	fout << tmp;
-
-	fout.close();
+	outFile.close();
 }
 
 #include "../Generation/DivideBiomes.h"

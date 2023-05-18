@@ -19,6 +19,13 @@ namespace ImportInfo
 	};
 
 	typedef std::array<std::vector<UnitModel>, 7> SpecialBlockInfo;
+	
+	struct NbtGoto {
+		int nbttype;
+		std::vector<int> go;
+		float DisplayPosStartX, DisplayPosStartY, DisplayPosEndX, DisplayPosEndY;
+		int   DisplayTexStartX, DisplayTexStartY, DisplayTexEndX, DisplayTexEndY;
+	};
 
 	struct Texture4 {
 		int stx = 0, sty = 0, endx = 16, endy = 16;
@@ -26,10 +33,12 @@ namespace ImportInfo
 
 	extern std::map<int, BlockInfo> binfo;
 	extern std::map<int, SpecialBlockInfo> spbinfo;
+	extern std::map<int, ImportInfo::NbtGoto> nbtinfo;
 
 	extern void StartImport();
-	extern bool IsSpecialModel[1024];
+	extern unsigned short IsSpecialModel[1024];
 	extern bool IsNotSolid[1024];
 	extern bool IsTransmit[1024];
 	extern bool CanWalkThrough[1024];
+	extern float EmitLight[1024];
 }

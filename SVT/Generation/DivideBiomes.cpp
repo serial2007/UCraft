@@ -3,20 +3,19 @@
 
 void UBiomes::DivideBiomes(Generation::WorldUnit* unit)
 {
-	auto GenBiome = PositionRandom::GenLocation(0.02f, unit->x * 256 - 500, unit->x * 256 + 755, unit->y * 256 - 500, unit->y * 256 + 755, 0, 90, &DefaultRandomMachine);
+	auto GenBiome = PositionRandom::GenLocation(0.03, unit->x * 256 - 1000, unit->x * 256 + 1255, unit->y * 256 - 1000, unit->y * 256 + 1255, 0, 31, &DefaultRandomMachine);
 
-	for (auto& i : GenBiome)
+	for (int i = 0; i < GenBiome.size(); ++i)
 	{
-		i.first -= unit->x * 256;
-		i.second -= unit->y * 256;
+		GenBiome[i].first  -= unit->x * 256;
+		GenBiome[i].second -= unit->y * 256;
 	}
 
-	unsigned q = 0; long long maxq, tmp;
-	for(long long i = -200; i < 456; ++i)
-	for(long long j = -200; j < 456; ++j)
+	int q = 0; int maxq, tmp;
+	for(int i = -200; i < 456; ++i)
+	for(int j = -200; j < 456; ++j)
 	{
-		q = 0;
-		maxq = LLONG_MAX;
+		maxq = 0xfffffff;
 		for (auto& k : GenBiome)
 		{
 			tmp = (k.first - i) * (k.first - i) + (k.second - j) * (k.second - j);
@@ -24,11 +23,10 @@ void UBiomes::DivideBiomes(Generation::WorldUnit* unit)
 			{
 				maxq = tmp;
 				*(unit->FindBiome(i, j)) = (
-					q % 2 ?
+					(k.first + k.second + unit->x * 256 + unit->y * 256) % 2 ?
 					4U : 70U
 					);
 			}
-			++q;
 		}
 	}
 }

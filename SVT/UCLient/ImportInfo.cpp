@@ -2,10 +2,12 @@
 
 std::map<int, ImportInfo::BlockInfo> ImportInfo::binfo;
 std::map<int, ImportInfo::SpecialBlockInfo> ImportInfo::spbinfo;
-bool	ImportInfo::IsSpecialModel[1024];
+std::map<int, ImportInfo::NbtGoto> ImportInfo::nbtinfo;
+unsigned short	ImportInfo::IsSpecialModel[1024];
 bool	ImportInfo::IsNotSolid[1024];
 bool	ImportInfo::IsTransmit[1024];
 bool	ImportInfo::CanWalkThrough[1024];
+float	ImportInfo::EmitLight[1024];
 
 void ImportInfo::StartImport()
 {
@@ -31,12 +33,15 @@ void ImportInfo::StartImport()
 		Json::Value vl = value[i];
 		int id = vl["id"].asInt();
 		int type = vl["type"].asInt();
-		Json::Value dx = vl["index"];
+		
 		ImportInfo::IsNotSolid[id] = vl["unsolid"].asInt();
 		ImportInfo::IsTransmit[id] = vl["transmit"].asInt();
 		ImportInfo::CanWalkThrough[id] = vl["canwalkthrough"].asInt();
+		ImportInfo::EmitLight[id] = vl["light"].asFloat();
+
 		if (type == 1)
 		{
+			Json::Value dx = vl["index"];
 			Json::Value basic = dx["basic"];
 			Json::Value start = basic["start"];
 			Json::Value end   = basic["end"];
@@ -58,6 +63,7 @@ void ImportInfo::StartImport()
 
 		if (type == 2)
 		{
+			Json::Value dx = vl["index"];
 			Json::Value Top			= dx["top"];
 			Json::Value Topstart	= Top["start"];
 			Json::Value Topend		= Top["end"];
@@ -100,6 +106,7 @@ void ImportInfo::StartImport()
 
 		if (type == -1)
 		{
+			Json::Value dx = vl["index"];
 			ImportInfo::SpecialBlockInfo tmp;
 			Json::Value general = dx["general"];
 			for (unsigned int j = 0; j < general.size(); ++j) {
@@ -139,6 +146,39 @@ void ImportInfo::StartImport()
 			}
 			ImportInfo::spbinfo[id] = tmp;
 			ImportInfo::IsSpecialModel[id] = 1;
+		}
+
+		if (type == 0)
+		{
+			int nbttype = vl["nbttype"].asInt();
+			ImportInfo:NbtGoto nbtinfo;
+			nbtinfo.nbttype = nbttype;
+			Json::Value nbt = vl["nbt"];
+			if (nbttype == 1)
+			{	
+				nbtinfo.go.push_back(nbt["0"].asInt());
+				nbtinfo.go.push_back(nbt["1"].asInt());
+				nbtinfo.go.push_back(nbt["2"].asInt());
+				nbtinfo.go.push_back(nbt["3"].asInt());
+				nbtinfo.go.push_back(nbt["4"].asInt());
+				nbtinfo.go.push_back(nbt["5"].asInt());
+			}
+			
+
+			Json::Value dis = vl["display"];
+			nbtinfo.DisplayTexStartX = dis["TexStartX"].asInt();
+			nbtinfo.DisplayTexStartY = dis["TexStartY"].asInt();
+			nbtinfo.DisplayTexEndX   = dis["TexEndX"].asInt();
+			nbtinfo.DisplayTexEndY   = dis["TexEndY"].asInt();
+			
+			nbtinfo.DisplayPosStartX = dis["PosStartX"].asFloat();
+			nbtinfo.DisplayPosStartY = dis["PosStartY"].asFloat();
+			nbtinfo.DisplayPosEndX = dis["PosEndX"].asFloat();
+			nbtinfo.DisplayPosEndY = dis["PosEndY"].asFloat();
+				
+				
+				ImportInfo::nbtinfo[id] = nbtinfo;
+				ImportInfo::IsSpecialModel[id] = 2;
 		}
 	}
 }

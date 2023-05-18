@@ -306,7 +306,7 @@ void RenderBlockProcess()
 						{
 							auto u = GenMain::WorldNbt(surf.x, surf.y, surf.z);
 							if (u != nullptr)
-								*u |= 0x80000000;
+								*u |= 0xe0000000;
 						}
 						else
 						{
@@ -317,12 +317,12 @@ void RenderBlockProcess()
 							{
 								if (ImportInfo::nbtinfo[RenderBlock::SelectedBlock].nbttype == 1)
 								{
-									if (FloatEqual(surf.x, look.x - 1) && FloatEqual(surf.y, look.y) && FloatEqual(surf.z, look.z)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 0; std::cout << "N-0\n"; }
-									if (FloatEqual(surf.x, look.x) && FloatEqual(surf.y, look.y - 1) && FloatEqual(surf.z, look.z)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 1; std::cout << "N-1\n"; }
-									if (FloatEqual(surf.x, look.x) && FloatEqual(surf.y, look.y) && FloatEqual(surf.z, look.z - 1)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 2; std::cout << "N-2\n"; }
-									if (FloatEqual(surf.x, look.x + 1) && FloatEqual(surf.y, look.y) && FloatEqual(surf.z, look.z)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 3; std::cout << "N-3\n"; }
-									if (FloatEqual(surf.x, look.x) && FloatEqual(surf.y, look.y + 1) && FloatEqual(surf.z, look.z)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 4; std::cout << "N-4\n"; }
-									if (FloatEqual(surf.x, look.x) && FloatEqual(surf.y, look.y) && FloatEqual(surf.z, look.z + 1)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 5; std::cout << "N-5\n"; }
+									if (FloatEqual(surf.x, look.x - 1) && FloatEqual(surf.y, look.y) && FloatEqual(surf.z, look.z)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 0; }
+									if (FloatEqual(surf.x, look.x) && FloatEqual(surf.y, look.y - 1) && FloatEqual(surf.z, look.z)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 1; }
+									if (FloatEqual(surf.x, look.x) && FloatEqual(surf.y, look.y) && FloatEqual(surf.z, look.z - 1)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 2; }
+									if (FloatEqual(surf.x, look.x + 1) && FloatEqual(surf.y, look.y) && FloatEqual(surf.z, look.z)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 3; }
+									if (FloatEqual(surf.x, look.x) && FloatEqual(surf.y, look.y + 1) && FloatEqual(surf.z, look.z)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 4; }
+									if (FloatEqual(surf.x, look.x) && FloatEqual(surf.y, look.y) && FloatEqual(surf.z, look.z + 1)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 5; }
 
 									std::cout << "nbt = " << *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) << '\n';
 									std::cout << "look = " << look.x << ' ' << look.y << ' ' << look.z << '\n';

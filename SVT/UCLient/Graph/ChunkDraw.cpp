@@ -39,7 +39,7 @@ void UGraph::DrawChunk(Generation::Chunk* chunk, Generation::WorldUnit* unit, bo
 
 inline void UGraph::DrawBlock(Generation::Chunk* chunk, Generation::WorldUnit* unit, int i, int j, int k, bool priority)
 {
-	if (chunk->block[i][j][k] == 0 && (chunk->blockstate[i][j][k] & 0x80000000U) == 0)
+	if (chunk->block[i][j][k] == 0 && (chunk->blockstate[i][j][k] & 0xe0000000U) == 0)
 		return;
 
 	unsigned nd = 0;
@@ -50,21 +50,28 @@ inline void UGraph::DrawBlock(Generation::Chunk* chunk, Generation::WorldUnit* u
 	if (k > 0 &&	(chunk->block[i][j][k - 1] == 0	|| ImportInfo::IsNotSolid[chunk->block[i][j][k - 1]]) )		nd |= 0b001000U;
 	if (k < 127 &&	(chunk->block[i][j][k + 1] == 0	|| ImportInfo::IsNotSolid[chunk->block[i][j][k + 1]]) )		nd |= 0b000001U;
 
-	if (i == 0)		nd += 0b100000;
-	if (i == 15)	nd += 0b000100;
-	if (j == 0)		nd += 0b010000;
-	if (j == 15)	nd += 0b000010;
+	if (i == 0)		nd |= 0b100000;
+	if (i == 15)	nd |= 0b000100;
+	if (j == 0)		nd |= 0b010000;
+	if (j == 15)	nd |= 0b000010;
 
-	if (chunk->blockstate[i][j][k] & 0x80000000U) {
+	if (chunk->blockstate[i][j][k] & 0xe0000000U) {
 		unsigned waternd = 0;
-		if (i > 0 &&	(chunk->blockstate[i - 1][j][k] & 0x80000000U) == 0 )	waternd |= 0b100000U;
-		if (i < 15 &&	(chunk->blockstate[i + 1][j][k] & 0x80000000U) == 0 )	waternd |= 0b000100U;
-		if (j > 0 &&	(chunk->blockstate[i][j - 1][k] & 0x80000000U) == 0 )	waternd |= 0b010000U;
-		if (j < 15 &&	(chunk->blockstate[i][j + 1][k] & 0x80000000U) == 0 )	waternd |= 0b000010U;
-		if (k > 0 &&	(chunk->blockstate[i][j][k - 1] & 0x80000000U) == 0 )	waternd |= 0b001000U;
-		if (k < 127 &&	(chunk->blockstate[i][j][k + 1] & 0x80000000U) == 0 )	waternd |= 0b000001U;
+		if (i > 0 &&	(chunk->blockstate[i - 1][j][k] & 0xe0000000U) == 0 )	waternd |= 0b100000U;
+		if (i < 15 &&	(chunk->blockstate[i + 1][j][k] & 0xe0000000U) == 0 )	waternd |= 0b000100U;
+		if (j > 0 &&	(chunk->blockstate[i][j - 1][k] & 0xe0000000U) == 0 )	waternd |= 0b010000U;
+		if (j < 15 &&	(chunk->blockstate[i][j + 1][k] & 0xe0000000U) == 0 )	waternd |= 0b000010U;
+		if (k > 0 &&	(chunk->blockstate[i][j][k - 1] & 0xe0000000U) == 0 )	waternd |= 0b001000U;
+		if (k < 127 &&	(chunk->blockstate[i][j][k + 1] & 0xe0000000U) == 0 )	waternd |= 0b000001U;
 
-			RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, waternd, 32, 1 + priority * 2, unit, 0U);
+		if (i == 0	&& GenMain::WorldNbt(i - 1 + chunk->x * 16, k, j + chunk->y * 16) != nullptr && (*GenMain::WorldNbt(i - 1 + chunk->x * 16, k, j + chunk->y * 16) & 0xe0000000U) == 0)	waternd |= 0b100000U;
+		if (i == 15	&& GenMain::WorldNbt(i + 1 + chunk->x * 16, k, j + chunk->y * 16) != nullptr && (*GenMain::WorldNbt(i + 1 + chunk->x * 16, k, j + chunk->y * 16) & 0xe0000000U) == 0)	waternd |= 0b000100U;
+		if (j == 0	&& GenMain::WorldNbt(i + chunk->x * 16, k, j + chunk->y * 16 - 1) != nullptr && (*GenMain::WorldNbt(i + chunk->x * 16, k, j + chunk->y * 16 - 1) & 0xe0000000U) == 0)	waternd |= 0b010000U;
+		if (j == 15 && GenMain::WorldNbt(i + chunk->x * 16, k, j + chunk->y * 16 + 1) != nullptr && (*GenMain::WorldNbt(i + chunk->x * 16, k, j + chunk->y * 16 + 1) & 0xe0000000U) == 0)	waternd |= 0b000010U;
+
+
+		if(waternd & 0b000001U)		RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, waternd, 32,  1 + priority * 2, unit, 0U);
+		else						RenderBlock::RegisterBlock(i + chunk->x * 16, j + chunk->y * 16, k, waternd, 555, 1 + priority * 2, unit, 0U);
 		if (chunk->block[i][j][k] == 0)
 			return;
 	}

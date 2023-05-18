@@ -138,11 +138,46 @@ void RenderBlock::ProcessInput(float deltatime)
 	}
 	if (glfwGetKey(RenderBlock::window, GLFW_KEY_Q) == GLFW_PRESS)
 	{
-		RenderBlock::SelectedBlock = 60;
+		for(int i = -2; i <= 2; ++i)
+		for(int j = -2; j <= 2; ++j){
+			auto k = GenMain::WorldNbt(i + RenderBlock::cameraPos.x, RenderBlock::cameraPos.y, j + RenderBlock::cameraPos.z);
+			if (k != nullptr) {
+				*k = 0x80000000U;
+			}
+		}
+		RenderBlock::ChunkShouldUpdate = 1;
+
 	}
 	return;
 }
 #include "../ImportInfo.h"
+#include "../BlockUpdate.h"
+#define __SP_DRAW__(_WH) \
+for (auto& m : ImportInfo::spbinfo[id][_WH])																											\
+{																																						\
+	RenderBlock::UBasic w[] = {																															\
+	{x + m.PosStartX,	y + m.PosStartY,	z + m.PosStartZ,	m.TexStartX / RenderBlock::GWidth,	m.TexStartY / RenderBlock::GHeight, mxsurlit},		\
+	{x + m.PosStartX + m.PosEndX - m.PosMidX,   y + m.PosStartY + m.PosEndY - m.PosMidY,	z + m.PosStartZ + m.PosEndZ - m.PosMidZ,					\
+																m.TexEndX / RenderBlock::GWidth,  m.TexStartY / RenderBlock::GHeight, mxsurlit},		\
+	{x + m.PosMidX,		y + m.PosMidY,		z + m.PosMidZ,		m.TexStartX / RenderBlock::GWidth,  m.TexEndY / RenderBlock::GHeight, mxsurlit},		\
+	{x + m.PosEndX,		y + m.PosEndY,		z + m.PosEndZ,		m.TexEndX / RenderBlock::GWidth,  m.TexEndY / RenderBlock::GHeight, mxsurlit} };		\
+																																						\
+	if (m.layer + layout)																																\
+	{																																					\
+		memcpy(RenderBlock::whm[m.layer + layout] + RenderBlock::offsetm[m.layer + layout], w, sizeof(w));												\
+		++RenderBlock::RendererNm[m.layer + layout];																									\
+		RenderBlock::offsetm[m.layer + layout] += 4;																									\
+	}																																					\
+	else																																				\
+	{																																					\
+		memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));																					\
+		++RenderBlock::RendererN;																														\
+		RenderBlock::offset += 4;																														\
+	}																																					\
+}																																						
+
+
+
 void RenderBlockProcess()
 {
 	Renderer::ActivateImgui = 1;
@@ -243,6 +278,8 @@ void RenderBlockProcess()
 				{
 					*GenMain::WorldBlock(look.x, look.y, look.z) = 0;
 					RenderBlock::ChunkShouldUpdate = 1;
+
+					UserAction::RegisterUpdate((look.x), (look.y), (look.z));
 				}
 			}
 			MouseButtonDown = 1;
@@ -262,33 +299,45 @@ void RenderBlockProcess()
 				if (!isnan(look.x))
 				{
 					auto r = GenMain::WorldBlock(surf.x, surf.y, surf.z);
+
 					if (r != nullptr)
 					{
-						*r = RenderBlock::SelectedBlock;
-						if (UserAction::IsStuck(p))
-							*r = 0;
-						RenderBlock::ChunkShouldUpdate = 1;
-
-						if (ImportInfo::IsSpecialModel[RenderBlock::SelectedBlock] == 2)
+						if (RenderBlock::SelectedBlock == 32)
 						{
-							if (ImportInfo::nbtinfo[RenderBlock::SelectedBlock].nbttype == 1)
+							auto u = GenMain::WorldNbt(surf.x, surf.y, surf.z);
+							if (u != nullptr)
+								*u |= 0x80000000;
+						}
+						else
+						{
+							*r = RenderBlock::SelectedBlock;
+							if (UserAction::IsStuck(p))
+								*r = 0;
+							if (ImportInfo::IsSpecialModel[RenderBlock::SelectedBlock] == 2)
 							{
-								if (FloatEqual(surf.x, look.x - 1)	&& FloatEqual(surf.y, look.y    ) && FloatEqual(surf.z, look.z)		)	{*(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 0; std::cout << "N-0\n";}
-								if (FloatEqual(surf.x, look.x	)	&& FloatEqual(surf.y, look.y - 1) && FloatEqual(surf.z, look.z)		)	{*(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 1; std::cout << "N-1\n";}
-								if (FloatEqual(surf.x, look.x	)	&& FloatEqual(surf.y, look.y    ) && FloatEqual(surf.z, look.z - 1)	)		{*(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 2; std::cout << "N-2\n";}
-								if (FloatEqual(surf.x, look.x + 1)	&& FloatEqual(surf.y, look.y    ) && FloatEqual(surf.z, look.z)		)	{*(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 3; std::cout << "N-3\n";}
-								if (FloatEqual(surf.x, look.x	)	&& FloatEqual(surf.y, look.y + 1) && FloatEqual(surf.z, look.z)		)	{*(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 4; std::cout << "N-4\n";}
-								if (FloatEqual(surf.x, look.x	)	&& FloatEqual(surf.y, look.y    ) && FloatEqual(surf.z, look.z + 1)	)		{*(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 5; std::cout << "N-5\n";}
+								if (ImportInfo::nbtinfo[RenderBlock::SelectedBlock].nbttype == 1)
+								{
+									if (FloatEqual(surf.x, look.x - 1) && FloatEqual(surf.y, look.y) && FloatEqual(surf.z, look.z)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 0; std::cout << "N-0\n"; }
+									if (FloatEqual(surf.x, look.x) && FloatEqual(surf.y, look.y - 1) && FloatEqual(surf.z, look.z)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 1; std::cout << "N-1\n"; }
+									if (FloatEqual(surf.x, look.x) && FloatEqual(surf.y, look.y) && FloatEqual(surf.z, look.z - 1)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 2; std::cout << "N-2\n"; }
+									if (FloatEqual(surf.x, look.x + 1) && FloatEqual(surf.y, look.y) && FloatEqual(surf.z, look.z)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 3; std::cout << "N-3\n"; }
+									if (FloatEqual(surf.x, look.x) && FloatEqual(surf.y, look.y + 1) && FloatEqual(surf.z, look.z)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 4; std::cout << "N-4\n"; }
+									if (FloatEqual(surf.x, look.x) && FloatEqual(surf.y, look.y) && FloatEqual(surf.z, look.z + 1)) { *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) = 5; std::cout << "N-5\n"; }
 
-								std::cout << "nbt = " << *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) << '\n' ;
-								std::cout << "look = " << look.x << ' ' << look.y << ' ' << look.z << '\n';
-								std::cout << "surf = " << surf.x << ' ' << surf.y << ' ' << surf.z << '\n';
+									std::cout << "nbt = " << *(GenMain::WorldNbt(surf.x, surf.y, surf.z)) << '\n';
+									std::cout << "look = " << look.x << ' ' << look.y << ' ' << look.z << '\n';
+									std::cout << "surf = " << surf.x << ' ' << surf.y << ' ' << surf.z << '\n';
+								}
 							}
 						}
+						RenderBlock::ChunkShouldUpdate = 1;
 					}
+
+					UserAction::RegisterUpdate(surf.x, surf.y, surf.z);
 				}
 			}
 			MouseRightButton = 1;
+
 		}
 		else
 		{
@@ -389,34 +438,19 @@ void RenderBlock::RegisterBlock(float x, float y, float z, unsigned short sur, i
 		mxsurlit = max(mxsurlit, surlit[k]);
 	}
 	
-	if (ImportInfo::IsSpecialModel[id] == 1)
-	{
-		for (auto& m : ImportInfo::spbinfo[id][6])
-		{
-			RenderBlock::UBasic w[] = {
-			{x + m.PosStartX,	y + m.PosStartY,	z + m.PosStartZ,	m.TexStartX / RenderBlock::GWidth,	m.TexStartY / RenderBlock::GHeight, mxsurlit},
-			{x + m.PosStartX + m.PosEndX - m.PosMidX,   y + m.PosStartY + m.PosEndY - m.PosMidY,	z + m.PosStartZ + m.PosEndZ - m.PosMidZ,
-																		m.TexEndX   / RenderBlock::GWidth,  m.TexStartY / RenderBlock::GHeight, mxsurlit},
-			{x + m.PosMidX,		y + m.PosMidY,		z + m.PosMidZ,		m.TexStartX / RenderBlock::GWidth,  m.TexEndY   / RenderBlock::GHeight, mxsurlit},
-			{x + m.PosEndX,		y + m.PosEndY,		z + m.PosEndZ,		m.TexEndX   / RenderBlock::GWidth,  m.TexEndY   / RenderBlock::GHeight, mxsurlit} };
+	if (ImportInfo::IsSpecialModel[id] == 1) {
+		__SP_DRAW__(6);
+		if (sur & 0b100000) __SP_DRAW__(0);
+		if (sur & 0b010000) __SP_DRAW__(1);
+		if (sur & 0b001000) __SP_DRAW__(2);
+		if (sur & 0b000100) __SP_DRAW__(3);
+		if (sur & 0b000010) __SP_DRAW__(4);
+		if (sur & 0b000001) __SP_DRAW__(5);
 
-			if (m.layer + layout)
-			{
-				memcpy(RenderBlock::whm[m.layer + layout] + RenderBlock::offsetm[m.layer + layout], w, sizeof(w));
-				++RenderBlock::RendererNm[m.layer + layout];
-				RenderBlock::offsetm[m.layer + layout] += 4;
-			}
-			else
-			{
-				memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
-				++RenderBlock::RendererN;
-				RenderBlock::offset += 4;
-			}
-		}
 	}
 	else if (ImportInfo::IsSpecialModel[id] == 2)
 	{
-		RenderBlock::RegisterBlock(x, y, z, sur, ImportInfo::nbtinfo[id].go[nbt], layout, unit, 0U);
+		RenderBlock::RegisterBlock(x, y, z, sur, ImportInfo::nbtinfo[id].go[nbt & 0x7fffffff], layout, unit, 0U);
 	}
 
 	else

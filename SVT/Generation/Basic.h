@@ -28,6 +28,8 @@ extern struct Pos
 {
 	int x, y, h = 0;
 	bool e = 0;
+	Pos(int _x, int _y, int _z):
+		x(_x), y(_y), h(_z){}
 };
 
 extern bool FloatEqual(float x, float y);

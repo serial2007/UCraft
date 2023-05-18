@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="UCLient\BlockUpdate.cpp" />
     <ClCompile Include="Class\Biome\Desert\desert.cpp" />
     <ClCompile Include="Class\Biome\Hill\Tree\tree.cpp" />
     <ClCompile Include="Generation\DivideBiomes.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="UCLient\UserAction.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="UCLient\BlockUpdate.h" />
     <ClInclude Include="Class\Biome\Desert\desert.h" />
     <ClInclude Include="Class\Biome\Hill\Tree\tree.h" />
     <ClInclude Include="Generation\DivideBiomes.h" />

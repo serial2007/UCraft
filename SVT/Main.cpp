@@ -10,7 +10,7 @@
 #include "UCLient/Graph/DynamicRegister.h"
 #include "UCLient/UserAction.h"
 #include "UCLient/Graph/GenBasicLight.h"
-
+#include "UCLient/BlockUpdate.h"
 #pragma omp parallel for
 
 
@@ -28,6 +28,7 @@ int main()
 	std::thread Dyn(DynamicRegister);
 	while (RenderBlock::window == nullptr) {}
 	std::thread User(UserAction::PLayerMain);
+	std::thread Tick(UserAction::update);
 	Sleep(1000);
 	while(!RenderBlock::ProgramEnd)
 	{

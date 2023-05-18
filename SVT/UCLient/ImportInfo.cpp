@@ -9,6 +9,8 @@ bool	ImportInfo::IsTransmit[1024];
 bool	ImportInfo::CanWalkThrough[1024];
 float	ImportInfo::EmitLight[1024];
 
+
+
 void ImportInfo::StartImport()
 {
 	std::ifstream fin("Resources/index.json");
@@ -26,7 +28,39 @@ void ImportInfo::StartImport()
 		return;
 	}
 
-	
+#define __READ_NBT__(_WH) \
+for (unsigned int j = 0; j < general.size(); ++j) {			\
+Json::Value m = general[j];									\
+															\
+ImportInfo::UnitModel k;									\
+k.layer = m["layer"].asInt();								\
+															\
+Json::Value t = m["TexStart"];								\
+k.TexStartX = t["x"].asInt();								\
+k.TexStartY = t["y"].asInt();								\
+															\
+t = m["TexEnd"];											\
+k.TexEndX = t["x"].asInt();									\
+k.TexEndY = t["y"].asInt();									\
+															\
+t = m["PosStart"];											\
+k.PosStartX = t["x"].asFloat();								\
+k.PosStartY = t["y"].asFloat();								\
+k.PosStartZ = t["z"].asFloat();								\
+															\
+t = m["PosMid"];											\
+k.PosMidX = t["x"].asFloat();								\
+k.PosMidY = t["y"].asFloat();								\
+k.PosMidZ = t["z"].asFloat();								\
+															\
+t = m["PosEnd"];											\
+k.PosEndX = t["x"].asFloat();								\
+k.PosEndY = t["y"].asFloat();								\
+k.PosEndZ = t["z"].asFloat();								\
+															\
+															\
+tmp[_WH].push_back(k);										\
+}
 
 	for (unsigned int i = 0; i < value.size(); ++i)
 	{
@@ -108,42 +142,18 @@ void ImportInfo::StartImport()
 		{
 			Json::Value dx = vl["index"];
 			ImportInfo::SpecialBlockInfo tmp;
-			Json::Value general = dx["general"];
-			for (unsigned int j = 0; j < general.size(); ++j) {
-				Json::Value m = general[j];
-				ImportInfo::UnitModel k;
-				/*k.texx = m["TexStart"].asInt();
-				k.texy = m["end"].asInt();
-				k.posx = m["posstart"].asFloat();
-				k.posy = m["posend"].asFloat();*/
-				k.layer = m["layer"].asInt();
-
-				Json::Value t = m["TexStart"];
-				k.TexStartX = t["x"].asInt();
-				k.TexStartY = t["y"].asInt();
-
-				t = m["TexEnd"];
-				k.TexEndX = t["x"].asInt();
-				k.TexEndY = t["y"].asInt();
-
-				t = m["PosStart"];
-				k.PosStartX = t["x"].asFloat();
-				k.PosStartY = t["y"].asFloat();
-				k.PosStartZ = t["z"].asFloat();
-
-				t = m["PosMid"];
-				k.PosMidX = t["x"].asFloat();
-				k.PosMidY = t["y"].asFloat();
-				k.PosMidZ = t["z"].asFloat();
-
-				t = m["PosEnd"];
-				k.PosEndX = t["x"].asFloat();
-				k.PosEndY = t["y"].asFloat();
-				k.PosEndZ = t["z"].asFloat();
+			Json::Value general;
+			general = dx["general"];	__READ_NBT__(6);
+			general = dx["0"];			__READ_NBT__(0);
+			general = dx["1"];			__READ_NBT__(1);
+			general = dx["2"];			__READ_NBT__(2);
+			general = dx["3"];			__READ_NBT__(3);
+			general = dx["4"];			__READ_NBT__(4);
+			general = dx["5"];			__READ_NBT__(5);
 
 
-				tmp[6].push_back(k);
-			}
+
+
 			ImportInfo::spbinfo[id] = tmp;
 			ImportInfo::IsSpecialModel[id] = 1;
 		}

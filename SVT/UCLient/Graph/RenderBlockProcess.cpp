@@ -152,32 +152,6 @@ void RenderBlock::ProcessInput(float deltatime)
 }
 #include "../ImportInfo.h"
 #include "../BlockUpdate.h"
-#define __SP_DRAW__(_WH) \
-for (auto& m : ImportInfo::spbinfo[id][_WH])																											\
-{																																						\
-	RenderBlock::UBasic w[] = {																															\
-	{x + m.PosStartX,	y + m.PosStartY,	z + m.PosStartZ,	m.TexStartX / RenderBlock::GWidth,	m.TexStartY / RenderBlock::GHeight, mxsurlit},		\
-	{x + m.PosStartX + m.PosEndX - m.PosMidX,   y + m.PosStartY + m.PosEndY - m.PosMidY,	z + m.PosStartZ + m.PosEndZ - m.PosMidZ,					\
-																m.TexEndX / RenderBlock::GWidth,  m.TexStartY / RenderBlock::GHeight, mxsurlit},		\
-	{x + m.PosMidX,		y + m.PosMidY,		z + m.PosMidZ,		m.TexStartX / RenderBlock::GWidth,  m.TexEndY / RenderBlock::GHeight, mxsurlit},		\
-	{x + m.PosEndX,		y + m.PosEndY,		z + m.PosEndZ,		m.TexEndX / RenderBlock::GWidth,  m.TexEndY / RenderBlock::GHeight, mxsurlit} };		\
-																																						\
-	if (m.layer + layout)																																\
-	{																																					\
-		memcpy(RenderBlock::whm[m.layer + layout] + RenderBlock::offsetm[m.layer + layout], w, sizeof(w));												\
-		++RenderBlock::RendererNm[m.layer + layout];																									\
-		RenderBlock::offsetm[m.layer + layout] += 4;																									\
-	}																																					\
-	else																																				\
-	{																																					\
-		memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));																					\
-		++RenderBlock::RendererN;																														\
-		RenderBlock::offset += 4;																														\
-	}																																					\
-}																																						
-
-
-
 void RenderBlockProcess()
 {
 	Renderer::ActivateImgui = 1;
@@ -401,6 +375,30 @@ void RenderBlockProcess()
 
 #include "../ImportInfo.h"
 #include "../Graph/SmoothLight.h"
+#define __SP_DRAW__(_WH) \
+for (auto& m : ImportInfo::spbinfo[id][_WH])																											\
+{																																						\
+	RenderBlock::UBasic w[] = {																															\
+	{x + m.PosStartX,	y + m.PosStartY,	z + m.PosStartZ,	m.TexStartX / RenderBlock::GWidth,	m.TexStartY / RenderBlock::GHeight, mxsurlit},		\
+	{x + m.PosStartX + m.PosEndX - m.PosMidX,   y + m.PosStartY + m.PosEndY - m.PosMidY,	z + m.PosStartZ + m.PosEndZ - m.PosMidZ,					\
+																m.TexEndX / RenderBlock::GWidth,  m.TexStartY / RenderBlock::GHeight, mxsurlit},		\
+	{x + m.PosMidX,		y + m.PosMidY,		z + m.PosMidZ,		m.TexStartX / RenderBlock::GWidth,  m.TexEndY / RenderBlock::GHeight, mxsurlit},		\
+	{x + m.PosEndX,		y + m.PosEndY,		z + m.PosEndZ,		m.TexEndX / RenderBlock::GWidth,  m.TexEndY / RenderBlock::GHeight, mxsurlit} };		\
+																																						\
+	if (m.layer + layout)																																\
+	{																																					\
+		memcpy(RenderBlock::whm[m.layer + layout] + RenderBlock::offsetm[m.layer + layout], w, sizeof(w));												\
+		++RenderBlock::RendererNm[m.layer + layout];																									\
+		RenderBlock::offsetm[m.layer + layout] += 4;																									\
+	}																																					\
+	else																																				\
+	{																																					\
+		memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));																					\
+		++RenderBlock::RendererN;																														\
+		RenderBlock::offset += 4;																														\
+	}																																					\
+}
+
 void RenderBlock::RegisterBlock(float x, float y, float z, unsigned short sur, int id, unsigned layout, Generation::WorldUnit* unit, unsigned int nbt)
 {
 	float surlit[6], mxsurlit = 0.0f;
@@ -439,14 +437,149 @@ void RenderBlock::RegisterBlock(float x, float y, float z, unsigned short sur, i
 	}
 	
 	if (ImportInfo::IsSpecialModel[id] == 1) {
-		__SP_DRAW__(6);
-		if (sur & 0b100000) __SP_DRAW__(0);
-		if (sur & 0b010000) __SP_DRAW__(1);
-		if (sur & 0b001000) __SP_DRAW__(2);
-		if (sur & 0b000100) __SP_DRAW__(3);
-		if (sur & 0b000010) __SP_DRAW__(4);
-		if (sur & 0b000001) __SP_DRAW__(5);
+		if (id == 32 || id == 555) {
+			unsigned p[3][3], maxp = 0U;
+			unsigned l[2][2];
+			int mi, mj;
+			for(int i = 0; i < 3; ++i)
+			for(int j = 0; j < 3; ++j){
+				auto o = GenMain::WorldNbt(x + i - 1, z, -(y + j - 1));
+				if (o == nullptr)	p[i][j] = 0;
+				else				p[i][j] = *o & 0xe0000000U;
+				if (maxp < p[i][j]) {
+					maxp = p[i][j];
+					mi = i; mj = j;
+				}
+			}
+			if (maxp == p[1][1]) l[0][0] = l[0][1] = l[1][0] = l[1][1] = maxp;
+			else if (mi != 1 && mj != 1) {
+				l[mi / 2][mj / 2]			= maxp;
+				l[1 - mi / 2][mj / 2]		= max(p[1][1], max(p[2 - mi][mj], p[1][mj]));
+				l[mi / 2][1 - mj / 2]		= max(p[1][1], max(p[mi][2 - mj], p[mi][1]));
+				l[1 - mi / 2][1 - mj / 2]	= p[1][1];
+			}
+			else {
+				if (mi == 1) {
+					l[0][mj / 2]		= l[1][mj / 2]		= maxp;
+					l[0][1 - mj / 2]	= l[1][1 - mj / 2]	= p[1][1];
+				}
+				else {
+					l[mi / 2][0]		= l[mi / 2][1]		= maxp;
+					l[1 - mi / 2][0]	= l[1 - mi / 2][1]	= p[1][1];
+				}
+			}
+			float h[2][2];
+			for(int i = 0; i < 2; ++i)
+			for(int j = 0; j < 2; ++j){
+				if (l[i][j] == 0xe0000000U && id == 555) h[i][j] = 1.0f;
+				else h[i][j] = l[i][j] / float(0x100000000L);
+			}
 
+			{
+				RenderBlock::UBasic w[] = {
+				{x,     y    , z + h[0][0],  80 / RenderBlock::GWidth, 32 / RenderBlock::GHeight, mxsurlit},
+				{x,     y + 1, z + h[0][1], 80 / RenderBlock::GWidth, 48 / RenderBlock::GHeight, mxsurlit},
+				{x + 1, y,     z + h[1][0],  96 / RenderBlock::GWidth, 32 / RenderBlock::GHeight, mxsurlit},
+				{x + 1, y + 1, z + h[1][1],  96 / RenderBlock::GWidth, 48 / RenderBlock::GHeight, mxsurlit} };
+				if (layout)
+				{
+					memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
+					++RenderBlock::RendererNm[layout];
+					RenderBlock::offsetm[layout] += 4;
+				}
+				else
+				{
+					memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
+					++RenderBlock::RendererN;
+					RenderBlock::offset += 4;
+				}
+			}
+			if (sur & 0b100000) {
+				RenderBlock::UBasic w[] = {
+				{x,     y    , z,  80 / RenderBlock::GWidth, 32 / RenderBlock::GHeight, mxsurlit},
+				{x,     y,  z + h[0][0],  80 / RenderBlock::GWidth, 48 / RenderBlock::GHeight, mxsurlit},
+				{x, y + 1,     z,  96 / RenderBlock::GWidth, 32 / RenderBlock::GHeight, mxsurlit},
+				{x, y + 1, z + h[0][1],  96 / RenderBlock::GWidth, 48 / RenderBlock::GHeight, mxsurlit} };
+				if (layout)
+				{
+					memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
+					++RenderBlock::RendererNm[layout];
+					RenderBlock::offsetm[layout] += 4;
+				}
+				else
+				{
+					memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
+					++RenderBlock::RendererN;
+					RenderBlock::offset += 4;
+				}
+			}
+			if (sur & 0b010000) {
+				RenderBlock::UBasic w[] = {
+				{x,     y    , z,  80 / RenderBlock::GWidth, 32 / RenderBlock::GHeight, mxsurlit},
+				{x,     y,  z + h[0][0], 80 / RenderBlock::GWidth, 48 / RenderBlock::GHeight, mxsurlit},
+				{x + 1, y,     z,  96 / RenderBlock::GWidth, 32 / RenderBlock::GHeight, mxsurlit},
+				{x + 1, y, z + h[1][0],  96 / RenderBlock::GWidth, 48 / RenderBlock::GHeight, mxsurlit}};
+				if (layout)
+				{
+					memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
+					++RenderBlock::RendererNm[layout];
+					RenderBlock::offsetm[layout] += 4;
+				}
+				else
+				{
+					memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
+					++RenderBlock::RendererN;
+					RenderBlock::offset += 4;
+				}
+			}
+			if (sur & 0b000100) {
+				RenderBlock::UBasic w[] = {
+				{x + 1,     y    , z,  80 / RenderBlock::GWidth, 32 / RenderBlock::GHeight, mxsurlit},
+				{x + 1,     y,  z + h[1][0],  80 / RenderBlock::GWidth, 48 / RenderBlock::GHeight, mxsurlit},
+				{x + 1, y + 1,     z,  96 / RenderBlock::GWidth, 32 / RenderBlock::GHeight, mxsurlit},
+				{x + 1, y + 1, z + h[1][1],  96 / RenderBlock::GWidth, 48 / RenderBlock::GHeight, mxsurlit} };
+				if (layout)
+				{
+					memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
+					++RenderBlock::RendererNm[layout];
+					RenderBlock::offsetm[layout] += 4;
+				}
+				else
+				{
+					memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
+					++RenderBlock::RendererN;
+					RenderBlock::offset += 4;
+				}
+			}
+			if (sur & 0b000010) {
+				RenderBlock::UBasic w[] = {
+				{x,     y + 1    , z,  80 / RenderBlock::GWidth, 32 / RenderBlock::GHeight, mxsurlit},
+				{x,     y + 1,  z + h[0][1], 80 / RenderBlock::GWidth, 48 / RenderBlock::GHeight, mxsurlit},
+				{x + 1, y + 1,     z,  96 / RenderBlock::GWidth, 32 / RenderBlock::GHeight, mxsurlit},
+				{x + 1, y + 1, z + h[1][1],  96 / RenderBlock::GWidth, 48 / RenderBlock::GHeight, mxsurlit} };
+				if (layout)
+				{
+					memcpy(RenderBlock::whm[layout] + RenderBlock::offsetm[layout], w, sizeof(w));
+					++RenderBlock::RendererNm[layout];
+					RenderBlock::offsetm[layout] += 4;
+				}
+				else
+				{
+					memcpy(RenderBlock::wh + RenderBlock::offset, w, sizeof(w));
+					++RenderBlock::RendererN;
+					RenderBlock::offset += 4;
+				}
+			}
+		}
+		else {
+			__SP_DRAW__(6);
+			if (sur & 0b100000) __SP_DRAW__(0);
+			if (sur & 0b010000) __SP_DRAW__(1);
+			if (sur & 0b001000) __SP_DRAW__(2);
+			if (sur & 0b000100) __SP_DRAW__(3);
+			if (sur & 0b000010) __SP_DRAW__(4);
+			if (sur & 0b000001) __SP_DRAW__(5);
+		}
 	}
 	else if (ImportInfo::IsSpecialModel[id] == 2)
 	{

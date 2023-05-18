@@ -30,6 +30,7 @@ bool				RenderBlock::LockCursor = 1;
 bool				RenderBlock::LastPressE = 0;
 unsigned			RenderBlock::SelectedBlock = 1U;
 double				RenderBlock::MouseX, RenderBlock::MouseY;
+bool				RenderBlock::IsInWater = 0;
 
 
 glm::vec3 RenderBlock::PlayerLookAt(glm::vec3* surf)
@@ -75,7 +76,8 @@ void RenderBlock::ProcessInput(float deltatime)
 {
 	if (glfwGetKey(RenderBlock::window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(RenderBlock::window, true);
-	float cameraSpeed = 3.0f * deltatime;
+	
+	float cameraSpeed = (RenderBlock::IsInWater ? 1.0f : 3.0f) * deltatime;
 	glm::vec3 ktot(0.0f);
 
 	if (glfwGetKey(RenderBlock::window, GLFW_KEY_W) == GLFW_PRESS)
@@ -130,22 +132,13 @@ void RenderBlock::ProcessInput(float deltatime)
 	}
 	if (glfwGetKey(RenderBlock::window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
-		if (RenderBlock::OnGround)
+		if (RenderBlock::IsInWater) {
+			RenderBlock::Velocity.y = max(RenderBlock::Velocity.y + 0.4 * deltatime, 0.02f);
+		}
+		else if (RenderBlock::OnGround)
 		{
 			RenderBlock::Velocity.y = 0.15f;
 		}
-
-	}
-	if (glfwGetKey(RenderBlock::window, GLFW_KEY_Q) == GLFW_PRESS)
-	{
-		for(int i = -2; i <= 2; ++i)
-		for(int j = -2; j <= 2; ++j){
-			auto k = GenMain::WorldNbt(i + RenderBlock::cameraPos.x, RenderBlock::cameraPos.y, j + RenderBlock::cameraPos.z);
-			if (k != nullptr) {
-				*k = 0x80000000U;
-			}
-		}
-		RenderBlock::ChunkShouldUpdate = 1;
 
 	}
 	return;
@@ -242,6 +235,10 @@ void RenderBlockProcess()
 		glfwGetWindowSize(RenderBlock::window, &RenderBlock::WinWidth, &RenderBlock::WinHeight);
 		glViewport(0, 0, RenderBlock::WinWidth, RenderBlock::WinHeight);
 
+		RenderBlock::IsInWater = UserAction::IsInWater(RenderBlock::cameraPos);
+
+		if (RenderBlock::IsInWater) UserAction::WaterPush(DeltaTime);
+
 		RenderBlock::ProcessInput(DeltaTime);
 		if (glfwGetMouseButton(RenderBlock::window, GLFW_MOUSE_BUTTON_LEFT) && RenderBlock::LockCursor)
 		{
@@ -253,7 +250,10 @@ void RenderBlockProcess()
 					*GenMain::WorldBlock(look.x, look.y, look.z) = 0;
 					RenderBlock::ChunkShouldUpdate = 1;
 
-					UserAction::RegisterUpdate((look.x), (look.y), (look.z));
+					for(int i = -2; i <= 2; ++i)
+					for(int j = -2; j <= 2; ++j)
+					for(int k = -2; k <= 2; ++k)
+						UserAction::RegisterUpdate((look.x + i), (look.y + j), (look.z + k));
 				}
 			}
 			MouseButtonDown = 1;
@@ -307,7 +307,10 @@ void RenderBlockProcess()
 						RenderBlock::ChunkShouldUpdate = 1;
 					}
 
-					UserAction::RegisterUpdate(surf.x, surf.y, surf.z);
+					for(int i = -2; i <= 2; ++i)
+					for(int j = -2; j <= 2; ++j)
+					for(int k = -2; k <= 2; ++k)
+						UserAction::RegisterUpdate(surf.x + i, surf.y + j, surf.z + k);
 				}
 			}
 			MouseRightButton = 1;
@@ -353,7 +356,7 @@ void RenderBlockProcess()
 		EyeAngle[0] = max(-89.5f, EyeAngle[0]);
 		EyeAngle[0] = min( 89.5f, EyeAngle[0]);
 
-		RenderBlock::Velocity.y += -1.0f * DeltaTime;
+		RenderBlock::Velocity.y += (RenderBlock::IsInWater ? -0.3f : - 0.7f) * DeltaTime;
 		float df = std::powf(0.00005f, DeltaTime);
 		RenderBlock::Velocity.x *= df;
 		RenderBlock::Velocity.z *= df;

@@ -55,4 +55,5 @@ namespace RenderBlock
 
 	extern unsigned SelectedBlock;
 	extern double MouseX, MouseY;
+	extern bool IsInWater;
 }

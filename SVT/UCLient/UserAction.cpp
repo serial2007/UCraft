@@ -26,7 +26,7 @@ void UserAction::PLayerMain()
 			RenderBlock::cameraPos = tmp;
 		}
 
-		footd = GenMain::WorldBlock(RenderBlock::cameraPos.x, RenderBlock::cameraPos.y - 2.4f, RenderBlock::cameraPos.z);
+		footd = GenMain::WorldBlock(RenderBlock::cameraPos.x, RenderBlock::cameraPos.y - 1.8f, RenderBlock::cameraPos.z);
 		
 		auto VelocityLock = RenderBlock::Velocity;
 		float x, y, z;
@@ -88,7 +88,7 @@ bool UserAction::IsStuck(glm::vec3 pos)
 	{
 		auto p = pos + glm::vec3(
 			(i ? 0.4f : -0.4f),
-			(j ? 0.2f : -1.5f),
+			(j ? 0.2f : -1.7f),
 			(k ? 0.4f : -0.4f)
 		);
 		auto m = GenMain::WorldBlock(p.x, p.y, p.z);
@@ -96,4 +96,42 @@ bool UserAction::IsStuck(glm::vec3 pos)
 			return true;
 	}
 	return false;
+}
+
+bool UserAction::IsInWater(glm::vec3 pos)
+{
+	for(short i = 0; i < 2; ++i)
+	for(short j = 0; j < 2; ++j)
+	for(short k = 0; k < 2; ++k)
+	{
+		auto p = pos + glm::vec3(
+			(i ? 0.4f : -0.4f),
+			(j ? 0.2f : -1.65f),
+			(k ? 0.4f : -0.4f)
+		);
+		auto m = GenMain::WorldNbt(p.x, p.y, p.z);
+		if (m != nullptr) {
+			unsigned q = (*m & 0xe0000000);
+			if (q == 0) continue;
+			float h = p.y - floorf(p.y);
+			if ((h * 0x100000000) <= q) return 1;
+		}
+		else continue;
+	}
+	return 0;
+}
+
+void UserAction::WaterPush(float deltatime)
+{
+	float mi = 0, mj = 0;
+	for(int i = -1; i <= 1; ++i)
+	for(int j = -1; j <= 1; ++j){
+
+		auto p = GenMain::WorldNbt(RenderBlock::cameraPos.x + (float)i, RenderBlock::cameraPos.y - 1.65f, RenderBlock::cameraPos.z + (float)j);
+		if (p == nullptr) continue;
+		mi += (float)i * ((*p) & 0xe0000000);
+		mj += (float)j * ((*p) & 0xe0000000);
+	}
+	RenderBlock::Velocity.x -= mi * deltatime / (float)0x900000000;
+	RenderBlock::Velocity.z -= mj * deltatime / (float)0x900000000;
 }
